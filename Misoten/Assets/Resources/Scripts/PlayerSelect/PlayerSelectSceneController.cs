@@ -15,10 +15,15 @@ public class PlayerSelectSceneController : MonoBehaviour
 	// Use this for initialization
 	void Start()
 	{
-		playerData =Resources.Load<PlayerData>("Assets/PlayerData");
 	
 	}
+
+	void Awake()
+	{
+		playerData = Resources.Load<PlayerData>("Assets/PlayerData");
 	
+	}
+
 	// Update is called once per frame
 	void Update () {
 

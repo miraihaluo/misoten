@@ -13,9 +13,11 @@ public class PlayerControl : MonoBehaviour {
 	[SerializeField]
 	private float rotationSpeed;
 
+	private DefineData defineData;
+
 	// 移動限界値の最小最大値　正四角形が大前提
-	private const float max = Define.STAGE_BOARDER_SIZE / 2.0f;
-	private const float min = -(Define.STAGE_BOARDER_SIZE / 2.0f);
+	private float max;
+	private float min;
 
 	// 移動限界位置一時格納用ベクトル
 	private Vector3 limitPos = Vector3.one;
@@ -41,6 +43,10 @@ public class PlayerControl : MonoBehaviour {
 	void Awake()
 	{
 		playerData = Resources.Load<PlayerData>("Assets/PlayerData");
+		defineData = Resources.Load<DefineData>("Assets/DefineData");
+
+		max = defineData.STAGE_BOARDER_SIZE / 2.0f;
+		min = -(defineData.STAGE_BOARDER_SIZE / 2.0f);
 	
 	}
 	
