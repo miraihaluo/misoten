@@ -2797,7 +2797,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22443570, guid: 6e9b1bff6f45fe74ba6009291c9d300e, type: 2}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11418056, guid: 6e9b1bff6f45fe74ba6009291c9d300e, type: 2}
       propertyPath: m_Value
@@ -3405,7 +3405,7 @@ Prefab:
       objectReference: {fileID: 923467490}
     - target: {fileID: 22443570, guid: 6e9b1bff6f45fe74ba6009291c9d300e, type: 2}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6e9b1bff6f45fe74ba6009291c9d300e, type: 2}
@@ -6317,7 +6317,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22443570, guid: 6e9b1bff6f45fe74ba6009291c9d300e, type: 2}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11418056, guid: 6e9b1bff6f45fe74ba6009291c9d300e, type: 2}
       propertyPath: m_Value
@@ -6818,7 +6818,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22443570, guid: 6e9b1bff6f45fe74ba6009291c9d300e, type: 2}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11418056, guid: 6e9b1bff6f45fe74ba6009291c9d300e, type: 2}
       propertyPath: m_Value
