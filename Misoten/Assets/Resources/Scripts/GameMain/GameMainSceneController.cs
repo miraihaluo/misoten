@@ -44,6 +44,9 @@ public class GameMainSceneController : MonoBehaviour
 
 		}
 
+		// スコア配列の参照を取得
+		scoreArray = playerData.GetPlayerScoreArray();
+
 		// スコア配列ソート用の配列を別に生成
 		sort = new int[scoreArray.Length];
 
@@ -69,9 +72,6 @@ public class GameMainSceneController : MonoBehaviour
 
 	private void PlayerRankUpdate()
 	{
-		// スコア配列の参照を取得
-		scoreArray = playerData.GetPlayerScoreArray();
-
 		// スコア配列をソート用配列にコピー
 		Array.Copy(scoreArray, sort, scoreArray.Length);
 
