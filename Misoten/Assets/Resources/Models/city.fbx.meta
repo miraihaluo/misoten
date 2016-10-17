@@ -1,0 +1,152 @@
+fileFormatVersion: 2
+guid: c142003a361669c4aa9801a4768a2ffb
+timeCreated: 1475804093
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: building_geo1
+    100002: building_geo2
+    100004: building_geo3
+    100006: building_geo4
+    100008: //RootNode
+    100010: locator1
+    100012: locator10
+    100014: locator11
+    100016: locator12
+    100018: locator13
+    100020: locator14
+    100022: locator15
+    100024: locator16
+    100026: locator17
+    100028: locator18
+    100030: locator19
+    100032: locator2
+    100034: locator20
+    100036: locator21
+    100038: locator22
+    100040: locator23
+    100042: locator24
+    100044: locator25
+    100046: locator26
+    100048: locator27
+    100050: locator28
+    100052: locator3
+    100054: locator4
+    100056: locator5
+    100058: locator6
+    100060: locator7
+    100062: locator8
+    100064: locator9
+    100066: qTown_filler_grp
+    400000: building_geo1
+    400002: building_geo2
+    400004: building_geo3
+    400006: building_geo4
+    400008: //RootNode
+    400010: locator1
+    400012: locator10
+    400014: locator11
+    400016: locator12
+    400018: locator13
+    400020: locator14
+    400022: locator15
+    400024: locator16
+    400026: locator17
+    400028: locator18
+    400030: locator19
+    400032: locator2
+    400034: locator20
+    400036: locator21
+    400038: locator22
+    400040: locator23
+    400042: locator24
+    400044: locator25
+    400046: locator26
+    400048: locator27
+    400050: locator28
+    400052: locator3
+    400054: locator4
+    400056: locator5
+    400058: locator6
+    400060: locator7
+    400062: locator8
+    400064: locator9
+    400066: qTown_filler_grp
+    2300000: building_geo1
+    2300002: building_geo2
+    2300004: building_geo3
+    2300006: building_geo4
+    3300000: building_geo1
+    3300002: building_geo2
+    3300004: building_geo3
+    3300006: building_geo4
+    4300000: building_geo1
+    4300002: building_geo2
+    4300004: building_geo3
+    4300006: building_geo4
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
