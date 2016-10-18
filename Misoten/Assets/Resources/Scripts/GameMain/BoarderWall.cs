@@ -19,13 +19,16 @@ public class BoarderWall : MonoBehaviour {
 	// スケールで使うベクトル
 	private Vector3 scale;
 
+	// デファインデータ
+	private DefineData	defineData;
+
 	// Use this for initialization
 	void Start () {
 
 		// 壁オブジェ配列の要素数を設定
 		wallObjArray = new GameObject[4];
-		
-		scale = new Vector3(Define.STAGE_BOARDER_SIZE, height, 1.0f);
+
+		scale = new Vector3(defineData.STAGE_BOARDER_SIZE, height, 1.0f);
 
 		// 必要な壁オブジェ分、プレハブから生成する
 		for (int i = 0; i < wallObjArray.Length; i++)
@@ -48,6 +51,12 @@ public class BoarderWall : MonoBehaviour {
 		ArrangeWalls();
 
 	}
+
+	void Awake()
+	{
+		defineData = Resources.Load<DefineData>("Assets/DefineData");
+	
+	}
 	
 	// Update is called once per frame
 	void Update () {
@@ -58,21 +67,21 @@ public class BoarderWall : MonoBehaviour {
 	{
 		// プラスZ側の壁
 		wallObjArray[0].name = "+Z";
-		wallObjArray[0].transform.Translate(0.0f, 0.0f, Define.STAGE_BOARDER_SIZE / 2.0f);
+		wallObjArray[0].transform.Translate(0.0f, 0.0f, defineData.STAGE_BOARDER_SIZE / 2.0f);
 
 		// マイナスZ側の壁
 		wallObjArray[1].name = "-Z";
-		wallObjArray[1].transform.Translate(0.0f, 0.0f, -(Define.STAGE_BOARDER_SIZE / 2.0f));
+		wallObjArray[1].transform.Translate(0.0f, 0.0f, -(defineData.STAGE_BOARDER_SIZE / 2.0f));
 		wallObjArray[1].transform.Rotate(0.0f, 180.0f, 0.0f, Space.Self);
 
 		// プラスX側の壁
 		wallObjArray[2].name = "+X";
-		wallObjArray[2].transform.Translate(Define.STAGE_BOARDER_SIZE / 2.0f, 0.0f, 0.0f);
+		wallObjArray[2].transform.Translate(defineData.STAGE_BOARDER_SIZE / 2.0f, 0.0f, 0.0f);
 		wallObjArray[2].transform.Rotate(0.0f, 90.0f, 0.0f, Space.Self);
 	
 		// マイナスX側の壁
 		wallObjArray[3].name = "-X";
-		wallObjArray[3].transform.Translate(-(Define.STAGE_BOARDER_SIZE / 2.0f), 0.0f, 0.0f);
+		wallObjArray[3].transform.Translate(-(defineData.STAGE_BOARDER_SIZE / 2.0f), 0.0f, 0.0f);
 		wallObjArray[3].transform.Rotate(0.0f, -90.0f, 0.0f, Space.Self);
 
 	}

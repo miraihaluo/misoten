@@ -11,6 +11,7 @@ public class PlayerData : ScriptableObject
 	[SerializeField]
 	private int[] playerScoreArray = null;
 
+	private const int MAX_PLAYER_NUM = 4;
 
 	/////////////////////////
 	/* 参加プレイヤー関係 */
@@ -25,7 +26,7 @@ public class PlayerData : ScriptableObject
 	public bool SetPlayerNum(int setNum)
 	{
 		// 入れようとする人数が、参加可能人数より多いと失敗
-		if (setNum > Define.MAX_PLAYER_NUM) return false;
+		if (setNum > MAX_PLAYER_NUM) return false;
 
 		// 入れようとする人数が、0より小さいと失敗
 		if (setNum < 0) return false;
@@ -44,7 +45,7 @@ public class PlayerData : ScriptableObject
 	public bool AddPlayerNum(int addNum)
 	{
 		// 参加可能人数を超過しようとすると失敗
-		if (playerNum + addNum > Define.MAX_PLAYER_NUM) return false;
+		if (playerNum + addNum > MAX_PLAYER_NUM) return false;
 
 		// 参加人数を0より小さくしようとすると失敗
 		if (playerNum + addNum < 0) return false;
