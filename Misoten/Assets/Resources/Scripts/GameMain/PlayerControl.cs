@@ -55,8 +55,8 @@ public class PlayerControl : MonoBehaviour {
 
 		// ボタン入力を取る
 		// 戻り値は　-1から+1　の値
-        float rotY = Input.GetAxis("Horizontal");	// 左右入力
-        float moveZ = Input.GetAxis("Vertical");	// 前後入力
+        float rotY = Input.GetAxis("Horizontal" + this.name);	// 左右入力
+        float moveZ = Input.GetAxis("Vertical" + this.name);	// 前後入力
 
 		// 秒間の値をフレーム間の値に変換する
 		float deltaMoveSpeed = Time.deltaTime * moveSpeed;
@@ -86,13 +86,11 @@ public class PlayerControl : MonoBehaviour {
 
 	void OnCollisionEnter(Collision aite)
 	{
-		Debug.Log("Col:" + this.name + "が" + aite.gameObject.name + "と当たりました。");
 
 	}
 
 	void OnTriggerEnter(Collider other)
 	{
-		Debug.Log("Tri:"  + this.name + "が" + other.gameObject.name + "と当たりました。");
 
 		if (other.tag == "Child")
 		{
