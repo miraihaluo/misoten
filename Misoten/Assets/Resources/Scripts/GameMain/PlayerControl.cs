@@ -13,6 +13,11 @@ public class PlayerControl : MonoBehaviour {
 	[SerializeField]
 	private float rotationSpeed;
 
+	/// <summary>
+	/// シーンコントローラーオブジェクト
+	/// </summary>
+	private GameMainSceneController sceneObj;
+
 	private DefineData defineData;
 
 	// 移動限界値の最小最大値　正四角形が大前提
@@ -49,6 +54,8 @@ public class PlayerControl : MonoBehaviour {
 	{
 		playerData = Resources.Load<PlayerData>("Assets/PlayerData");
 		defineData = Resources.Load<DefineData>("Assets/DefineData");
+
+		sceneObj = FindObjectOfType<GameMainSceneController>();
 
 		horizontalStr += this.name;
 		verticalStr += this.name;
@@ -114,6 +121,7 @@ public class PlayerControl : MonoBehaviour {
 		if (other.tag == "Goal")
 		{
 			playerData.AddPlayerScoreArray(int.Parse(transform.name) - 1 , score);
+			sceneObj.PlayerRankUpdate();
 			score = 0;
 		
 		}

@@ -4,34 +4,61 @@ using System.Collections;
 public class ChildObjCreatePoint : MonoBehaviour {
 
 	private GameObject prefabChildObj;
+	private GameObject instansChildObj;
 
 	[SerializeField]
 	private Vector3 pos;
 
-	private const int createChildCoolTime = 5;
-	private float nowCreateChildTime = 0;
+	private float createChildCoolTime;
+
+	/// <summary>
+	/// 存在する最大子供の人数
+	/// </summary>
+	private const int MAX_CHILDREN = 15;
 
 	// Use this for initialization
 	void Start () {
-		prefabChildObj = (GameObject)Resources.Load("Prefabs/GameMain/ChildObj");
+		pos.y = 25;
+		createChildCoolTime = Random.Range(15, 30);
 	
 	}
-	
+
+	void Awake()
+	{
+		prefabChildObj = (GameObject)Resources.Load("Prefabs/GameMain/ChildObj");
+
+		// 最初にいくつか生成
+		for (int i = 0; i < 9; i++)
+		{
+			Instantiate(prefabChildObj).transform.parent = this.transform;
+			pos.x = Random.Range(-150, 150);
+			pos.z = Random.Range(-150, 150);
+			transform.GetChild(i).transform.position = pos;
+		
+		}
+
+	}
+
 	// Update is called once per frame
 	void Update () {
 
 		// テキトーに再生成
-		if ((int)nowCreateChildTime <= 0 && transform.childCount == 0)
+		if (transform.childCount < 15)
 		{
-			Instantiate(prefabChildObj).transform.parent = this.transform;
-			transform.GetChild(0).transform.position = pos;
-			nowCreateChildTime = createChildCoolTime;
+			createChildCoolTime -= Time.deltaTime * 60;
 
-		}
+			if (createChildCoolTime <= 0)
+			{
+				pos.x = Random.Range(-150, 150);
+				pos.z = Random.Range(-150, 150);
 
-		if (transform.childCount == 0)
-		{
-			nowCreateChildTime -= Time.deltaTime * 1;
+				instansChildObj = Instantiate(prefabChildObj);
+				instansChildObj.transform.position = pos;
+				instansChildObj.transform.parent = this.transform;
+
+				createChildCoolTime = Random.Range(15, 30);
+			
+			}
 		
 		}
 

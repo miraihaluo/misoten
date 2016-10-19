@@ -67,7 +67,7 @@ public class GameMainSceneController : MonoBehaviour
 
     }
 
-	private void PlayerRankUpdate()
+	public void PlayerRankUpdate()
 	{
 		// スコア配列をソート用配列にコピー
 		Array.Copy(scoreArray, sort, scoreArray.Length);
