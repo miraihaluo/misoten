@@ -18,6 +18,11 @@ public class PlayerControl : MonoBehaviour {
 	/// </summary>
 	private GameMainSceneController sceneObj;
 
+	/// <summary>
+	/// 子供生成オブジェ
+	/// </summary>
+	private ChildObjCreatePoint childObjCreatePointObj;
+
 	private DefineData defineData;
 
 	// 移動限界値の最小最大値　正四角形が大前提
@@ -56,6 +61,7 @@ public class PlayerControl : MonoBehaviour {
 		defineData = Resources.Load<DefineData>("Assets/DefineData");
 
 		sceneObj = FindObjectOfType<GameMainSceneController>();
+		childObjCreatePointObj = FindObjectOfType<ChildObjCreatePoint>();
 
 		horizontalStr += this.name;
 		verticalStr += this.name;
@@ -111,7 +117,7 @@ public class PlayerControl : MonoBehaviour {
 		{
 			if (score < SCORE_MAX)
 			{
-				Destroy(other.gameObject);
+				childObjCreatePointObj.DestroyChild(uint.Parse(other.transform.name));
 				score++;
 
 			}
