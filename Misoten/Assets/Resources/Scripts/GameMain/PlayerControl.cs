@@ -22,8 +22,10 @@ public class PlayerControl : MonoBehaviour {
 	// 移動限界位置一時格納用ベクトル
 	private Vector3 limitPos = Vector3.one;
 
+	// シーンを跨ぐプレイヤーデータを扱うアセットデータ
 	private PlayerData playerData;
 	
+	// 一度に持てる子供の最大人数
 	private const int SCORE_MAX = 3;
 
 	//現在のスコア
@@ -36,6 +38,9 @@ public class PlayerControl : MonoBehaviour {
 	private int rank = 1;
 	public int Rank { set { rank = value; } get { return rank; } }
 
+	private string horizontalStr = "Horizontal";
+	private string verticalStr = "Vertical";
+
 	// Use this for initialization
 	void Start () {
 	
@@ -44,6 +49,9 @@ public class PlayerControl : MonoBehaviour {
 	{
 		playerData = Resources.Load<PlayerData>("Assets/PlayerData");
 		defineData = Resources.Load<DefineData>("Assets/DefineData");
+
+		horizontalStr += this.name;
+		verticalStr += this.name;
 
 		max = defineData.STAGE_BOARDER_SIZE / 2.0f;
 		min = -(defineData.STAGE_BOARDER_SIZE / 2.0f);
@@ -55,8 +63,8 @@ public class PlayerControl : MonoBehaviour {
 
 		// ボタン入力を取る
 		// 戻り値は　-1から+1　の値
-        float rotY = Input.GetAxis("Horizontal" + this.name);	// 左右入力
-        float moveZ = Input.GetAxis("Vertical" + this.name);	// 前後入力
+		float rotY = Input.GetAxis(horizontalStr);	// 左右入力
+		float moveZ = Input.GetAxis(verticalStr);	// 前後入力
 
 		// 秒間の値をフレーム間の値に変換する
 		float deltaMoveSpeed = Time.deltaTime * moveSpeed;

@@ -58,9 +58,6 @@ public class GameMainSceneController : MonoBehaviour
 		// 残り時間を減らす
 		limitTime -= Time.deltaTime * 1;
 
-		// 順位の更新
-		PlayerRankUpdate();
-
 		// 特定のボタンを押すか、残り時間が0になったら遷移
         if (Input.GetButtonDown(sceneChangeVirtualKeyName) || limitTime <= 0)
         {
