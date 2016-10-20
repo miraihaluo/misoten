@@ -952,7 +952,7 @@ Animator:
   m_GameObject: {fileID: 167508}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 86080382fa4b06a43bb8c348f64f747c, type: 3}
-  m_Controller: {fileID: 9100000, guid: 4c92400eccce3bb44a1c3fbe62a42e0c, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -973,6 +973,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 100
   rotationSpeed: 100
+  freezeTimePerFrame: 15
+  damageRotationSpeed: 0.5
   score: 0
   rank: 1
 --- !u!135 &13515698
@@ -985,7 +987,7 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!137 &13792690
 SkinnedMeshRenderer:
