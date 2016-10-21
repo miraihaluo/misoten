@@ -14,49 +14,37 @@ Platform assembly: C:\Users\ohs20344\Desktop\Unity\misoten\Misoten\test_Data\Man
 Loading C:\Users\ohs20344\Desktop\Unity\misoten\Misoten\test_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
 Platform assembly: C:\Users\ohs20344\Desktop\Unity\misoten\Misoten\test_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
 Loading C:\Users\ohs20344\Desktop\Unity\misoten\Misoten\test_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
-- Completed reload, in  0.226 seconds
+- Completed reload, in  0.202 seconds
 Platform assembly: C:\Users\ohs20344\Desktop\Unity\misoten\Misoten\test_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: C:\Users\ohs20344\Desktop\Unity\misoten\Misoten\test_Data\Managed\System.dll (this message is harmless)
-desktop: 1920x1080 59Hz; virtual: 3286x1080 at -1366,0
+desktop: 1366x768 60Hz; virtual: 1366x768 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
 <RI> Initialized touch support.
-UnloadTime: 2.528037 ms
+UnloadTime: 1.792964 ms
 Setting up 1 worker threads for Enlighten.
-  Thread -> id: 2fc4 -> priority: 1 
+  Thread -> id: 1550 -> priority: 1 
 Unloading 6 Unused Serialized files (Serialized files now loaded: 0)
-UnloadTime: 15.160201 ms
+UnloadTime: 12.546741 ms
 
 Unloading 7 unused Assets to reduce memory usage. Loaded Objects now: 239.
-Total: 0.614735 ms (FindLiveObjects: 0.061963 ms CreateObjectMapping: 0.058397 ms MarkObjects: 0.464506 ms  DeleteObjects: 0.028530 ms)
+Total: 0.738672 ms (FindLiveObjects: 0.044578 ms CreateObjectMapping: 0.052157 ms MarkObjects: 0.614743 ms  DeleteObjects: 0.025855 ms)
 
 Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
-UnloadTime: 1.333783 ms
+UnloadTime: 1.118039 ms
 
 Unloading 4 unused Assets to reduce memory usage. Loaded Objects now: 238.
-Total: 0.770313 ms (FindLiveObjects: 0.047698 ms CreateObjectMapping: 0.036108 ms MarkObjects: 0.655301 ms  DeleteObjects: 0.028530 ms)
+Total: 0.531826 ms (FindLiveObjects: 0.040566 ms CreateObjectMapping: 0.034325 ms MarkObjects: 0.428849 ms  DeleteObjects: 0.026301 ms)
 
 Unloading 5 Unused Serialized files (Serialized files now loaded: 0)
-UnloadTime: 0.885771 ms
+UnloadTime: 0.784589 ms
 
 Unloading 3 unused Assets to reduce memory usage. Loaded Objects now: 1306.
-Total: 1.560241 ms (FindLiveObjects: 0.186783 ms CreateObjectMapping: 0.074445 ms MarkObjects: 1.261121 ms  DeleteObjects: 0.036108 ms)
+Total: 1.286993 ms (FindLiveObjects: 0.118579 ms CreateObjectMapping: 0.064639 ms MarkObjects: 1.081484 ms  DeleteObjects: 0.020506 ms)
 
 Unloading 4 Unused Serialized files (Serialized files now loaded: 0)
-UnloadTime: 6.971606 ms
+UnloadTime: 6.560681 ms
 
-Unloading 71 unused Assets to reduce memory usage. Loaded Objects now: 240.
-Total: 1.268253 ms (FindLiveObjects: 0.044578 ms CreateObjectMapping: 0.053939 ms MarkObjects: 0.491699 ms  DeleteObjects: 0.676253 ms)
-
-Unloading 2 Unused Serialized files (Serialized files now loaded: 0)
-UnloadTime: 1.353398 ms
-
-Unloading 3 unused Assets to reduce memory usage. Loaded Objects now: 247.
-Total: 0.562132 ms (FindLiveObjects: 0.034771 ms CreateObjectMapping: 0.034325 ms MarkObjects: 0.472976 ms  DeleteObjects: 0.018277 ms)
-
-Unloading 4 Unused Serialized files (Serialized files now loaded: 0)
-UnloadTime: 1.223675 ms
-
-Unloading 5 unused Assets to reduce memory usage. Loaded Objects now: 241.
-Total: 0.564361 ms (FindLiveObjects: 0.041457 ms CreateObjectMapping: 0.035662 ms MarkObjects: 0.462723 ms  DeleteObjects: 0.023626 ms)
+Unloading 70 unused Assets to reduce memory usage. Loaded Objects now: 241.
+Total: 1.436333 ms (FindLiveObjects: 0.052157 ms CreateObjectMapping: 0.052157 ms MarkObjects: 0.518007 ms  DeleteObjects: 0.812228 ms)
 
