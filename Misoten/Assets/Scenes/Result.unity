@@ -96,6 +96,7 @@ GameObject:
   - 4: {fileID: 297472423}
   - 114: {fileID: 297472422}
   - 114: {fileID: 297472421}
+  - 114: {fileID: 297472424}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -147,6 +148,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 6
+<<<<<<< HEAD
+=======
+--- !u!114 &297472424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 297472420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17ee361259ab8954b9f8ec22957e1265, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerData: {fileID: 0}
+  PlayerNum: 0
+  PlayerRank: 
+  PlayerScore: 
+  ScoreTest: 01000000020000000100000001000000
+  RankTest: 00000000000000000000000000000000
+>>>>>>> 014a6e7309f6e014fdbcb51dd67533be0727aeb6
 --- !u!1001 &560137721
 Prefab:
   m_ObjectHideFlags: 0
@@ -478,7 +499,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+<<<<<<< HEAD
   m_RootOrder: 2
+=======
+  m_RootOrder: 0
+>>>>>>> 014a6e7309f6e014fdbcb51dd67533be0727aeb6
 --- !u!1 &2107194954
 GameObject:
   m_ObjectHideFlags: 0
