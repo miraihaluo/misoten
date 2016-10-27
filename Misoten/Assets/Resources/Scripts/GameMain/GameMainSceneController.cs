@@ -12,7 +12,9 @@ public class GameMainSceneController : MonoBehaviour
     [SerializeField]    // 変数をインスペクターから変更できるようにする
     private string nextSceneName;
 
-	// 制限時間
+	/// <summary>
+	/// 残り時間
+	/// </summary>
 	[SerializeField]
 	private float limitTime = 60;
 	public float NowTime { get { return limitTime; } } // limitTimeのゲッター
@@ -23,6 +25,36 @@ public class GameMainSceneController : MonoBehaviour
 
 	private int[] scoreArray;
 	private int[] sort;
+
+	/// <summary>
+	/// プレイヤーの現在のランクを表示するオブジェ群を格納している配列
+	/// </summary>
+	[SerializeField]
+	private Rank[] nowRankObjArray;
+
+	/// <summary>
+	/// プレイヤーの次のランクを表示するオブジェ群を格納している配列
+	/// </summary>
+	[SerializeField]
+	private NextRank[] nextRankObjArray;
+
+	/// <summary>
+	/// 次の順位に必要なスコアを表示するオブジェ群を格納している配列
+	/// </summary>
+	[SerializeField]
+	private NextScore[] nextScoreArray;
+
+	/// <summary>
+	/// ランキングオブジェ配列
+	/// </summary>
+	[SerializeField]
+	private Rank[] rankingObjArray;
+
+	/// <summary>
+	/// ランキングに表示している取得スコアオブジェ配列
+	/// </summary>
+	[SerializeField]
+	private NextScore[] rankingScoreObjArray;
 
     // Use this for initialization
     void Start(){
@@ -94,6 +126,37 @@ public class GameMainSceneController : MonoBehaviour
 			
 			}
 
+		}
+
+		foreach (Rank rankObj in nowRankObjArray)
+			rankObj.UpdateNowRank();
+
+		foreach (NextRank nextRankObj in nextRankObjArray)
+			nextRankObj.UpdateNextRank();
+
+		for (int i = 0; i < nextScoreArray.Length; i++)
+		{
+			// １位の時は２位との差を表示する
+			if (players[i].Rank == 1)
+			{
+				// 自分のスコアから、１つ下のランクのスコアを引いた値を送る
+				nextScoreArray[i].UpdateNextScore(sort[players[i].Rank - 1] - sort[players[i].Rank]);
+			}
+			else
+			{
+				// 一つ上のスコアから、自分のスコアを引いた値を送る
+				nextScoreArray[i].UpdateNextScore(sort[players[i].Rank - 2] - sort[players[i].Rank - 1]);
+			
+			}
+		}
+
+		foreach (Rank rankingObj in rankingObjArray)
+			rankingObj.UpdateNowRank();
+
+		for (int i = 0; i < rankingScoreObjArray.Length; i++)
+		{
+			rankingScoreObjArray[i].UpdateNextScore(scoreArray[i % 4]);
+		
 		}
 
 	}
