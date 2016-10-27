@@ -12,7 +12,9 @@ public class GameMainSceneController : MonoBehaviour
     [SerializeField]    // 変数をインスペクターから変更できるようにする
     private string nextSceneName;
 
-	// 制限時間
+	/// <summary>
+	/// 残り時間
+	/// </summary>
 	[SerializeField]
 	private float limitTime = 60;
 	public float NowTime { get { return limitTime; } } // limitTimeのゲッター
@@ -23,6 +25,18 @@ public class GameMainSceneController : MonoBehaviour
 
 	private int[] scoreArray;
 	private int[] sort;
+
+	/// <summary>
+	/// プレイヤーの現在のランクを表示するオブジェ群を格納している配列
+	/// </summary>
+	[SerializeField]
+	private Rank[] nowRankObjArray;
+
+	/// <summary>
+	/// プレイヤーの次のランクを表示するオブジェ群を格納している配列
+	/// </summary>
+	[SerializeField]
+	private NextRank[] nextRankObjArray;
 
     // Use this for initialization
     void Start(){
@@ -95,6 +109,12 @@ public class GameMainSceneController : MonoBehaviour
 			}
 
 		}
+
+		foreach (Rank rankObj in nowRankObjArray)
+			rankObj.UpdateNowRank();
+
+		foreach (NextRank nextRankObj in nextRankObjArray)
+			nextRankObj.UpdateNextRank();
 
 	}
 

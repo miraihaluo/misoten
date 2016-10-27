@@ -9,7 +9,7 @@ public class MiniMap_PlayerIcon : MonoBehaviour {
 	private Quaternion rot = Quaternion.identity;
 
 	[SerializeField]
-	private GameObject targetPlayer;
+	private PlayerControl targetPlayer;
 
 	// Use this for initialization
 	void Start () {

@@ -9,7 +9,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 496498}
   - 33: {fileID: 3336010}
-  - 135: {fileID: 13561588}
   - 23: {fileID: 2349678}
   - 54: {fileID: 5495492}
   - 135: {fileID: 13597700}
@@ -80,18 +79,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
---- !u!135 &13561588
-SphereCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 101902}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!135 &13597700
 SphereCollider:
   m_ObjectHideFlags: 1

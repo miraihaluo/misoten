@@ -77,6 +77,11 @@ public class PlayerControl : MonoBehaviour {
 	/// </summary>
 	private bool enableAttack_f = true;
 
+	/// <summary>
+	/// rootの参照
+	/// </summary>
+	private GameObject rootObj;
+
 	// 移動限界値の最小最大値　正四角形が大前提
 	private float max;
 	private float min;
@@ -130,6 +135,11 @@ public class PlayerControl : MonoBehaviour {
 		// 移動限界値の設定
 		max = defineData.STAGE_BOARDER_SIZE / 2.0f;
 		min = -(defineData.STAGE_BOARDER_SIZE / 2.0f);
+
+		// rootの参照を取得
+		foreach (Transform child in transform)
+			if (child.name == "root")
+				rootObj = child.gameObject;
 	
 	}
 	
@@ -152,7 +162,7 @@ public class PlayerControl : MonoBehaviour {
 			case E_STATUS.DAMAGE:
 				remainingFreezeTime -= Time.deltaTime * 60.0f;
 
-				this.transform.Rotate(0.0f, Time.deltaTime * damageRotationSpeed * 60.0f, 0.0f, Space.Self);
+				rootObj.transform.Rotate(0.0f, Time.deltaTime * damageRotationSpeed * 60.0f, 0.0f, Space.Self);
 
 				if (remainingFreezeTime < 0)
 					eStatus = E_STATUS.ACTIVE;
@@ -160,6 +170,9 @@ public class PlayerControl : MonoBehaviour {
 				break;
 		
 		}
+
+		if (Input.GetKeyDown(KeyCode.Return))
+			AttackDamage();
 
 		// 移動と回転の計算
 		transform.Translate(0.0f, 0.0f, axisY * Time.deltaTime * moveSpeed);

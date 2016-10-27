@@ -27,8 +27,15 @@ public class Rank : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		rect.x = (targetPlayer.Rank - 1) * rect.width;
-		rawImageObj.uvRect = rect;
 
 	}
+
+	public void UpdateNowRank()
+	{
+		// U:0が1位なので、-1して合わせる
+		rect.x = (targetPlayer.Rank - 1) * rect.width;
+		rawImageObj.uvRect = rect;
+	
+	}
+
 }
