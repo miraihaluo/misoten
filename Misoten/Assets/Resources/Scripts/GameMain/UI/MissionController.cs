@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 
 
+
 public class MissionController : MonoBehaviour
 {
 
@@ -15,15 +16,25 @@ public class MissionController : MonoBehaviour
     private RawImage BGObj;
 
     [SerializeField]
-    private float textSpeed = -100.0f;      //テキストが流れるスピード
-    private bool onMission = false;         //テキストが流れているかどうか
-    private Vector3 startPosition;          //テキストのスタート座標
+    private float textSpeed;  //テキストの流れるスピード
 
-    private string mission1 = "ミッション１だよ～";
-    private string mission2 = "ミッション２だよ～";
-    private string mission3 = "ミッション３だよ～";
+    enum eTEXT_STATE{
+        DELETE,
+        MOVE,
+        REMOVE,
+        STOP
+    };
+    private eTEXT_STATE onMission = eTEXT_STATE.DELETE ;           //テキストの状態
+    private Vector3 startPosition;                                 //テキストの待機位置
+    private float LimitTime = 0;                                   //テキストの寿命 
 
-    private float textSize;               //テキストのサイズ
+    private string mission1 = "UFOを撃墜せよ！";
+    private string mission2 = "野良猫の妨害を回避せよ！";
+    private string mission3 = "エイリアンから子供たちを守れ！";
+    private string mission4 = "太陽を破壊せよ！";
+    private string mission5 = "一定時間スピード2倍！";
+
+    private Vector2 textSize;       //テキストの大きさ
 
     // Use this for initialization
     void Start()
@@ -35,24 +46,17 @@ public class MissionController : MonoBehaviour
     {
         // GameMainSceneControllerのゲームオブジェクトを取得
         sceneObj = GameObject.FindObjectOfType<GameMainSceneController>();
-
-        //テキストをスタート位置に
-        startPosition = new Vector3(1500, 0, 0);
-        textObj.transform.position = Camera.main.WorldToScreenPoint(startPosition);
-
-        //テキストサイズを取得
-        textSize = textObj.preferredWidth*3;
-
     }
     
     void Update()
     {
-        //20秒ごとにテキストを流す
-        if(Mathf.CeilToInt(sceneObj.NowTime) % 20 == 0 & !onMission)
+        
+        //一定時間ごとにテキストを流す
+        if(Mathf.CeilToInt(sceneObj.NowTime) % 20 == 0 & onMission == eTEXT_STATE.DELETE)
         {
-            onMission = true;
-            //ランダムで３パターン
-            switch (Random.Range(0, 2))
+            //ランダムでミッション分岐
+            onMission = eTEXT_STATE.MOVE;
+            switch (Random.Range(0, 5))
             {
                 case 0:
                     textObj.text = mission1;
@@ -63,21 +67,49 @@ public class MissionController : MonoBehaviour
                 case 2:
                     textObj.text = mission3;
                     break;
+                case 3:
+                    textObj.text = mission4;
+                    break;
+                case 4:
+                    textObj.text = mission5;
+                    break;
             }
+            //テキストサイズを計算
+            textSize.x = textObj.preferredWidth;
+
+
+            startPosition = new Vector3(textSize.x + Screen.width, 0, 0);
+            textObj.transform.localPosition = startPosition;
         }
 
-        if (onMission)
+        //テキストを流す処理
+        if (onMission == eTEXT_STATE.MOVE | onMission == eTEXT_STATE.REMOVE)
         {
-            //テキストを流す処理
+            //テキストを流す
             textObj.transform.Translate(Time.deltaTime * textSpeed, 0, 0);
 
-            //画面端に行くとスタート位置に戻す
-            if (textObj.transform.localPosition.x < -(textSize + Screen.width))
+            //画面真ん中まで行くと一時停止
+            if (textObj.transform.localPosition.x <= 0 & onMission == eTEXT_STATE.MOVE)
             {
-                textObj.transform.localPosition = startPosition;
-                onMission = false;
+                onMission = eTEXT_STATE.STOP;
+                LimitTime = 3;
+            }
+
+            //画面端まで行くと停止
+            if (textObj.transform.localPosition.x < -(textSize.x + Screen.width))
+            {
+                onMission = eTEXT_STATE.DELETE;
             }
         }
 
+        //テキスト一時停止の処理
+        if(onMission == eTEXT_STATE.STOP)
+        {
+            LimitTime -= Time.deltaTime * 1;
+            if(LimitTime <= 0)
+            {
+                onMission = eTEXT_STATE.REMOVE;
+            }
+        }
     }
 }

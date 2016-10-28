@@ -1,37 +1,66 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
 public class PlayerCamera : MonoBehaviour {
 
-	// 追従するGameObject（プレイヤー）
-	// インスペクターで指定する
-	[SerializeField]
+    // 追従するGameObject（プレイヤー）
+    // インスペクターで指定する
+    [SerializeField]
     private Transform targetPlayer;
+    
 
-	// 追従するプレイヤーからの相対位置
-	// インスペクターから設定する
-	[SerializeField]
-    private Vector3 posOffset;
+    // 追従するプレイヤーからの相対位置で注視点を指定
+    // (0, 0, 0)でtargetPlayerの原点を注視
+    private Vector3 lockAtOffset = new Vector3(0, -3, 0);
+    
+    //カメラのディレイスピード
+    private float delaySpeed = 10.0f;
+    
 
-	// 追従するプレイヤーからの相対位置で注視点を指定
-	// (0, 0, 0)で親オブジェの原点を注視
-	// インスペクターから設定する
-	[SerializeField]
-	private Vector3 lockAtOffset;
+    /*****************************************************************
+        カメラ更新処理
+    *****************************************************************/
+    void LookAt(bool slerp)
+    {
+        Vector3 posOffset;          //カメラ座標のオフセット
+        Vector3 newPosition;        //新カメラ座標
+        Quaternion newRotation;     //新カメラ角度
 
-	// Use this for initialization
+        //カメラ座標のオフセット計算
+        posOffset = new Vector3(-targetPlayer.forward.x * 10, 5.0f, -targetPlayer.forward.z * 10);
+
+        //カメラ座標計算
+        newPosition = targetPlayer.position + posOffset ;
+
+        //カメラ角度計算
+        newRotation = Quaternion.LookRotation(targetPlayer.position - transform.position - lockAtOffset);
+
+        switch (slerp)
+        {
+            case true:  //ディレイありTPS視点
+                transform.position = Vector3.Lerp(transform.position, newPosition, delaySpeed * Time.deltaTime);
+                transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, delaySpeed * Time.deltaTime);
+                break;
+            case false: //ディレイ無しTPS視点
+                transform.position = newPosition;
+                transform.rotation = newRotation;
+                break;
+        }
+    }
+
+
 	void Start () {
+        //ディレイ無しでTPS視点
+        LookAt(false);
 
-		// 追従するプレイヤーを親にする
-		transform.parent = targetPlayer;
+    }
 
-		// 自分のポジションに、追従するプレイヤーからの相対位置を代入する
-		transform.position = targetPlayer.position + posOffset;
 
-	}
+    void Update()
+    {
+        //ディレイありでTPS視点
+        LookAt(true);
+    }
 
-	// Update is called once per frame
-	void LateUpdate () {
-
-	}
 }
