@@ -27,6 +27,20 @@ public class PlayerCamera : MonoBehaviour {
         Vector3 newPosition;        //新カメラ座標
         Quaternion newRotation;     //新カメラ角度
 
+		//カメラ座標の計算
+		/*        cameraPos.Set(	targetPlayer.position.x + (targetPlayer.forward.x * posOffset.x),
+								targetPlayer.position.y + posOffset.y,
+								targetPlayer.position.z + (targetPlayer.forward.z * posOffset.z)
+								);
+
+				// 注視点の計算
+				lockAtPos.Set(	targetPlayer.position.x + targetPlayer.forward.x * lockAtOffset.x,
+								targetPlayer.position.y + lockAtOffset.y,
+								targetPlayer.position.z + targetPlayer.forward.z * lockAtOffset.z);
+
+				transform.LookAt(lockAtPos);
+		*/
+
         //カメラ座標のオフセット計算
         posOffset = new Vector3(-targetPlayer.forward.x * 10, 5.0f, -targetPlayer.forward.z * 10);
 
