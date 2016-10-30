@@ -52,6 +52,8 @@ public class PlayerControl : MonoBehaviour {
 	/// </summary>
 	private float axisY;
 
+	private float UpDown;
+
 	/// <summary>
 	/// シーンコントローラーオブジェクト
 	/// </summary>
@@ -108,6 +110,7 @@ public class PlayerControl : MonoBehaviour {
 
 	private string horizontalStr = "Horizontal";
 	private string verticalStr = "Vertical";
+	private string upStr = "Up";
 	private string attackStr = "Attack";
 
 	// Use this for initialization
@@ -130,6 +133,7 @@ public class PlayerControl : MonoBehaviour {
 		// ボタン文字列に自分のIDを追加
 		horizontalStr += this.name;
 		verticalStr += this.name;
+		upStr += this.name;
 		attackStr += this.name;
 
 		// 移動限界値の設定
@@ -153,6 +157,7 @@ public class PlayerControl : MonoBehaviour {
 				// 戻り値は　-1から+1　の値
 				axisX = Input.GetAxis(horizontalStr);	// 左右入力
 				axisY = Input.GetAxis(verticalStr);	// 前後入力
+				UpDown = Input.GetAxis(upStr);
 
 				// 攻撃処理
 				AttackAction();
@@ -175,7 +180,7 @@ public class PlayerControl : MonoBehaviour {
 			AttackDamage();
 
 		// 移動と回転の計算
-		transform.Translate(0.0f, 0.0f, axisY * Time.deltaTime * moveSpeed);
+		transform.Translate(0.0f, UpDown * moveSpeed * Time.deltaTime, axisY * Time.deltaTime * moveSpeed);
 		transform.Rotate(0.0f, axisX * Time.deltaTime * rotationSpeed, 0.0f, Space.Self);	// ローカル回転
 
 		// 移動範囲のチェック
