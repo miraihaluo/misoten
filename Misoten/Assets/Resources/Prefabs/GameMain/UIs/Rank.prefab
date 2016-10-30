@@ -41,9 +41,9 @@ MonoBehaviour:
   m_UVRect:
     serializedVersion: 2
     x: 0
-    y: 0.75
-    width: 0.25
-    height: 0.25
+    y: 0.375
+    width: 0.125
+    height: 0.125
 --- !u!114 &11478414
 MonoBehaviour:
   m_ObjectHideFlags: 1

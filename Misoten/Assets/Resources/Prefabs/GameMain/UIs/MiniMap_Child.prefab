@@ -40,9 +40,9 @@ MonoBehaviour:
   m_UVRect:
     serializedVersion: 2
     x: 0
-    y: 0.125
-    width: 0.0625
-    height: 0.0625
+    y: 0.03125
+    width: 0.03125
+    height: 0.03125
 --- !u!222 &22259326
 CanvasRenderer:
   m_ObjectHideFlags: 1
