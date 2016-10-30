@@ -76,6 +76,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 224: {fileID: 22437258}
+  - 114: {fileID: 11441740}
   m_Layer: 5
   m_Name: Ranking
   m_TagString: Untagged
@@ -120,6 +121,17 @@ MonoBehaviour:
     y: 0.25
     width: 0.0625
     height: 0.125
+--- !u!114 &11441740
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 169678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 281fdbc62e14d0d438ca78657a1133d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &11457702
 MonoBehaviour:
   m_ObjectHideFlags: 1
