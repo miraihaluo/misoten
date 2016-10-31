@@ -4,12 +4,12 @@ using UnityEngine.UI;	// UI弄るのに必要
 
 public class MiniMap_PlayerIcon : MonoBehaviour {
 
-	private Image imageObj;
+	private RawImage imageObj;
 	private Vector3 pos = Vector3.one;
 	private Quaternion rot = Quaternion.identity;
 
 	[SerializeField]
-	private GameObject targetPlayer;
+	private PlayerControl targetPlayer;
 
 	// Use this for initialization
 	void Start () {
@@ -18,7 +18,7 @@ public class MiniMap_PlayerIcon : MonoBehaviour {
 
 	void Awake()
 	{
-		imageObj = this.GetComponent<Image>();
+		imageObj = this.GetComponent<RawImage>();
 	
 	}
 

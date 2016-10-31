@@ -13,23 +13,29 @@ public class Rank : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		rect.y = 0.0f;
-		rect.width = 0.25f;
-		rect.height = 1.0f;
 
 	}
 
 	void Awake()
 	{
 		rawImageObj = GetComponent<RawImage>();
-	
+
+		rect = rawImageObj.uvRect;
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
-		rect.x = (targetPlayer.Rank - 1) * rect.width;
-		rawImageObj.uvRect = rect;
 
 	}
+
+	public void UpdateNowRank()
+	{
+		// U:0が1位なので、-1して合わせる
+		rect.x = (targetPlayer.Rank - 1) * rect.width;
+		rawImageObj.uvRect = rect;
+	
+	}
+
 }

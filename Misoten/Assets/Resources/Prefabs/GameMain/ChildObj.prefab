@@ -9,7 +9,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 496498}
   - 33: {fileID: 3336010}
-  - 135: {fileID: 13561588}
   - 23: {fileID: 2349678}
   - 54: {fileID: 5495492}
   - 135: {fileID: 13597700}
@@ -28,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 101902}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 25, z: 100}
-  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_LocalScale: {x: 15, y: 50, z: 15}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -42,7 +41,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_Materials:
-  - {fileID: 2100000, guid: ac5b88e1baa07a841a7b1236b0ae52ff, type: 2}
+  - {fileID: 2100000, guid: 43ff6115a9125ce408ecfaaa52bbe422, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
@@ -80,18 +79,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
---- !u!135 &13561588
-SphereCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 101902}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!135 &13597700
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -102,7 +89,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &100100000
 Prefab:

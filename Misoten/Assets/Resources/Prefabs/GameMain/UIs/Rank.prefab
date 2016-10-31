@@ -37,13 +37,13 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Texture: {fileID: 2800000, guid: cdbaa9bf11e9c0343a8de609493cadee, type: 3}
+  m_Texture: {fileID: 2800000, guid: 643bad6b7b6e5be43917e0070f97e0db, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
-    y: 0
-    width: 0.25
-    height: 1
+    y: 0.375
+    width: 0.125
+    height: 0.125
 --- !u!114 &11478414
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -76,8 +76,8 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -910, y: 270}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: -895, y: 475}
+  m_SizeDelta: {x: 130, y: 130}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &100100000
 Prefab:
