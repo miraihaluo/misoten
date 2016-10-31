@@ -38,7 +38,6 @@ public class FrameController : MonoBehaviour
 		NONE,			// 無し
 		ONETIME,		// 即座に変わる
 		LEVOROTATION,	// 反時計回り
-        FLASHING,       // 点灯
 	
 		MAX
 	}
@@ -57,16 +56,7 @@ public class FrameController : MonoBehaviour
 		MAX
 	}
 
-    /// <summary>
-    /// 点灯時の状態
-    /// </summary>
-    private enum E_FLASHING_COLOR_STATE
-    {
-        FLASH_ON = 0,
-        FLASH_OFF
-    }
-
-    private const int SCREEN_WIDTH = 960;
+	private const int SCREEN_WIDTH = 960;
 	private const int SCREEN_HEIGHT = 540;
 
 	/// <summary>
@@ -97,45 +87,10 @@ public class FrameController : MonoBehaviour
 	/// </summary>
 	private Color[] defaultColorArray = new Color[] {Color.red, Color.blue, Color.green, Color.yellow};
 
-    /// <summary>
-    /// 点滅の状態
-    /// </summary>
-    private int flashingState = (int)E_FLASHING_COLOR_STATE.FLASH_OFF;
-
-    /// <summary>
-    /// 点滅時の仮色(ON)
-    /// </summary>
-    private Color[] flashingColorArrayON = new Color[] { Color.white, Color.white, Color.white, Color.white };
-
-    /// <summary>
-    /// 点滅時の仮色(OFF)
-    /// </summary>
-    private Color[] flashingColorArrayOFF = new Color[] { Color.black, Color.black, Color.black, Color.black };
-
-    /// <summary>
-    /// 点滅間隔
-    /// </summary>
-    private float flashingInterval = 0.5f;
-
-    /// <summary>
-    /// 点滅間隔処理の一時記憶
-    /// </summary>
-    private float flashingIntervalWork = 0;
-
-    /// <summary>
-    /// 点滅時間
-    /// </summary>
-    private float flashingTime = 10f;
-
-    /// <summary>
-    /// 点滅間隔処理の一時記憶
-    /// </summary>
-    private float flashingTimeWork = 0;
-
-    /// <summary>
-    /// 変化後の色
-    /// </summary>
-    private Color changeColor;
+	/// <summary>
+	/// 変化後の色
+	/// </summary>
+	private Color changeColor;
 
 	/// <summary>
 	/// ドットの色が変わっていく速さ
@@ -322,18 +277,14 @@ public class FrameController : MonoBehaviour
 		{
 			case E_CHANGE_COLOR_FUNCTION.ONETIME:
 				changeColorOneTime();
-                
-                break;
+
+				break;
 
 			case E_CHANGE_COLOR_FUNCTION.LEVOROTATION:
 				ChangeColorLevoRotation();
-                
-                break;
-                
-            case E_CHANGE_COLOR_FUNCTION.FLASHING:
-                ChangeColorFlashing();
-                
-                break;
+
+				break;
+
 		}
 
 		// とりあえず色変えが発生している時は、変更を受け付けない
@@ -348,13 +299,7 @@ public class FrameController : MonoBehaviour
 		if (Input.GetKeyDown(KeyCode.R))
 			SetChangeColorFunction(E_CHANGE_COLOR_FUNCTION.LEVOROTATION, new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), 1.0f));
 
-        //枠点滅
-        if (Input.GetKeyDown(KeyCode.F))
-            SetChangeColorFunction(E_CHANGE_COLOR_FUNCTION.FLASHING, new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), 1.0f));
-        
-            
-
-    }
+	}
 
 	/// <summary>
 	/// 色を変える関数の指定と初期化
@@ -436,68 +381,5 @@ public class FrameController : MonoBehaviour
 		
 	
 	}
-
-    /// <summary>
-    /// 全部の枠を二色で点滅させる
-    /// </summary>
-    private void ChangeColorFlashing()
-    {
-        flashingTimeWork = flashingTime;
-        flashingIntervalWork = flashingInterval;
-        Debug.Log("点滅間隔");
-
-        //点滅時間
-        do{
-
-            //点灯間隔過ぎたら色変える
-            flashingIntervalWork -= Time.deltaTime * 1;
-            Debug.Log(flashingIntervalWork);
-
-            //
-            flashingTimeWork -= Time.deltaTime * 1;
-            Debug.Log(flashingTimeWork);
-
-            //点滅の間隔
-            if (flashingIntervalWork <= 0)
-            {
-                
-                //現在の点灯の状態
-                switch (flashingState)
-                {
-                    case (int)E_FLASHING_COLOR_STATE.FLASH_ON:
-
-                        //プレイヤーの色全て点灯ON時の色に変更
-                        for (int playerNum = 0; playerNum < frameDotJaggeArray.Length; playerNum++)
-                            for (int lineNum = 0; lineNum < frameDotJaggeArray[playerNum].Length; lineNum++)
-                                for (int dotNum = 0; dotNum < frameDotJaggeArray[playerNum][lineNum].Length; dotNum++)
-                                {
-                                    frameDotJaggeArray[playerNum][lineNum][dotNum].color = flashingColorArrayOFF[playerNum];
-
-                                }
-                        flashingState = (int)E_FLASHING_COLOR_STATE.FLASH_ON;
-                    
-                        break;
-                    case (int)E_FLASHING_COLOR_STATE.FLASH_OFF:
-
-
-                        //プレイヤーの色全て点灯OFF時の色に変更
-                        for (int playerNum = 0; playerNum < frameDotJaggeArray.Length; playerNum++)
-                            for (int lineNum = 0; lineNum < frameDotJaggeArray[playerNum].Length; lineNum++)
-                                for (int dotNum = 0; dotNum < frameDotJaggeArray[playerNum][lineNum].Length; dotNum++)
-                                {
-                                    frameDotJaggeArray[playerNum][lineNum][dotNum].color = flashingColorArrayON[playerNum];
-
-                                }
-
-                        flashingState = (int)E_FLASHING_COLOR_STATE.FLASH_OFF;
-                    
-                        break;
-                }
-                EndChangeColorFunction();
-                flashingIntervalWork = flashingInterval;
-            }
-        } while (flashingTimeWork > 0);
-
-    }
 
 }

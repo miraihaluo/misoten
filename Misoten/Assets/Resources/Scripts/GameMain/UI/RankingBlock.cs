@@ -12,5 +12,4 @@ public class RankingBlock : MonoBehaviour {
 	void Update () {
 	
 	}
-    
 }
