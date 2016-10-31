@@ -252,14 +252,14 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-
+<<<<<<< HEAD
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 6
-
-
+<<<<<<< HEAD
+=======
 --- !u!114 &297472424
-
+=======
   m_Children:
   - {fileID: 1849956077}
   m_Father: {fileID: 1083061505}
@@ -270,14 +270,26 @@ RectTransform:
   m_SizeDelta: {x: 180, y: 50}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &320065213
-
+>>>>>>> 576e725c490a9ebe0d62982dc85f41a03fdce0c2
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 320065211}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c224d952d25543e4abfba600c4f978f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+<<<<<<< HEAD
   playerData: {fileID: 0}
   PlayerNum: 0
   PlayerRank: 
   PlayerScore: 
   ScoreTest: 01000000020000000100000001000000
   RankTest: 00000000000000000000000000000000
-
+>>>>>>> 014a6e7309f6e014fdbcb51dd67533be0727aeb6
+=======
   system: {fileID: 565360742}
   myRT: {fileID: 320065212}
   p_no: 3
@@ -318,7 +330,7 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 320065211}
-
+>>>>>>> 576e725c490a9ebe0d62982dc85f41a03fdce0c2
 --- !u!1001 &560137721
 Prefab:
   m_ObjectHideFlags: 0
@@ -1033,7 +1045,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
-
+<<<<<<< HEAD
 --- !u!1001 &1365416521
 Prefab:
   m_ObjectHideFlags: 0
@@ -1088,7 +1100,8 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0d83e0cf24788c24288582019f08e194, type: 2}
   m_IsPrefabParent: 0
-
+=======
+>>>>>>> 576e725c490a9ebe0d62982dc85f41a03fdce0c2
 --- !u!1 &1570861609
 GameObject:
   m_ObjectHideFlags: 0
@@ -1129,13 +1142,16 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-
+<<<<<<< HEAD
   m_RootOrder: 2
-
+=======
   m_RootOrder: 0
-
+<<<<<<< HEAD
+>>>>>>> 014a6e7309f6e014fdbcb51dd67533be0727aeb6
 --- !u!1 &2107194954
-
+=======
+--- !u!1 &1681675409
+>>>>>>> 576e725c490a9ebe0d62982dc85f41a03fdce0c2
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
