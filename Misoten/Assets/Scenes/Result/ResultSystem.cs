@@ -8,22 +8,15 @@ public class ResultSystem : MonoBehaviour
     //プレイヤーデータを保持しているアセットを取得
     public PlayerData playerData;
 
+    [SerializeField]
     private int PlayerNum;
-    public int[] PlayerRank;
+    [SerializeField]
+    private int[] PlayerRank;
+    [SerializeField]
     private int[] PlayerScore;
-    private int[] DummyRank;
-    private int[] DummyScore;
-    
-    //データ入力テスト用
-    public int[] ScoreTest;
 
-    public int[] GetRank(){
-        return PlayerRank;
-    }
-    public int[] GetScore()
-    {
-        return PlayerScore;
-    }
+    public int[] ScoreTest;
+    public int[] RankTest;
 
     // Use this for initialization
     void Awake()
@@ -39,27 +32,22 @@ public class ResultSystem : MonoBehaviour
         PlayerNum   = playerData.GetPlayerNum();
         PlayerRank  = new int[playerData.GetPlayerNum()];
         PlayerScore = new int[playerData.GetPlayerNum()];
-        DummyScore = new int[playerData.GetPlayerNum()];
         playerData.GetPlayerScoreArray().CopyTo( PlayerScore , 0);
-        PlayerScore.CopyTo(DummyScore,0);
 
-        DummyRank = new int[PlayerNum];
-
-
-        ScoreTest.CopyTo(PlayerScore, 0);//スコアテスト用
         //ランク付け
         RankChecker();
-
-        DummyScore.CopyTo(PlayerScore,0);
-
-        ScoreTest.CopyTo(PlayerScore, 0);////スコアテスト用
 
     }
 
     // Update is called once per frame
     void Update()
     {
-  
+
+        PlayerRank.CopyTo(RankTest, 0);
+        ScoreTest.CopyTo(PlayerScore, 0);
+        RankChecker();
+
+       
     }
 
 
@@ -76,7 +64,7 @@ public class ResultSystem : MonoBehaviour
         {
             for (int t = 0; PlayerNum - i - 1 > t; t++)
             {
-                if (PlayerScore[t + 1] > PlayerScore[t])
+                if (PlayerScore[t + 1] < PlayerScore[t])
                 {
                     int dummy;
                     dummy = PlayerScore[t + 1];
@@ -89,27 +77,34 @@ public class ResultSystem : MonoBehaviour
 
                 }
             }
-        }  
-              
+        }
         
+
+        //入れ替え
+        int[] DummyRank = new int[PlayerNum];
         PlayerRank.CopyTo(DummyRank,0);
-          
+
+        for (int i = PlayerNum-1; 0 <  i; i--) {
+            PlayerRank[DummyRank[i]-1] = i%4;
+        }
+
+          /*
         //同順処理
-        int rank = 2;
-        PlayerRank[DummyRank[0]-1] = 1;
+        int rank = 1 ;
         for (int i = 1; PlayerNum > i; i++)
         {
-            if (PlayerScore[i] != PlayerScore[i - 1])
+            for (int t = 0; PlayerNum - i > t ; t++)
             {
-                PlayerRank[DummyRank[i]-1] = rank;
+                if (PlayerScore[PlayerNum - i] == PlayerScore[t])
+                {
+                    PlayerRank[DummyRank[t] - 1] = PlayerRank[PlayerNum - i];
+                }
             }
-            else
-            {
-                PlayerRank[DummyRank[i]-1] = PlayerRank[DummyRank[i - 1]-1];
-            }
-            rank++;
-        } 
-        return;
+
+          
+        }       */
+                  
+            return;
     }
 
 }
