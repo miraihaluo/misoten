@@ -15,13 +15,17 @@ public class PlayerControl : MonoBehaviour {
 	/// </summary>
 	private E_STATUS eStatus = E_STATUS.ACTIVE;
 
-	// 秒間の移動量
-	// インスペクターで設定する
+	/// <summary>
+	/// 秒間の移動量。
+	/// インスペクターで設定する
+	/// </summary>
 	[SerializeField]
 	private float moveSpeed;
 
-	// 秒間の回転量
-	// インスペクターで設定する
+	/// <summary>
+	/// 秒間の回転量。
+	/// インスペクターで設定する
+	/// </summary>
 	[SerializeField]
 	private float rotationSpeed;
 
@@ -52,7 +56,10 @@ public class PlayerControl : MonoBehaviour {
 	/// </summary>
 	private float axisY;
 
-	private float UpDown;
+	/// <summary>
+	/// Y軸の上下するAxisを格納する　範囲-1～1
+	/// </summary>
+	private float axisUpDown;
 
 	/// <summary>
 	/// シーンコントローラーオブジェクト
@@ -84,6 +91,11 @@ public class PlayerControl : MonoBehaviour {
 	/// </summary>
 	private GameObject rootObj;
 
+	/// <summary>
+	/// 自身のリジッドボディ
+	/// </summary>
+	private Rigidbody rigidbody;
+
 	// 移動限界値の最小最大値　正四角形が大前提
 	private float max;
 	private float min;
@@ -95,19 +107,28 @@ public class PlayerControl : MonoBehaviour {
 	private PlayerData playerData;
 	private DefineData defineData;
 	
-	// 一度に持てる子供の最大人数
+	/// <summary>
+	/// 一度に持てる子供の最大数
+	/// </summary>
 	private const int SCORE_MAX = 3;
 
-	//現在のスコア
+	/// <summary>
+	/// 現在のスコア
+	/// </summary>
 	[SerializeField]
 	private int score = 0;
 	public int Score { get { return score; } }
 
-	// 現在の順位
+	/// <summary>
+	/// 現在の順位
+	/// </summary>
 	[SerializeField]
 	private int rank = 1;
 	public int Rank { set { rank = value; } get { return rank; } }
 
+	/// <summary>
+	/// 入力を判別する文字列
+	/// </summary>
 	private string horizontalStr = "Horizontal";
 	private string verticalStr = "Vertical";
 	private string upStr = "Up";
@@ -144,7 +165,10 @@ public class PlayerControl : MonoBehaviour {
 		foreach (Transform child in transform)
 			if (child.name == "root")
 				rootObj = child.gameObject;
-	
+		
+		// リジッドボディの取得
+		rigidbody = GetComponent<Rigidbody>();
+
 	}
 	
 	// Update is called once per frame
@@ -157,7 +181,7 @@ public class PlayerControl : MonoBehaviour {
 				// 戻り値は　-1から+1　の値
 				axisX = Input.GetAxis(horizontalStr);	// 左右入力
 				axisY = Input.GetAxis(verticalStr);	// 前後入力
-				UpDown = Input.GetAxis(upStr);
+				axisUpDown = Input.GetAxis(upStr);
 
 				// 攻撃処理
 				AttackAction();
@@ -180,8 +204,12 @@ public class PlayerControl : MonoBehaviour {
 			AttackDamage();
 
 		// 移動と回転の計算
-		transform.Translate(0.0f, UpDown * moveSpeed * Time.deltaTime, axisY * Time.deltaTime * moveSpeed);
 		transform.Rotate(0.0f, axisX * Time.deltaTime * rotationSpeed, 0.0f, Space.Self);	// ローカル回転
+		 transform.Translate(0.0f, axisUpDown * moveSpeed * Time.deltaTime, axisY * Time.deltaTime * moveSpeed);
+		//rigidbody.AddForce(this.transform.forward.x * axisY * Time.deltaTime * moveSpeed, axisUpDown * moveSpeed * Time.deltaTime, this.transform.forward.z * axisY * Time.deltaTime * moveSpeed);
+
+		// 減速処理
+		//rigidbody.velocity = moveSpeed;
 
 		// 移動範囲のチェック
 		CheckLimitPos();

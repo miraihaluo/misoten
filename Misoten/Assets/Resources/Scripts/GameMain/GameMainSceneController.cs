@@ -25,13 +25,18 @@ public class GameMainSceneController : MonoBehaviour
 
 	private int[] scoreArray;
 	private int[] sort;
+	
+	/// <summary>
+	/// ランキングブロックの配列
+	/// </summary>
+	private int[] rankingBlockRankArray = new int[] {0, 1, 2, 3};
 
 	/// <summary>
 	/// プレイヤーの現在のランクを表示するオブジェ群を格納している配列
 	/// </summary>
 	[SerializeField]
 	private Rank[] nowRankObjArray;
-
+	/*
 	/// <summary>
 	/// プレイヤーの次のランクを表示するオブジェ群を格納している配列
 	/// </summary>
@@ -43,18 +48,19 @@ public class GameMainSceneController : MonoBehaviour
 	/// </summary>
 	[SerializeField]
 	private NextScore[] nextScoreArray;
-
-	/// <summary>
-	/// ランキングオブジェ配列
-	/// </summary>
-	[SerializeField]
-	private Rank[] rankingObjArray;
+	*/
 
 	/// <summary>
 	/// ランキングに表示している取得スコアオブジェ配列
 	/// </summary>
 	[SerializeField]
 	private NextScore[] rankingScoreObjArray;
+
+	/// <summary>
+	/// ランキングブロック配列
+	/// </summary>
+	[SerializeField]
+	private RankingBlock[] rankingBlockObjArray;
 
     // Use this for initialization
     void Start(){
@@ -130,7 +136,7 @@ public class GameMainSceneController : MonoBehaviour
 
 		foreach (Rank rankObj in nowRankObjArray)
 			rankObj.UpdateNowRank();
-
+		/*
 		foreach (NextRank nextRankObj in nextRankObjArray)
 			nextRankObj.UpdateNextRank();
 
@@ -149,15 +155,49 @@ public class GameMainSceneController : MonoBehaviour
 			
 			}
 		}
-
-		foreach (Rank rankingObj in rankingObjArray)
-			rankingObj.UpdateNowRank();
+		*/
 
 		for (int i = 0; i < rankingScoreObjArray.Length; i++)
-		{
 			rankingScoreObjArray[i].UpdateNextScore(scoreArray[i % 4]);
-		
+
+		/*** ランキングブロックの処理 ***/
+		int[] work = new int[] {-1, -1, -1, -1};
+
+		for (int playerID = 0; playerID < rankingBlockRankArray.Length; playerID++)
+		{
+			for(int ranking = 0; ranking < sort.Length; ranking++)
+			{
+				if (scoreArray[rankingBlockRankArray[playerID]] == sort[ranking])
+				{
+					if (work[ranking] == -1)
+					{
+						work[ranking] = rankingBlockRankArray[playerID];
+						break;
+
+					}
+
+/*					for (int sarch = 0; ranking + sarch < work.Length; sarch++)
+						if (work[ranking + sarch] == -1)
+						{
+							work[ranking + sarch] = rankingBlockRankArray[playerID];
+							break;
+
+						}
+*/				
+				}
+
+			}
+
 		}
+
+		// workの中身をランキングブロックの順位を入れている配列にコピー
+		work.CopyTo(rankingBlockRankArray, 0);
+
+		// 各ランキングブロックに順位を入れる
+		for (int playerID = 0; playerID < rankingBlockObjArray.Length; playerID++)
+			for (int ranking = 0; ranking < rankingBlockRankArray.Length; ranking++)
+					rankingBlockObjArray[playerID].UpdateRanking(rankingBlockRankArray[ranking % 4] + 1);
+
 
 	}
 
