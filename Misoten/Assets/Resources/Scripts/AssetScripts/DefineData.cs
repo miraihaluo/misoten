@@ -4,6 +4,6 @@ using System.Collections;
 [CreateAssetMenu(menuName = "CustomAssets/DefineData")]
 public class DefineData : ScriptableObject
 {
-	public readonly int STAGE_BOARDER_SIZE = 300;
+	public readonly int STAGE_BOARDER_SIZE = 500;
 
 }

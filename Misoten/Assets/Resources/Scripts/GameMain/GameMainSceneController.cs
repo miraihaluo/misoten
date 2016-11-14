@@ -195,9 +195,7 @@ public class GameMainSceneController : MonoBehaviour
 
 		// 各ランキングブロックに順位を入れる
 		for (int playerID = 0; playerID < rankingBlockObjArray.Length; playerID++)
-			for (int ranking = 0; ranking < rankingBlockRankArray.Length; ranking++)
-					rankingBlockObjArray[playerID].UpdateRanking(rankingBlockRankArray[ranking % 4] + 1);
-
+			rankingBlockObjArray[playerID].UpdateRanking(rankingBlockRankArray[playerID % 4] + 1);
 
 	}
 

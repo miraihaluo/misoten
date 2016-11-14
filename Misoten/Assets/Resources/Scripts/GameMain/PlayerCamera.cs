@@ -8,73 +8,71 @@ public class PlayerCamera : MonoBehaviour {
     // インスペクターで指定する
     [SerializeField]
     private Transform targetPlayer;
-    
 
-    // 追従するプレイヤーからの相対位置で注視点を指定
-    // (0, 0, 0)でtargetPlayerの原点を注視
-    private Vector3 lockAtOffset = new Vector3(0, -3, 0);
-    
-    //カメラのディレイスピード
-    private float delaySpeed = 10.0f;
-    
+    //カメラ座標のオフセット
+    [SerializeField]
+    private Vector3 posOffset;
+
+    //カメラ角度のオフセット
+    [SerializeField]
+    private Vector3 lookAtOffset;
+
+    //ディレイ時間
+    [SerializeField]
+    private float DelayTime;
+
+
+    private Vector3 playerStartPosition;    //プレイヤーの初期座標
+    private Vector3 cameraStartPosition;    //カメラの初期座標
+
 
     /*****************************************************************
         カメラ更新処理
     *****************************************************************/
-    void LookAt(bool slerp)
+    void CameraUpdate()
     {
-        Vector3 posOffset;          //カメラ座標のオフセット
-        Vector3 newPosition;        //新カメラ座標
-        Quaternion newRotation;     //新カメラ角度
 
-		//カメラ座標の計算
-		/*        cameraPos.Set(	targetPlayer.position.x + (targetPlayer.forward.x * posOffset.x),
-								targetPlayer.position.y + posOffset.y,
-								targetPlayer.position.z + (targetPlayer.forward.z * posOffset.z)
-								);
-
-				// 注視点の計算
-				lockAtPos.Set(	targetPlayer.position.x + targetPlayer.forward.x * lockAtOffset.x,
-								targetPlayer.position.y + lockAtOffset.y,
-								targetPlayer.position.z + targetPlayer.forward.z * lockAtOffset.z);
-
-				transform.LookAt(lockAtPos);
-		*/
-
-        //カメラ座標のオフセット計算
-        posOffset = new Vector3(-targetPlayer.forward.x * 10, 5.0f, -targetPlayer.forward.z * 10);
-
-        //カメラ座標計算
-        newPosition = targetPlayer.position + posOffset ;
-
-        //カメラ角度計算
-        newRotation = Quaternion.LookRotation(targetPlayer.position - transform.position - lockAtOffset);
-
-        switch (slerp)
-        {
-            case true:  //ディレイありTPS視点
-                transform.position = Vector3.Lerp(transform.position, newPosition, delaySpeed * Time.deltaTime);
-                transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, delaySpeed * Time.deltaTime);
-                break;
-            case false: //ディレイ無しTPS視点
-                transform.position = newPosition;
-                transform.rotation = newRotation;
-                break;
-        }
-    }
+        Vector3 newPosition;        //カメラ座標
+        Quaternion newRotation;     //カメラ角度
+        float rad;                  //回転角度
+          
+        //回転角度をラジアンに  
+        rad = targetPlayer.eulerAngles.y * Mathf.PI / 180;
+        
+        //カメラをプレイヤーを中心に回転
+        newPosition.x = -(-posOffset.x * Mathf.Cos(rad) - posOffset.z * Mathf.Sin(rad) )+ playerStartPosition.x;
+        newPosition.y = targetPlayer.position.y;
+        newPosition.z = -posOffset.x * Mathf.Sin(rad) + posOffset.z * Mathf.Cos(rad) + playerStartPosition.z;
 
 
-	void Start () {
-        //ディレイ無しでTPS視点
-        LookAt(false);
+
+        //カメラをプレイヤーの移動分平行移動、高さを合わせる
+        newPosition = newPosition + (targetPlayer.position - playerStartPosition);
+        newPosition.y = targetPlayer.position.y + posOffset.y;
+        //カメラの向きをプレイヤーと同じに
+        newRotation = targetPlayer.rotation * Quaternion.Euler(lookAtOffset);
+
+        //ディレイカメラ更新
+        transform.position = Vector3.Lerp(transform.position, newPosition, DelayTime * Time.deltaTime);
+        transform.rotation = Quaternion.Lerp(transform.rotation, newRotation, DelayTime * Time.deltaTime);
 
     }
 
+    void Start () {
+   
+        //プレイヤーの初期位置
+        playerStartPosition = targetPlayer.position;
+        //カメラの初期位置
+        cameraStartPosition = targetPlayer.position + posOffset;
+
+        //カメラの初期情報
+        transform.position = cameraStartPosition;
+        transform.rotation = targetPlayer.rotation;
+    }
 
     void Update()
     {
-        //ディレイありでTPS視点
-        LookAt(true);
+        //カメラ更新
+        CameraUpdate();
     }
-
 }

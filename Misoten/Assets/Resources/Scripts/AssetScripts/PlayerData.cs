@@ -11,6 +11,12 @@ public class PlayerData : ScriptableObject
 	[SerializeField]
 	private int[] playerScoreArray = null;
 
+	[SerializeField]
+	public readonly Color[] playerColorArray = {	new Color(255, 0, 0, 255),
+											new Color(0, 0, 255, 255),
+											new Color(0, 255, 0, 255),
+											new Color(255, 255, 0, 255)};
+
 	private const int MAX_PLAYER_NUM = 4;
 
 	/////////////////////////

@@ -84,8 +84,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetPlayer: {fileID: 0}
-  posOffset: {x: 0, y: 5, z: -10}
-  lockAtOffset: {x: 0, y: 0, z: 50}
+  posOffset: {x: 0, y: 7, z: -30}
+  lookAtOffset: {x: 5, y: 0, z: 2}
+  DelayTime: 3
 --- !u!124 &12481158
 Behaviour:
   m_ObjectHideFlags: 1

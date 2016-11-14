@@ -23,6 +23,11 @@ public class ChildObjCreatePoint : MonoBehaviour {
 	/// </summary>
 	private const int MAX_CHILDREN = 15;
 
+	/// <summary>
+	/// 固定の子供オブジェの参照を格納している配列
+	/// </summary>
+	private GameObject[] childrenObjArray;
+
 	// Use this for initialization
 	void Start () {
 	
@@ -31,10 +36,22 @@ public class ChildObjCreatePoint : MonoBehaviour {
 	void Awake()
 	{
 		chidrenIconObj = FindObjectOfType<ChildrenIcon>();
-		pos.y = 25;
+		pos.y = 0;
 		createChildCoolTime = Random.Range(15, 30);
 
 		prefabChildObj = (GameObject)Resources.Load("Prefabs/GameMain/ChildObj");
+
+		// 固定の子供オブジェクトの参照を受け取り、ミニマップアイコンを生成する
+		Transform special = this.transform.GetChild(0);
+		childrenObjArray = new GameObject[special.childCount];
+		for (int i = 0; i < childrenObjArray.Length; i++)
+		{
+			childrenObjArray[i] = special.GetChild(i).gameObject;
+			CreateChild(childrenObjArray[i].transform.position, (uint)i);
+
+		}
+
+		childrenID = (uint)childrenObjArray.Length;
 
 		// 最初にいくつか生成
 		for (int i = 0; i < 9; i++)
@@ -43,7 +60,7 @@ public class ChildObjCreatePoint : MonoBehaviour {
 			pos.z = Random.Range(-150, 150);
 
 			CreateChild(pos);
-		
+
 		}
 
 	}
@@ -63,7 +80,16 @@ public class ChildObjCreatePoint : MonoBehaviour {
 
 				CreateChild(pos);
 
-				createChildCoolTime = Random.Range(15, 30);
+				for (int i = 0; i < 2; i++)
+				{
+					int rand = Random.Range(0, childrenObjArray.Length - 1);
+					childrenObjArray[rand].SetActive(true);
+					CreateChild(childrenObjArray[rand].transform.position, (uint)rand);
+				
+				}
+
+
+					createChildCoolTime = Random.Range(15, 30);
 			
 			}
 		
@@ -74,14 +100,21 @@ public class ChildObjCreatePoint : MonoBehaviour {
 	private void CreateChild(Vector3 createPos)
 	{
 		instansChildObj = Instantiate(prefabChildObj);
-		instansChildObj.transform.position = pos;
+		instansChildObj.transform.position = createPos;
 		instansChildObj.name = childrenID.ToString();
 		instansChildObj.transform.parent = this.transform;
 
 		// ミニマップアイコン生成
-		chidrenIconObj.CreateChildIcon(pos, childrenID);
+		chidrenIconObj.CreateChildIcon(createPos, childrenID);
 
 		childrenID++;
+
+	}
+
+	private void CreateChild(Vector3 createPos, uint childID)
+	{
+		// ミニマップアイコン生成
+		chidrenIconObj.CreateChildIcon(createPos, childID);
 
 	}
 
@@ -89,8 +122,16 @@ public class ChildObjCreatePoint : MonoBehaviour {
 	{
 		chidrenIconObj.DestroyChildIcon(childID);
 
+		if (childID < childrenObjArray.Length)
+		{
+			childrenObjArray[childID].SetActive(false);
+			return;
+
+		}
+
 		foreach (Transform child in transform)
 		{
+			if (child.name == "Special") continue;
 			if (uint.Parse(child.name) == childID)
 			{
 				Destroy(child.gameObject);
