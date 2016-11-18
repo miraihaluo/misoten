@@ -16,18 +16,92 @@ public class PlayerControl : MonoBehaviour {
 	private E_STATUS eStatus = E_STATUS.ACTIVE;
 
 	/// <summary>
-	/// 秒間の移動量。
+	/// 秒間の移動の加速量。。
 	/// インスペクターで設定する
 	/// </summary>
 	[SerializeField]
-	private float moveSpeed;
+    private float moveAcceleration;
 
 	/// <summary>
-	/// 秒間の回転量。
+	/// 秒間の回転の加速量。
 	/// インスペクターで設定する
 	/// </summary>
 	[SerializeField]
-	private float rotationSpeed;
+    private float rotationAcceleration;
+
+    /// <summary>
+    /// 現在の移動量
+    /// </summary>
+ //   [SerializeField]
+    private Vector3 moveSpeed;
+
+    /// <summary>
+    /// 現在の回転量
+    /// </summary>
+ //   [SerializeField]
+    private Vector3 rotationSpeed;
+
+    /// <summary>
+    /// 移動の減速の割合
+    /// </summary>
+    [SerializeField]
+    private float moveResistivity;
+
+    /// <summary>
+    /// 回転の減速の割合
+    /// </summary>
+    [SerializeField]
+    private float rotationResistivity;
+
+    /// <summary>
+    /// 移動の最高速度
+    /// </summary>
+    [SerializeField]
+    private float moveMaxspeed;
+
+    /// <summary>
+    /// 回転の最高速度
+    /// </summary>
+    [SerializeField]
+    private float rotationMaxspeed;
+
+    /// <summary>
+    /// 浮遊の速度
+//    /// </summary>
+  //  [SerializeField]
+    private float floating;
+
+    /// <summary>
+    ///浮遊の加速度
+    /// </summary>
+    [SerializeField]
+    private float floatingAcceleration;
+
+    /// <summary>
+    /// 上下移動の加速度
+    /// </summary>
+    [SerializeField]
+    private float floatingMoveAcceleration;
+
+    /// <summary>
+    /// 上下移動のの減衰値
+    /// </summary>
+    [SerializeField]
+    private float floatingResistivity;
+
+
+    /// <summary>
+    /// 上下移動の最高速度
+    /// </summary>
+    [SerializeField]
+    private float floatingMaxspeed;
+
+
+    /// <summary>
+    /// 上下移動の減衰値
+    /// </summary>
+    [SerializeField]
+    private float floatingRevision;
 
 	/// <summary>
 	/// 攻撃被ヒット時の硬直フレーム
@@ -203,10 +277,15 @@ public class PlayerControl : MonoBehaviour {
 		if (Input.GetKeyDown(KeyCode.Return))
 			AttackDamage();
 
-		// 移動と回転の計算
-		transform.Rotate(0.0f, axisX * Time.deltaTime * rotationSpeed, 0.0f, Space.Self);	// ローカル回転
-		 transform.Translate(0.0f, axisUpDown * moveSpeed * Time.deltaTime, axisY * Time.deltaTime * moveSpeed);
-		//rigidbody.AddForce(this.transform.forward.x * axisY * Time.deltaTime * moveSpeed, axisUpDown * moveSpeed * Time.deltaTime, this.transform.forward.z * axisY * Time.deltaTime * moveSpeed);
+
+        //計算用関数
+        speedCalculation();
+
+		// 移動と回転の値の代入
+      //  transform.Rotate(rotationSpeed.x, rotationSpeed.y, rotationSpeed.z, Space.Self);	// ローカル回転
+	//	transform.Translate(0.0f,moveSpeed.y, moveSpeed.z);
+        rigidbody.AddTorque(rotationSpeed.x, rotationSpeed.y, rotationSpeed.z,ForceMode.Force);
+        rigidbody.AddForce(0.0f, moveSpeed.y, moveSpeed.z, ForceMode.Force);
 
 		// 減速処理
 		//rigidbody.velocity = moveSpeed;
@@ -296,6 +375,8 @@ public class PlayerControl : MonoBehaviour {
 
 	}
 
+
+
 	void OnTriggerEnter(Collider other)
 	{
 
@@ -318,5 +399,65 @@ public class PlayerControl : MonoBehaviour {
 		}
 
 	}
+
+
+    //移動、回転、上下降速度計算
+    void speedCalculation()
+    {
+        float absNum;
+
+        //回転速度計算 ============== 
+
+        //____減衰計算
+        rotationSpeed.y = rotationSpeed.y - rotationSpeed.y * (1.0f - rotationResistivity);
+        //____加速計算
+        rotationSpeed.y += axisX * Time.deltaTime * rotationAcceleration;
+        //____速度制限
+        absNum = System.Math.Abs(rotationSpeed.y);
+        if (rotationMaxspeed < absNum)
+            rotationSpeed.y = rotationMaxspeed * (rotationSpeed.y / absNum);
+
+        //移動速度計算 ============== 
+
+        //____減衰計算
+        moveSpeed.z = moveSpeed.z - moveSpeed.z * (1.0f - moveResistivity);
+        //____加速計算
+        moveSpeed.z += axisY * Time.deltaTime * moveAcceleration;
+        //____速度制限
+        absNum = System.Math.Abs(moveSpeed.z);
+        if (moveMaxspeed < absNum)
+            moveSpeed.z = moveMaxspeed * (moveSpeed.z / absNum ); 
+
+
+
+
+        //浮遊計算 ==============       
+
+        //____減衰計算
+        moveSpeed.y = moveSpeed.y - moveSpeed.y * (1.0f - floatingResistivity * Time.deltaTime);
+
+        //キー入力があれば浮遊を停止する
+        if (axisUpDown != 0)
+        {
+            moveSpeed.y += axisUpDown * Time.deltaTime * floatingMoveAcceleration;
+        }
+        else
+        {
+            if (Mathf.Abs(floatingAcceleration) < Mathf.Abs(floating))
+            {
+                floating = floatingAcceleration;
+                floatingAcceleration *= -1;
+            }
+            floating += floatingAcceleration * Time.deltaTime;
+            moveSpeed.y += floating;
+        }
+
+        //____速度制限
+        absNum = System.Math.Abs(moveSpeed.y);
+        if (floatingMaxspeed < absNum)
+            moveSpeed.y = floatingMaxspeed * (moveSpeed.y / absNum); 
+
+        return;
+    }
 
 }

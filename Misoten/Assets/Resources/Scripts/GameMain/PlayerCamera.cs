@@ -74,7 +74,7 @@ public class PlayerCamera : MonoBehaviour {
     void Update()
     {
         //ディレイありでTPS視点
-        LookAt(true);
+        LookAt(false);
     }
 
 }
