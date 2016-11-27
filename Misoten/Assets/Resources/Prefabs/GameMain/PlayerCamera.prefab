@@ -85,7 +85,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetPlayer: {fileID: 0}
   posOffset: {x: 0, y: 7, z: -30}
-  lookAtOffset: {x: 5, y: 0, z: 2}
+  lookAtOffset: {x: 0, y: 0, z: 0}
   DelayTime: 3
 --- !u!124 &12481158
 Behaviour:

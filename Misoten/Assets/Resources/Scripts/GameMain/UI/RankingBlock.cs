@@ -186,7 +186,6 @@ public class RankingBlock : MonoBehaviour {
                     // ワンアクションにかける時間から縦移動スピードを決定
                     moveSpeedY = (myRectTransform.sizeDelta.y * (oldRanking - newRanking)) / moveTime;
 
-                    Debug.Log(myRectTransform.sizeDelta);
                    
                     elapsedTimeWork = moveTime * 3;
 

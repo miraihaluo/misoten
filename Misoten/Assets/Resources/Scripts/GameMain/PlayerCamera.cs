@@ -70,7 +70,7 @@ public class PlayerCamera : MonoBehaviour {
         transform.rotation = targetPlayer.rotation;
     }
 
-    void Update()
+    void LateUpdate()
     {
         //カメラ更新
         CameraUpdate();

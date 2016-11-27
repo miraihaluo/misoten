@@ -52,7 +52,7 @@ public class PlayerControl : MonoBehaviour {
 	/// <summary>
 	/// 現在の移動量
 	/// </summary>
-	[SerializeField, Header("現在の速度")]
+	//[SerializeField, Header("現在の速度")]
 	private Vector3 moveSpeed;
 
 	/// <summary>
@@ -77,7 +77,7 @@ public class PlayerControl : MonoBehaviour {
 	/// <summary>
 	/// 現在の回転量
 	/// </summary>
-	[SerializeField, Header("現在の回転量")]
+	//[SerializeField, Header("現在の回転量")]
 	private Vector3 rotationSpeed;
 
 	/// <summary>
@@ -93,28 +93,22 @@ public class PlayerControl : MonoBehaviour {
 	private float rotationResistivity;
 
 	/// <summary>
-	/// 浮遊の上下のずれている値
+	/// 浮遊の現在の速度
 	/// </summary>
-	[SerializeField, Header("浮遊のずれている値")]
+	//[SerializeField, Header("現在の浮遊の速度")]
 	private float floating;
 
 	/// <summary>
-	/// 上下移動の加速度
+	/// 浮遊の加速度
 	/// </summary>
-	[SerializeField, Header("上下移動の加速度")]
+	[SerializeField, Header("浮遊の加速度")]
 	private float floatingAcceleration;
 
 	/// <summary>
-	/// 浮遊と上下移動の減衰値
+	/// 上下移動のの減衰値
 	/// </summary>
-	[SerializeField, Header("浮遊と上下移動の減衰値")]
+	[SerializeField, Header("上下移動のの減衰値")]
 	private float floatingResistivity;
-
-	/// <summary>
-	/// 浮遊の速度範囲
-	/// </summary>
-	[SerializeField, Header("浮遊の速度範囲")]
-	private float floatingRange;
 
 	/// <summary>
 	/// 上下移動の最高速度
@@ -123,16 +117,11 @@ public class PlayerControl : MonoBehaviour {
 	private float floatingMaxspeed;
 
 	/// <summary>
-	/// 浮遊の補正値の適応％値
+	/// 上下移動の加速度
 	/// </summary>
-	[SerializeField, Header("浮遊の補正値(%)")]
-	private float floatingRevision;
+	[SerializeField, Header("上下移動の加速度")]
+	private float floatingMoveAcceleration;
 
-	/// <summary>
-	/// 前回の浮遊の速度
-	/// </summary>
-	[SerializeField, Header("前回の浮遊の速度")]
-	private float floatingSpeed;
 
 	/// <summary>
 	/// 子供を奪われる状態の時間。
@@ -223,6 +212,16 @@ public class PlayerControl : MonoBehaviour {
 	private ParticleSystem attackWaterObj;
 
 	/// <summary>
+	/// 頭上に表示するプレイヤーアイコンのオブジェ
+	/// </summary>
+	private Transform numIconObj;
+
+	/// <summary>
+	/// プレイヤーアイコンのローカル位置
+	/// </summary>
+	private Vector3 numIconPos;
+
+	/// <summary>
 	/// 自身のリジッドボディ
 	/// </summary>
 	private Rigidbody rigidbody;
@@ -252,7 +251,7 @@ public class PlayerControl : MonoBehaviour {
 	/// <summary>
 	/// 一度に持てる子供の最大数
 	/// </summary>
-	private const int SCORE_MAX = 5;
+	private const int SCORE_MAX = 20;
 
 	/// <summary>
 	/// 現在持っている子供の人数
@@ -280,6 +279,7 @@ public class PlayerControl : MonoBehaviour {
 	void Start () {
 	
 	}
+
 	void Awake()
 	{
 		// アセットの参照受け取り
@@ -297,6 +297,10 @@ public class PlayerControl : MonoBehaviour {
 		foreach(Transform child in transform)
 			if (child.name == "AttackWater")
 				attackWaterObj = child.GetComponent<ParticleSystem>();
+
+		// プレイヤーアイコンオブジェの取得
+		numIconObj = this.transform.FindChild("Player_NumIcon");
+		numIconPos = numIconObj.localPosition;
 
 		// ボタン文字列に自分のIDを追加
 		horizontalStr += this.name;
@@ -547,66 +551,76 @@ public class PlayerControl : MonoBehaviour {
 
 	}
 
-	//移動、回転、上下降速度計算
-	void speedCalculation()
-	{
-		float absNum;
+   //移動、回転、上下降速度計算
+    void speedCalculation()
+    {
+        float absNum;
 
-		//回転速度計算 ============== 
+        //回転速度計算 ============== 
 
-		//____減衰計算
-		rotationSpeed.y = rotationSpeed.y - rotationSpeed.y * (1.0f - rotationResistivity);
-		//____加速計算
-		rotationSpeed.y += axisX * Time.deltaTime * rotationAcceleration;
-		//____速度制限
-		absNum = System.Math.Abs(rotationSpeed.y);
-		if (rotationMaxspeed < absNum)
-			rotationSpeed.y = rotationMaxspeed * (rotationSpeed.y / absNum);
+        //____減衰計算
+        rotationSpeed.y = rotationSpeed.y - rotationSpeed.y * (1.0f - rotationResistivity);
+        //____加速計算
+        rotationSpeed.y += axisX * Time.deltaTime * rotationAcceleration;
+        //____速度制限
+        absNum = System.Math.Abs(rotationSpeed.y);
+        if (rotationMaxspeed < absNum)
+            rotationSpeed.y = rotationMaxspeed * (rotationSpeed.y / absNum);
 
-		//移動速度計算 ============== 
+        //移動速度計算 ============== 
 
-		//____減衰計算
-		moveSpeed.z = moveSpeed.z - moveSpeed.z * (1.0f - moveResistivity);
-		//____加速計算
-		moveSpeed.z += axisY * Time.deltaTime * moveAcceleration;
-		//____速度制限
-		absNum = System.Math.Abs(moveSpeed.z);
-		if (moveMaxspeed < absNum)
-			moveSpeed.z = moveMaxspeed * (moveSpeed.z / absNum);
-
-
+        //____減衰計算
+        moveSpeed.z = moveSpeed.z - moveSpeed.z * (1.0f - moveResistivity);
+        //____加速計算
+        moveSpeed.z += axisY * Time.deltaTime * moveAcceleration;
+        //____速度制限
+        absNum = System.Math.Abs(moveSpeed.z);
+        if (moveMaxspeed < absNum)
+            moveSpeed.z = moveMaxspeed * (moveSpeed.z / absNum ); 
 
 
-		//浮遊計算 ============== 
 
-		//____減衰計算
-		moveSpeed.y = moveSpeed.y - moveSpeed.y * (1.0f - floatingResistivity);
 
-		//入力があれば上下移動、なければ浮遊
-		if (axisUpDown != 0)
-		{
+        //浮遊計算 ==============       
 
-			//____加速計算  (入力での加速)
-			moveSpeed.y += axisUpDown * Time.deltaTime * floatingAcceleration;
-		}
-		else
-		{
-			//____浮遊計算                                                              
-			floatingSpeed = floatingSpeed + Time.deltaTime * (Random.Range(10, 10 + floatingRange * 2 - (floating * floatingRevision)) - 10 - floatingRange);
-			floating += floatingSpeed;
-			moveSpeed.y += floatingSpeed;
-		}
-		//____速度制限
-		absNum = System.Math.Abs(moveSpeed.y);
-		if (floatingMaxspeed < absNum)
-			moveSpeed.y = floatingMaxspeed * (moveSpeed.y / absNum);
+        //____減衰計算
+        moveSpeed.y = moveSpeed.y - moveSpeed.y * (1.0f - floatingResistivity * Time.deltaTime);
 
-		return;
-	}
+        //キー入力があれば浮遊を停止する
+        if (axisUpDown != 0)
+        {
+            moveSpeed.y += axisUpDown * Time.deltaTime * floatingMoveAcceleration;
+        }
+        else
+        {
+            if (Mathf.Abs(floatingAcceleration) < Mathf.Abs(floating))
+            {
+                floating = floatingAcceleration;
+                floatingAcceleration *= -1;
+            }
+            floating += floatingAcceleration * Time.deltaTime;
+            moveSpeed.y += floating;
+        }
+
+        //____速度制限
+        absNum = System.Math.Abs(moveSpeed.y);
+        if (floatingMaxspeed < absNum)
+            moveSpeed.y = floatingMaxspeed * (moveSpeed.y / absNum); 
+
+        return;
+    }
+
+
+    float test_atack_resist=6f;
+    void slipback(Vector3 opponentSpeed)
+    {
+        moveSpeed = (moveSpeed * -1 * test_atack_resist) - opponentSpeed;
+    
+    }
 
 	void OnCollisionEnter(Collision aite)
 	{
-
+                   
 	}
 
 	void OnTriggerEnter(Collider other)
@@ -624,6 +638,8 @@ public class PlayerControl : MonoBehaviour {
 
 		if (other.tag == "Goal")
 		{
+			if (score == 0) return;
+
 			playerData.AddPlayerScoreArray(int.Parse(transform.name) - 1 , score);
 			sceneObj.PlayerRankUpdate();
 			score = 0;
@@ -632,6 +648,7 @@ public class PlayerControl : MonoBehaviour {
 
 		if (other.tag == "Player")
 		{
+            
 			// 自分が通常状態じゃなければ除外
 			if (eStatus != E_STATUS.ACTIVE) return;
 			
@@ -639,6 +656,7 @@ public class PlayerControl : MonoBehaviour {
 			if (score == SCORE_MAX) return;
 
 			PlayerControl playerObj = other.GetComponent<PlayerControl>();
+
 
 			// 相手がダメージ状態じゃなければ除外
 			if ((E_STATUS)playerObj.GetStatus() != E_STATUS.DAMAGE) return;
@@ -664,6 +682,18 @@ public class PlayerControl : MonoBehaviour {
 		// 当たった時の処理
 		AttackDamage();
 	
+	}
+
+	void OnWillRenderObject()
+	{
+/*		if (this.transform.position.y < Camera.current.transform.position.y) return;
+
+		if (Mathf.Asin((this.transform.position.y - Camera.current.transform.position.y) / Vector3.Distance(Camera.current.transform.position, this.transform.position)) * 180 / Mathf.PI < 15.0f)
+			numIconObj.localPosition = numIconPos;
+		else
+			numIconObj.localPosition = -numIconPos;
+*/
+
 	}
 
 }

@@ -22,6 +22,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &159806
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 453236}
+  - 114: {fileID: 11412752}
+  m_Layer: 0
+  m_Name: Player_NumIcon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &160338
 GameObject:
   m_ObjectHideFlags: 0
@@ -39,33 +55,15 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &177396
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 428222}
-  - 33: {fileID: 3375376}
-  - 23: {fileID: 2383916}
-  - 114: {fileID: 11402822}
-  m_Layer: 0
-  m_Name: PlayerNumIcon
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &428222
+--- !u!4 &453236
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 177396}
+  m_GameObject: {fileID: 159806}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.1, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 1}
+  m_LocalPosition: {x: 0, y: 0.2, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 499520}
   m_RootOrder: 1
@@ -88,11 +86,11 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 122004}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 50, z: 100}
   m_LocalScale: {x: 50, y: 50, z: 50}
   m_Children:
   - {fileID: 494062}
-  - {fileID: 428222}
+  - {fileID: 453236}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!23 &2327190
@@ -122,39 +120,6 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
---- !u!23 &2383916
-MeshRenderer:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 177396}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 1
-  m_Materials:
-  - {fileID: 2100000, guid: 4b64901c1c0e210498e810995c1ac2d1, type: 2}
-  m_SubsetIndices: 
-  m_StaticBatchRoot: {fileID: 0}
-  m_UseLightProbes: 0
-  m_ReflectionProbeUsage: 0
-  m_ProbeAnchor: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 1
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
---- !u!33 &3375376
-MeshFilter:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 177396}
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!33 &3391212
 MeshFilter:
   m_ObjectHideFlags: 1
@@ -218,15 +183,15 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &11402822
+--- !u!114 &11412752
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 177396}
+  m_GameObject: {fileID: 159806}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8cc6e2779858eaa47bc3e069151202fe, type: 3}
+  m_Script: {fileID: 11500000, guid: de9a2b0b847575a4b898628b91a487b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &11430788
@@ -242,25 +207,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   eStatus: 0
   moveAcceleration: 20
-  moveSpeed: {x: 0, y: 0, z: 0}
   moveMaxspeed: 50
   moveResistivity: 0.5
-  rotationAcceleration: 10
-  rotationSpeed: {x: 0, y: 0, z: 0}
+  rotationAcceleration: 20
   rotationMaxspeed: 50
   rotationResistivity: 0.5
-  floating: 0
-  floatingAcceleration: 10
+  floatingAcceleration: 0.01
   floatingResistivity: 0.5
-  floatingRange: 0.01
   floatingMaxspeed: 50
-  floatingRevision: 1
-  floatingSpeed: 0
+  floatingMoveAcceleration: 20
   damageTimePerSec: 3
   crashTimePerSec: 0
   crashRotationFrequency: 0
   flashingOnCrashTimePreSec: 0.1
-  score: 0
+  score: 1
   rank: 1
 --- !u!198 &19873428
 ParticleSystem:

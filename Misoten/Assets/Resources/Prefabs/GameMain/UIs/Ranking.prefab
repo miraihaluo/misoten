@@ -132,6 +132,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 281fdbc62e14d0d438ca78657a1133d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetPlayer: {fileID: 0}
+  newRanking: 1
+  oldRanking: 0
+  moveSpeedX: 10000
+  moveSpeedY: 10000
+  moveTime: 1
+  elapsedTimeWork: 0
+  rankBuff: 0
 --- !u!114 &11457702
 MonoBehaviour:
   m_ObjectHideFlags: 1

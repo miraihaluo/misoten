@@ -21,6 +21,7 @@ public class GameMainSceneController : MonoBehaviour
 
 	private PlayerData playerData;
 
+	[SerializeField]
 	private PlayerControl[] players;
 
 	private int[] scoreArray;
@@ -73,7 +74,7 @@ public class GameMainSceneController : MonoBehaviour
 		playerData = Resources.Load<PlayerData>("Assets/PlayerData");
 		
 		// プレイヤーオブジェのデータを取得するためテキトーに検索して取得
-		GameObject workGameObj = GameObject.Find("Players");
+/*		GameObject workGameObj = GameObject.Find("Players");
 		players = new PlayerControl[workGameObj.transform.childCount];
 
 		for (int i = 0; i < workGameObj.transform.childCount; i++)
@@ -81,7 +82,7 @@ public class GameMainSceneController : MonoBehaviour
 			players[i] = workGameObj.transform.GetChild(i).transform.GetComponent<PlayerControl>();
 
 		}
-
+		*/
 		// スコア配列の参照を取得
 		scoreArray = playerData.GetPlayerScoreArray();
 
@@ -163,35 +164,27 @@ public class GameMainSceneController : MonoBehaviour
 		/*** ランキングブロックの処理 ***/
 		int[] work = new int[] {-1, -1, -1, -1};
 
+		// 要素番号を順位に、中身をプレイヤー番号で、work配列に並べていく
 		for (int playerID = 0; playerID < rankingBlockRankArray.Length; playerID++)
 		{
 			for(int ranking = 0; ranking < sort.Length; ranking++)
 			{
-				if (scoreArray[rankingBlockRankArray[playerID]] == sort[ranking])
-				{
-					if (work[ranking] == -1)
-					{
-						work[ranking] = rankingBlockRankArray[playerID];
-						break;
+				if (scoreArray[rankingBlockRankArray[playerID]] != sort[ranking]) continue;
+				if (work[ranking] != -1) continue;	// 同率なら、先に高い順位だった方が高い順位になる
 
-					}
-
-/*					for (int sarch = 0; ranking + sarch < work.Length; sarch++)
-						if (work[ranking + sarch] == -1)
-						{
-							work[ranking + sarch] = rankingBlockRankArray[playerID];
-							break;
-
-						}
-*/				
-				}
+				work[ranking] = rankingBlockRankArray[playerID];
+				break;
 
 			}
 
 		}
 
+		// 要素番号をプレイヤー番号に、中身を順位に変換する。
+		for (int i = 0; i < rankingBlockRankArray.Length; i++)
+			rankingBlockRankArray[work[i]] = i;
+
 		// workの中身をランキングブロックの順位を入れている配列にコピー
-		work.CopyTo(rankingBlockRankArray, 0);
+		//work.CopyTo(rankingBlockRankArray, 0);
 
 		// 各ランキングブロックに順位を入れる
 		for (int playerID = 0; playerID < rankingBlockObjArray.Length; playerID++)
