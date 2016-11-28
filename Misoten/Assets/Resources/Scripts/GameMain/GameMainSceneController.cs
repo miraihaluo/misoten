@@ -6,38 +6,38 @@ using System;	// Arrayを使うのに必要
 public class GameMainSceneController : MonoBehaviour
 {
 
-	// スペースキーで画面遷移
+    // スペースキーで画面遷移
     public string sceneChangeVirtualKeyName = "Jump";
 
     [SerializeField]    // 変数をインスペクターから変更できるようにする
     private string nextSceneName;
 
-	/// <summary>
-	/// 残り時間
-	/// </summary>
-	[SerializeField]
-	private float limitTime = 60;
-	public float NowTime { get { return limitTime; } } // limitTimeのゲッター
+    /// <summary>
+    /// 残り時間
+    /// </summary>
+    [SerializeField]
+    private float limitTime = 60;
+    public float NowTime { get { return limitTime; } } // limitTimeのゲッター
 
-	private PlayerData playerData;
+    private PlayerData playerData;
 
-	[SerializeField]
-	private PlayerControl[] players;
+    [SerializeField]
+    private PlayerControl[] players;
 
-	private int[] scoreArray;
-	private int[] sort;
-	
-	/// <summary>
-	/// ランキングブロックの配列
-	/// </summary>
-	private int[] rankingBlockRankArray = new int[] {0, 1, 2, 3};
+    private int[] scoreArray;
+    private int[] sort;
 
-	/// <summary>
-	/// プレイヤーの現在のランクを表示するオブジェ群を格納している配列
-	/// </summary>
-	[SerializeField]
-	private Rank[] nowRankObjArray;
-	/*
+    /// <summary>
+    /// ランキングブロックの配列
+    /// </summary>
+    private int[] rankingBlockRankArray = new int[] { 0, 1, 2, 3 };
+
+    /// <summary>
+    /// プレイヤーの現在のランクを表示するオブジェ群を格納している配列
+    /// </summary>
+    [SerializeField]
+    private Rank[] nowRankObjArray;
+    /*
 	/// <summary>
 	/// プレイヤーの次のランクを表示するオブジェ群を格納している配列
 	/// </summary>
@@ -51,93 +51,99 @@ public class GameMainSceneController : MonoBehaviour
 	private NextScore[] nextScoreArray;
 	*/
 
-	/// <summary>
-	/// ランキングに表示している取得スコアオブジェ配列
-	/// </summary>
-	[SerializeField]
-	private NextScore[] rankingScoreObjArray;
+    /// <summary>
+    /// ランキングに表示している取得スコアオブジェ配列
+    /// </summary>
+    [SerializeField]
+    private NextScore[] rankingScoreObjArray;
 
-	/// <summary>
-	/// ランキングブロック配列
-	/// </summary>
-	[SerializeField]
-	private RankingBlock[] rankingBlockObjArray;
+    /// <summary>
+    /// ランキングブロック配列
+    /// </summary>
+    [SerializeField]
+    private RankingBlock[] rankingBlockObjArray;
+
+    [SerializeField]
+    private AudioSource TimeUP_SE;
 
     // Use this for initialization
-    void Start(){
-		
+    void Start()
+    {
+
     }
 
-	void Awake()
-	{
-		// プレイヤーデータアセットの取得
-		playerData = Resources.Load<PlayerData>("Assets/PlayerData");
-		
-		// プレイヤーオブジェのデータを取得するためテキトーに検索して取得
-/*		GameObject workGameObj = GameObject.Find("Players");
-		players = new PlayerControl[workGameObj.transform.childCount];
+    void Awake()
+    {
+        // プレイヤーデータアセットの取得
+        playerData = Resources.Load<PlayerData>("Assets/PlayerData");
 
-		for (int i = 0; i < workGameObj.transform.childCount; i++)
-		{
-			players[i] = workGameObj.transform.GetChild(i).transform.GetComponent<PlayerControl>();
+        // プレイヤーオブジェのデータを取得するためテキトーに検索して取得
+        /*		GameObject workGameObj = GameObject.Find("Players");
+                players = new PlayerControl[workGameObj.transform.childCount];
 
-		}
-		*/
-		// スコア配列の参照を取得
-		scoreArray = playerData.GetPlayerScoreArray();
+                for (int i = 0; i < workGameObj.transform.childCount; i++)
+                {
+                    players[i] = workGameObj.transform.GetChild(i).transform.GetComponent<PlayerControl>();
 
-		// スコア配列ソート用の配列を別に生成
-		sort = new int[scoreArray.Length];
+                }
+                */
+        // スコア配列の参照を取得
+        scoreArray = playerData.GetPlayerScoreArray();
 
-	}
+        // スコア配列ソート用の配列を別に生成
+        sort = new int[scoreArray.Length];
+
+    }
 
     // Update is called once per frame
-    void Update(){
+    void Update()
+    {
 
-		// 残り時間を減らす
-		limitTime -= Time.deltaTime * 1;
+        // 残り時間を減らす
+        limitTime -= Time.deltaTime * 1;
 
-		// 特定のボタンを押すか、残り時間が0になったら遷移
+        // 特定のボタンを押すか、残り時間が0になったら遷移
         if (Input.GetButtonDown(sceneChangeVirtualKeyName) || limitTime <= 0)
         {
-            SceneManager.LoadScene(nextSceneName);
+            TimeUP_SE.Play();
+            FadeManager.Instance.LoadLevel(nextSceneName, 1.0f);
 
         }
 
     }
 
-	public void PlayerRankUpdate()
-	{
-		// スコア配列をソート用配列にコピー
-		Array.Copy(scoreArray, sort, scoreArray.Length);
+    public void PlayerRankUpdate()
+    {
+        // スコア配列をソート用配列にコピー
+        Array.Copy(scoreArray, sort, scoreArray.Length);
 
-		// ソート用配列を昇順にソート
-		Array.Sort(sort);
+        // ソート用配列を昇順にソート
+        Array.Sort(sort);
 
-		// ソート用配列を降順に変更
-		Array.Reverse(sort);
+        // ソート用配列を降順に変更
+        Array.Reverse(sort);
 
-		// i がプレイヤーID、 j が順位に対応
-		for (int i = 0; i < scoreArray.Length; i++)
-		{
-			for(int j = 0; j < sort.Length; j++)
-			{
-				// IDが i 番のプレイヤーのスコアが、j 位のスコアと同じか比較
-				if (scoreArray[i] == sort[j])
-				{
-					// j はゼロ始まり、順位はイチ始まりなので、+1をして合わせる
-					players[i].Rank = j + 1;
-					break; // j のfor文から抜ける
-				
-				}
-			
-			}
+        // i がプレイヤーID、 j が順位に対応
+        for (int i = 0; i < scoreArray.Length; i++)
+        {
+            for (int j = 0; j < sort.Length; j++)
+            {
+                // IDが i 番のプレイヤーのスコアが、j 位のスコアと同じか比較
+                if (scoreArray[i] == sort[j])
+                {
+                    // j はゼロ始まり、順位はイチ始まりなので、+1をして合わせる
+                    players[i].Rank = j + 1;
+                    break; // j のfor文から抜ける
 
-		}
+                }
 
-		foreach (Rank rankObj in nowRankObjArray)
-			rankObj.UpdateNowRank();
-		/*
+            }
+
+        }
+
+        foreach (Rank rankObj in nowRankObjArray)
+            rankObj.UpdateNowRank();
+        /*
 		foreach (NextRank nextRankObj in nextRankObjArray)
 			nextRankObj.UpdateNextRank();
 
@@ -158,38 +164,38 @@ public class GameMainSceneController : MonoBehaviour
 		}
 		*/
 
-		for (int i = 0; i < rankingScoreObjArray.Length; i++)
-			rankingScoreObjArray[i].UpdateNextScore(scoreArray[i % 4]);
+        for (int i = 0; i < rankingScoreObjArray.Length; i++)
+            rankingScoreObjArray[i].UpdateNextScore(scoreArray[i % 4]);
 
-		/*** ランキングブロックの処理 ***/
-		int[] work = new int[] {-1, -1, -1, -1};
+        /*** ランキングブロックの処理 ***/
+        int[] work = new int[] { -1, -1, -1, -1 };
 
-		// 要素番号を順位に、中身をプレイヤー番号で、work配列に並べていく
-		for (int playerID = 0; playerID < rankingBlockRankArray.Length; playerID++)
-		{
-			for(int ranking = 0; ranking < sort.Length; ranking++)
-			{
-				if (scoreArray[rankingBlockRankArray[playerID]] != sort[ranking]) continue;
-				if (work[ranking] != -1) continue;	// 同率なら、先に高い順位だった方が高い順位になる
+        // 要素番号を順位に、中身をプレイヤー番号で、work配列に並べていく
+        for (int playerID = 0; playerID < rankingBlockRankArray.Length; playerID++)
+        {
+            for (int ranking = 0; ranking < sort.Length; ranking++)
+            {
+                if (scoreArray[rankingBlockRankArray[playerID]] != sort[ranking]) continue;
+                if (work[ranking] != -1) continue;  // 同率なら、先に高い順位だった方が高い順位になる
 
-				work[ranking] = rankingBlockRankArray[playerID];
-				break;
+                work[ranking] = rankingBlockRankArray[playerID];
+                break;
 
-			}
+            }
 
-		}
+        }
 
-		// 要素番号をプレイヤー番号に、中身を順位に変換する。
-		for (int i = 0; i < rankingBlockRankArray.Length; i++)
-			rankingBlockRankArray[work[i]] = i;
+        // 要素番号をプレイヤー番号に、中身を順位に変換する。
+        for (int i = 0; i < rankingBlockRankArray.Length; i++)
+            rankingBlockRankArray[work[i]] = i;
 
-		// workの中身をランキングブロックの順位を入れている配列にコピー
-		//work.CopyTo(rankingBlockRankArray, 0);
+        // workの中身をランキングブロックの順位を入れている配列にコピー
+        //work.CopyTo(rankingBlockRankArray, 0);
 
-		// 各ランキングブロックに順位を入れる
-		for (int playerID = 0; playerID < rankingBlockObjArray.Length; playerID++)
-			rankingBlockObjArray[playerID].UpdateRanking(rankingBlockRankArray[playerID % 4] + 1);
+        // 各ランキングブロックに順位を入れる
+        for (int playerID = 0; playerID < rankingBlockObjArray.Length; playerID++)
+            rankingBlockObjArray[playerID].UpdateRanking(rankingBlockRankArray[playerID % 4] + 1);
 
-	}
+    }
 
 }
