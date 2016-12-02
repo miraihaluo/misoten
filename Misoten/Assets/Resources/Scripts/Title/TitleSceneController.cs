@@ -5,23 +5,29 @@ using UnityEngine.SceneManagement;  // シーン遷移に使う関数がある�
 public class TitleSceneController : MonoBehaviour
 {
 
-    [SerializeField]    // 変数をインスペクターから変更できるようにする
-    private string nextSceneName;
+	[SerializeField]    // 変数をインスペクターから変更できるようにする
+	private string nextSceneName;
+
+	//音楽データ
+	[SerializeField]
+	private AudioSource sound01;
 
 	// Use this for initialization
-	void Start () {
-	
+	void Start()
+	{
 	}
-	
+
 	// Update is called once per frame
-	void Update () {
+	void Update()
+	{
 
-        // キーボード、マウスの何かしらのボタンのトリガーをtrueで返す
-        if (Input.anyKeyDown)
-        {
-            SceneManager.LoadScene(nextSceneName);
-
-        }
+		// キーボード、マウスの何かしらのボタンのトリガーをtrueで返す
+		if (Input.anyKeyDown)
+		{
+			sound01.Play();
+		//	FadeManager.Instance.LoadLevel(nextSceneName, 1.0f);
+		}
 
 	}
+
 }
