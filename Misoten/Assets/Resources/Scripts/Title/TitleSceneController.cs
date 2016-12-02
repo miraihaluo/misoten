@@ -8,24 +8,20 @@ public class TitleSceneController : MonoBehaviour
     [SerializeField]    // 変数をインスペクターから変更できるようにする
     private string nextSceneName;
 
-    [SerializeField]
-    private AudioSource sound01;
-
-    // Use this for initialization
-    void Start()
-    {
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
+	// Use this for initialization
+	void Start () {
+	
+	}
+	
+	// Update is called once per frame
+	void Update () {
 
         // キーボード、マウスの何かしらのボタンのトリガーをtrueで返す
         if (Input.anyKeyDown)
         {
-            sound01.Play();
-            FadeManager.Instance.LoadLevel(nextSceneName, 1.0f);
+            SceneManager.LoadScene(nextSceneName);
+
         }
 
-    }
+	}
 }
