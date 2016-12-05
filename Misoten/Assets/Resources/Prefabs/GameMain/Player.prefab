@@ -136,12 +136,12 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 1
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_UseGravity: 0
   m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 126
-  m_CollisionDetection: 0
+  m_Interpolate: 2
+  m_Constraints: 80
+  m_CollisionDetection: 1
 --- !u!64 &6419008
 MeshCollider:
   m_ObjectHideFlags: 1
@@ -206,22 +206,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eStatus: 0
-  moveAcceleration: 20
-  moveMaxspeed: 50
-  moveResistivity: 0.5
-  rotationAcceleration: 20
-  rotationMaxspeed: 50
-  rotationResistivity: 0.5
-  floatingAcceleration: 0.01
-  floatingResistivity: 0.5
-  floatingMaxspeed: 50
-  floatingMoveAcceleration: 20
+  moveAcceleration: 40
+  moveMaxspeed: 150
+  moveResistivity: 0.8
+  rotationAcceleration: 2
+  rotationMaxspeed: 5
+  rotationResistivity: 0.9
+  floatingAcceleration: 0.02
+  floatingResistivity: 0.8
+  floatingMaxspeed: 200
+  floatingMoveAcceleration: 60
   damageTimePerSec: 3
   crashTimePerSec: 0
   crashRotationFrequency: 0
   flashingOnCrashTimePreSec: 0.1
+  childNumGaugeObj: {fileID: 0}
   score: 1
   rank: 1
+  Water_SE: {fileID: 0}
+  Hit_SE: {fileID: 0}
+  ChildGet_SE: {fileID: 0}
+  ScoreGet_SE: {fileID: 0}
+  Colision_SE: {fileID: 0}
+  Elasticity: 0.8
+  PlayerElasticity: 0.9
+  HitBackResistivity: 0.9
+  KeyStopTime: 0.1
+  PlayerHitBackSpeed: 4
 --- !u!198 &19873428
 ParticleSystem:
   m_ObjectHideFlags: 1

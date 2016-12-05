@@ -10,7 +10,7 @@ public class ChildGauge_ChildIcon : MonoBehaviour {
 	{
 		CREATE,
 		MOVE,
-
+        OUT,
 		MAX
 	}
 
@@ -22,12 +22,33 @@ public class ChildGauge_ChildIcon : MonoBehaviour {
 	private RectTransform rectTransObj;
 
 	/// <summary>
+	/// 自分の所属するゲージオブジェ
+	/// </summary>
+	private ChildNumGauge gaugeObj = null;
+
+	/// <summary>
+	/// 子供ゲージへのオフセット
+	/// </summary>
+	private Vector3 mainPosOffset;
+
+	/// <summary>
 	/// 移動限界範囲（ローカル座標）
 	/// </summary>
 	[SerializeField, Header("移動範囲")]
-	private Vector2 limitPos = new Vector2(200, 100);
+	private Vector3 limitPos = new Vector3(200, 100, 0.0f);
+
+	/// <summary>
+	/// 移動範囲のオフセット
+	/// </summary>
+	[SerializeField, Header("移動範囲のオフセット")]
+	private Vector3 limitPosOffset = new Vector3(-50, -10, 0.0f);
 
 	private Vector3 afterLimitPos = Vector3.zero;
+
+	/// <summary>
+	/// 移動方向
+	/// </summary>
+	private Vector3 moveVec;
 
 	/// <summary>
 	/// 乱数を格納する一時変数
@@ -64,7 +85,11 @@ public class ChildGauge_ChildIcon : MonoBehaviour {
 
 	private const int randomPer = 5;
 
-	void Awake()
+    //ベジェ曲線
+    private Bezier inBezier, outBezier;
+    private float t = 0.0f;
+
+    void Awake()
 	{
 		rectTransObj =  this.GetComponent<RectTransform>();
 	
@@ -73,12 +98,16 @@ public class ChildGauge_ChildIcon : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		moveNowTime = RandomVal(moveTimeArea[0], moveTimeArea[1]);
+		mainPosOffset.x = -this.transform.parent.transform.localPosition.x;
+		mainPosOffset.y = -this.transform.parent.transform.localPosition.y;
+		limitPosOffset += mainPosOffset;
 		CreateInitialize();
+        //inBezier = new Bezier(new Vector3(0f, 200.0f, 0f), new Vector3(0f, 0f, 0f), new Vector3(400f, 0.0f, 0f), new Vector3(limitPosOffset.x, -20.0f, 0f));
+        //outBezier = new Bezier(new Vector3(0f, 0f, 0f), new Vector3(300f, 0f, 0f), new Vector3(0f, 0f, 0f), new Vector3(Random.Range(-50, 50), 400f, 0f));
+    }
 
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    // Update is called once per frame
+    void Update () {
 
 		switch (eStatus)
 		{
@@ -89,9 +118,12 @@ public class ChildGauge_ChildIcon : MonoBehaviour {
 			case E_STATUS.MOVE:
 				MoveUpdate();
 				break;
-		
-		
-		}
+
+            case E_STATUS.OUT:
+                OutUpdate();
+                break;
+
+        }
 
 	}
 
@@ -103,6 +135,21 @@ public class ChildGauge_ChildIcon : MonoBehaviour {
 
 		return randomVal / randomPer;
 
+	}
+
+	private void SetGaugeObj(ChildNumGauge obj)
+	{
+		gaugeObj = obj;
+
+	}
+
+	/// <summary>
+	/// 状態をOUTにする
+	/// </summary>
+	public void ChangeModeOUT()
+	{
+		ChangeStatus(E_STATUS.OUT);
+	
 	}
 
 	private void ChangeStatus(E_STATUS changeStatus)
@@ -132,36 +179,57 @@ public class ChildGauge_ChildIcon : MonoBehaviour {
 				MoveInitialize();
 				break;
 
+			case E_STATUS.OUT:
+				OutInitialize();
+				break;
+
 		}
 	
 	}
 
 	private void CreateInitialize()
 	{
-		this.transform.localPosition = Vector3.up * 200.0f;
+		//this.transform.localPosition = Vector3.up * 200.0f;
+		inBezier = new Bezier(this.transform.localPosition, Vector3.zero + mainPosOffset, new Vector3(400f, 0.0f, 0f) + mainPosOffset, new Vector3(limitPosOffset.x, mainPosOffset.y, 0f));
 
 	}
 
 	private void CreateUpdate()
 	{
-		this.transform.localPosition -= Vector3.up * (25.0f * Time.deltaTime);
-
-		if(this.transform.localPosition.y < 0)
+        this.transform.localPosition = inBezier.GetPointAtTime(t);
+        t += 0.02f;
+        if (t > 1f)
+        {
+            t = 0f;
+            ChangeStatus(E_STATUS.MOVE);
+        }
+        /*/   
+        this.transform.localPosition -= Vector3.up * (25.0f * Time.deltaTime);
+        if (this.transform.localPosition.y < 0)
 			ChangeStatus(E_STATUS.MOVE);
-	
+	    //*/
 	}
 
 	private void CreateFinalize()
 	{
-		this.transform.localPosition = Vector3.zero;
+		//this.transform.localPosition = Vector3.zero;
+		gaugeObj.ConpletionHeadOperation();
 	
 	}
 
 	private void MoveInitialize()
-	{ }
+	{
+		moveVec.x = Random.Range(-1.0f, 1.0f);
+		moveVec.y = Random.Range(-1.0f, 1.0f);
+		moveVec.z = 0.0f;
+
+		moveVec.Normalize();
+
+	}
 
 	private void MoveUpdate()
 	{
+		/*
 		moveNowTime -= Time.deltaTime;
 
 		if (moveNowTime <= 0)
@@ -176,8 +244,41 @@ public class ChildGauge_ChildIcon : MonoBehaviour {
 			this.transform.localPosition = afterLimitPos;
 
 		}
+		*/
+
+		this.transform.localPosition += moveVec * moveVal * Time.deltaTime;
+
+		afterLimitPos.x = Mathf.Clamp(this.transform.localPosition.x, -limitPos.x + limitPosOffset.x, limitPos.x + limitPosOffset.x);
+		afterLimitPos.y = Mathf.Clamp(this.transform.localPosition.y, -limitPos.y + limitPosOffset.y, limitPos.y + limitPosOffset.y);
+
+		this.transform.localPosition = afterLimitPos;
+
+		if (this.transform.localPosition.x <= -limitPos.x + limitPosOffset.x) moveVec.x *= -1;
+		if (this.transform.localPosition.x >= limitPos.x + limitPosOffset.x) moveVec.x *= -1;
+		if (this.transform.localPosition.y <= -limitPos.y + limitPosOffset.y) moveVec.y *= -1;
+		if (this.transform.localPosition.y >= limitPos.y + limitPosOffset.y) moveVec.y *= -1;
 
 	}
+
+	private void OutInitialize()
+	{
+		//outBezier = new Bezier(this.transform.localPosition, new Vector3(300f, 0f, 0f), new Vector3(0f, 0f, 0f), new Vector3(Random.Range(-50, 50), 400f, 0f));
+		outBezier = new Bezier(Vector3.up * -20.0f + mainPosOffset, new Vector3(300f, 0f, 0f), Vector3.zero + mainPosOffset, new Vector3(Random.Range(-100, 100) + mainPosOffset.x, 400f + mainPosOffset.y, 0f));
+	
+	}
+
+    private void OutUpdate()
+    {
+		this.transform.localPosition = outBezier.GetPointAtTime(t);
+        t += 0.02f;
+        if (t > 1f)
+        {
+            t = 0f;
+            // バグりそう
+			Destroy(this.gameObject);
+        }
+
+    }
 
 	private void MoveFinalize()
 	{ }

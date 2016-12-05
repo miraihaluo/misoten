@@ -124,7 +124,8 @@ public class ChildObjCreatePoint : MonoBehaviour {
 
 		if (childID < childrenObjArray.Length)
 		{
-			childrenObjArray[childID].SetActive(false);
+			//childrenObjArray[childID].SetActive(false);
+			childrenObjArray[childID].SendMessage("ActiveOff");
 			return;
 
 		}

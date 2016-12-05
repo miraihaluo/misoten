@@ -29,8 +29,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a2167c933d116548b6edb1df85ff50d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  limitPos: {x: 50, y: 50}
-  moveVal: 5
+  limitPos: {x: 80, y: 20}
+  limitPosOffset: {x: -50, y: -20}
+  moveVal: 50
   rotateValArea: 180
   moveTimeArea:
   - 0.5

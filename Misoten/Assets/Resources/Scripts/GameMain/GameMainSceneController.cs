@@ -5,6 +5,20 @@ using System;	// Arrayを使うのに必要
 
 public class GameMainSceneController : MonoBehaviour
 {
+	/// <summary>
+	/// ゲームの進行状態
+	/// </summary>
+	private enum E_STATUS
+	{
+		START,	// 開始のデモムービー
+		GAME,	// ゲームメイン
+		END,	// 終了動作
+
+		MAX
+	};
+
+
+	private E_STATUS eStatus = E_STATUS.START;
 
     // スペースキーで画面遷移
     public string sceneChangeVirtualKeyName = "Jump";
@@ -63,8 +77,9 @@ public class GameMainSceneController : MonoBehaviour
     [SerializeField]
     private RankingBlock[] rankingBlockObjArray;
 
-    [SerializeField]
-    private AudioSource TimeUP_SE;
+	//音楽データ
+	[SerializeField]
+	private AudioSource TimeUP_SE;
 
     // Use this for initialization
     void Start()
@@ -99,18 +114,109 @@ public class GameMainSceneController : MonoBehaviour
     void Update()
     {
 
-        // 残り時間を減らす
-        limitTime -= Time.deltaTime * 1;
+		switch (eStatus)
+		{
+			case E_STATUS.START:
+				StartUpdate();
+				break;
 
-        // 特定のボタンを押すか、残り時間が0になったら遷移
-        if (Input.GetButtonDown(sceneChangeVirtualKeyName) || limitTime <= 0)
-        {
-            TimeUP_SE.Play();
-            FadeManager.Instance.LoadLevel(nextSceneName, 1.0f);
+			case E_STATUS.GAME:
+				GameUpdate();
+				break;
 
-        }
+			case E_STATUS.END:
+				EndUpdate();
+				break;
+
+		}
+
+		// 特定のボタンを押すか、残り時間が0になったら遷移
+		if (Input.GetButtonDown(sceneChangeVirtualKeyName))
+		{
+		//	TimeUP_SE.Play();
+			SceneManager.LoadScene(nextSceneName);
+
+		}
 
     }
+
+	private void ChangeStatus(E_STATUS changeStatus)
+	{
+		// 終了処理
+		switch (changeStatus)
+		{
+			case E_STATUS.START:
+				StartFinalize();
+				break;
+
+			case E_STATUS.GAME:
+				GameFinalize();
+				break;
+
+			case E_STATUS.END:
+				EndFinalize();
+				break;
+		
+		}
+
+		eStatus = changeStatus;
+
+		switch (changeStatus)
+		{
+			case E_STATUS.START:
+				StartInitialize();
+				break;
+
+			case E_STATUS.GAME:
+				GameInitialize();
+				break;
+
+			case E_STATUS.END:
+				EndInitialize();
+				break;
+		
+		}
+	
+	}
+
+	private void StartInitialize()
+	{ }
+
+	private void StartUpdate()
+	{ }
+
+	private void StartFinalize()
+	{ }
+
+	private void GameInitialize()
+	{ }
+
+	private void GameUpdate()
+	{
+
+		// 残り時間を減らす
+		limitTime -= Time.deltaTime * 1;
+
+		if (limitTime <= 0)
+			ChangeStatus(E_STATUS.END);
+	
+	
+	}
+
+	private void GameFinalize()
+	{ }
+
+	private void EndInitialize()
+	{ }
+
+	private void EndUpdate()
+	{
+		SceneManager.LoadScene(nextSceneName);
+	
+	}
+
+	private void EndFinalize()
+	{ }
 
     public void PlayerRankUpdate()
     {

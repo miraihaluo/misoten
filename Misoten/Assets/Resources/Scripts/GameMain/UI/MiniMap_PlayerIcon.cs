@@ -46,7 +46,7 @@ public class MiniMap_PlayerIcon : MonoBehaviour {
 
 
 	// Update is called once per frame
-	void Update () {
+	void LateUpdate () {
 		// (ミニマップの大きさ / 2) * プレイヤーの座標 / (ステージの広さ / 2)
 		pos.x = (200 / 2) * targetPlayer.transform.position.x / (500 / 2);
 		pos.y = (200 / 2) * targetPlayer.transform.position.z / (500 / 2);
