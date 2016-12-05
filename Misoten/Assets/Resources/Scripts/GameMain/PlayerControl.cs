@@ -230,7 +230,7 @@ public class PlayerControl : MonoBehaviour {
 	/// <summary>
 	/// 自身のリジッドボディ
 	/// </summary>
-	private Rigidbody rigidbody;
+	public Rigidbody rigidbody;
 
 	/// <summary>
 	/// レンダラーオブジェ配列
@@ -482,7 +482,7 @@ public class PlayerControl : MonoBehaviour {
 	/// </summary>
 	/// <param name="decScore">減算する値　値は正</param>
 	/// <returns>正誤判定</returns>
-	private bool DecreaseScore(int decScore)
+	public bool DecreaseScore(int decScore)
 	{
 		if (decScore <= 0) return false;
 		if (score - decScore < 0) return false;
