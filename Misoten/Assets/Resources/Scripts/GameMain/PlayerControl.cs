@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-
-
 public class PlayerControl : MonoBehaviour
 {
 
@@ -227,7 +225,7 @@ public class PlayerControl : MonoBehaviour
     /// <summary>
     /// 自身のリジッドボディ
     /// </summary>
-    public Rigidbody rigidbody;
+    private Rigidbody rigidbody;
 
     /// <summary>
     /// レンダラーオブジェ配列
@@ -546,7 +544,7 @@ public class PlayerControl : MonoBehaviour
     /// </summary>
     /// <param name="addScore">スコアに加算する値</param>
     /// <returns>true：成功　false：失敗</returns>
-    public bool AddScore(int addScore)
+    private bool AddScore(int addScore)
     {
         if (score + addScore > SCORE_MAX) return false;
         if (score + addScore < 0) return false;
