@@ -6,8 +6,11 @@ public class PlayerControl : MonoBehaviour {
 	/// <summary>
 	/// プレイヤーの状態を表す用の列挙型
 	/// </summary>
-	private enum E_STATUS
+	public enum E_STATUS
 	{
+		MIWATASI,	// 開始のデモムービー
+		SYUTUGEN,	// プレイヤーが降りてくる
+		START,		// UIの出現、開始のカウントダウン
 		ACTIVE,	// 通常
 		DAMAGE,	// 攻撃被ヒット時の子供を奪われる状態
 		CRASH,	// 子供を奪われた状態
@@ -30,7 +33,7 @@ public class PlayerControl : MonoBehaviour {
 	/// プレイヤーの状態
 	/// </summary>
 	[SerializeField, Header("プレイヤーの状態")]
-	private E_STATUS eStatus = E_STATUS.ACTIVE;
+	private E_STATUS eStatus = E_STATUS.MIWATASI;
 
 	/// <summary>
 	/// 点滅の状態
@@ -296,6 +299,7 @@ public class PlayerControl : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		MiwatasiInitialize();
 	
 	}
 
@@ -421,7 +425,7 @@ public class PlayerControl : MonoBehaviour {
 
 		if (Input.GetKeyUp(KeyCode.A))
 		{
-			Water_SE.Stop();
+//			Water_SE.Stop();
 			attackWaterObj.Stop();
 		}
 	}
@@ -444,7 +448,7 @@ public class PlayerControl : MonoBehaviour {
 //		AddScore(-1);
 
 		Hit_SE.Play();
-		ChangeStatus(E_STATUS.DAMAGE);
+		ChangePlayerStatus(E_STATUS.DAMAGE);
 	
 	}
 
@@ -508,7 +512,7 @@ public class PlayerControl : MonoBehaviour {
 
 	}
 
-	private void ChangeStatus(E_STATUS changeStatus)
+	private void ChangePlayerStatus(E_STATUS changeStatus)
 	{
 		// 終了処理
 		switch (eStatus)
@@ -549,6 +553,36 @@ public class PlayerControl : MonoBehaviour {
 	
 	
 	}
+
+	private void MiwatasiInitialize()
+	{
+
+	}
+
+	private void MiwatasiUpdate()
+	{ }
+
+	private void MiwatasiFinalize()
+	{
+	}
+
+	private void SyutugenInitialize()
+	{ }
+
+	private void SyutugenUpdate()
+	{ }
+
+	private void SyutugenFinalize()
+	{ }
+
+	private void StartInitialize()
+	{ }
+
+	private void StartUpdate()
+	{ }
+
+	private void StartFinalize()
+	{ }
 
 	private void ActiveInitialize()
 	{ }
@@ -593,7 +627,7 @@ public class PlayerControl : MonoBehaviour {
 		remainingDamageTime -= Time.deltaTime;
 		if (remainingDamageTime < 0)
 		{
-			ChangeStatus(E_STATUS.ACTIVE);
+			ChangePlayerStatus(E_STATUS.ACTIVE);
 			return;
 
 		}
@@ -640,7 +674,7 @@ public class PlayerControl : MonoBehaviour {
 
 		if (remainingDamageTime < 0)
 		{
-			ChangeStatus(E_STATUS.ACTIVE);
+			ChangePlayerStatus(E_STATUS.ACTIVE);
 			return;
 		}
 
