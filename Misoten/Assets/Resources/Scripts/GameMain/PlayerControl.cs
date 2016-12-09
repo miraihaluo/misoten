@@ -230,6 +230,7 @@ public class PlayerControl : MonoBehaviour {
 	/// <summary>
 	/// 自身のリジッドボディ
 	/// </summary>
+    [HideInInspector]
 	public Rigidbody rigidbody;
 
 	/// <summary>
@@ -780,7 +781,7 @@ public class PlayerControl : MonoBehaviour {
 	[SerializeField, Header("プレイヤーと当たった時のノックバック速度")]
 	private float PlayerHitBackSpeed;
 
-	Vector3 HitBackPlayer(PlayerControl PC, ContactPoint contact)
+    	Vector3 HitBackPlayer(PlayerControl PC, ContactPoint contact)
 	{
 		Vector3 speed = (new Vector3(0, moveSpeed.y, 0) + transform.forward * moveSpeed.z) + HitBackSpeed;
 
@@ -791,42 +792,64 @@ public class PlayerControl : MonoBehaviour {
 		return speed;
 
 	}
+    Vector3 HitBackCPU(CPU CP, ContactPoint contact)
+    {
+        Vector3 speed = (new Vector3(0, moveSpeed.y, 0) + transform.forward * moveSpeed.z) + HitBackSpeed;
 
-	void OnCollisionEnter(Collision aite)
-	{
-		ContactPoint contact = aite.contacts[0];
-		switch (aite.transform.tag)
-		{
+        Vector3 vec = CP.transform.position - transform.position;
 
+        speed = Vector3.Reflect(speed, contact.normal) * PlayerElasticity + CP.rigidbody.velocity + Vector3.Reflect(vec.normalized * PlayerHitBackSpeed, contact.normal);
 
-			case "Player":
-				PlayerControl PC = aite.transform.GetComponent<PlayerControl>();
+        return speed;
 
-				Vector3 speed = HitBackPlayer(PC, contact);
-
-				KeyStop = KeyStopTime;
-				HitBackSpeed = speed;
-				moveSpeed = new Vector3(0, 0, 0);
-				//   rigidbody.velocity = HitBackSpeed;
-
-				break;
-
-			default:
-				HitBackSpeed = (new Vector3(0, moveSpeed.y, 0) + transform.forward * moveSpeed.z) + HitBackSpeed;
+    }
+    void OnCollisionEnter(Collision aite)
+    {
+        ContactPoint contact = aite.contacts[0];
+        Vector3 speed;
+        switch (aite.transform.tag)
+        {
 
 
-				moveSpeed = new Vector3(0, 0, 0);
-				rotationSpeed = new Vector3(0, 0, 0);
-				HitBackSpeed = Vector3.Reflect(HitBackSpeed, contact.normal) * Elasticity;
+            case "Player":
+                PlayerControl PC = aite.transform.GetComponent<PlayerControl>();
 
-				KeyStop = KeyStopTime;
-				rigidbody.velocity = HitBackSpeed;
+                speed = HitBackPlayer(PC, contact);
+
+                KeyStop = KeyStopTime;
+                HitBackSpeed = speed;
+                moveSpeed = new Vector3(0, 0, 0);
+                //   rigidbody.velocity = HitBackSpeed;
+
+                break;
+            case "CPU":
+                CPU CP = aite.transform.GetComponent<CPU>();
+
+                speed = HitBackCPU(CP, contact);
+
+                KeyStop = KeyStopTime;
+                HitBackSpeed = speed;
+                moveSpeed = new Vector3(0, 0, 0);
+                //   rigidbody.velocity = HitBackSpeed;
+
+                break;
+
+            default:
+                HitBackSpeed = (new Vector3(0, moveSpeed.y, 0) + transform.forward * moveSpeed.z) + HitBackSpeed;
 
 
-				break;
+                moveSpeed = new Vector3(0, 0, 0);
+                rotationSpeed = new Vector3(0, 0, 0);
+                HitBackSpeed = Vector3.Reflect(HitBackSpeed, contact.normal) * Elasticity;
 
-		}
-	}
+                KeyStop = KeyStopTime;
+                rigidbody.velocity = HitBackSpeed;
+
+
+                break;
+
+        }
+    }
 
 	void OnTriggerEnter(Collider other)
     {

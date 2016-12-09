@@ -4,7 +4,7 @@ using System.Collections;
 public class CPU : MonoBehaviour {
 
 	/// <summary>
-	/// プレイヤーの状態を表す用の列挙型
+	/// キャラクタの状態を表す用の列挙型
 	/// </summary>
 	private enum E_STATUS
 	{
@@ -27,9 +27,9 @@ public class CPU : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// プレイヤーの状態
+    /// キャラクタの状態
 	/// </summary>
-	[SerializeField, Header("プレイヤーの状態")]
+    [SerializeField, Header("キャラクタの状態")]
 	private E_STATUS eStatus = E_STATUS.ACTIVE;
 
 	/// <summary>
@@ -186,11 +186,6 @@ public class CPU : MonoBehaviour {
 	/// </summary>
 	private ChildObjCreatePoint childObjCreatePointObj;
 
-	/// <summary>
-	/// 子供ゲージのオブジェ
-	/// </summary>
-	[SerializeField, Header("子供ゲージのオブジェ")]
-	private ChildNumGauge childNumGaugeObj;
 
 	/// <summary>
 	/// 攻撃オブジェクトのプレハブ
@@ -230,7 +225,8 @@ public class CPU : MonoBehaviour {
 	/// <summary>
 	/// 自身のリジッドボディ
 	/// </summary>
-	private Rigidbody rigidbody;
+    [HideInInspector]
+	public Rigidbody rigidbody;
 
 	/// <summary>
 	/// レンダラーオブジェ配列
@@ -257,7 +253,7 @@ public class CPU : MonoBehaviour {
 	/// <summary>
 	/// 一度に持てる子供の最大数
 	/// </summary>
-	private const int SCORE_MAX = 20;
+	private const int SCORE_MAX = 200;
 
 	/// <summary>
 	/// 現在持っている子供の人数
@@ -266,20 +262,6 @@ public class CPU : MonoBehaviour {
 	private int score = 0;
 	public int Score { get { return score; } }
 
-	/// <summary>
-	/// 現在の順位
-	/// </summary>
-	[SerializeField, Header("今の順位")]
-	private int rank = 1;
-	public int Rank { set { rank = value; } get { return rank; } }
-
-	/// <summary>
-	/// 入力を判別する文字列
-	/// </summary>
-	private string horizontalStr = "Horizontal";
-	private string verticalStr = "Vertical";
-	private string upStr = "Up";
-	private string attackStr = "Attack";
 
 	//音楽データ
 	[SerializeField]
@@ -321,12 +303,6 @@ public class CPU : MonoBehaviour {
 		numIconObj = this.transform.FindChild("Player_NumIcon");
 		numIconPos = numIconObj.localPosition;
 
-		// ボタン文字列に自分のIDを追加
-		horizontalStr += this.name;
-		verticalStr += this.name;
-		upStr += this.name;
-		attackStr += this.name;
-
 		// 移動限界値の設定
 		max = defineData.STAGE_BOARDER_SIZE / 2.0f;
 		min = -(defineData.STAGE_BOARDER_SIZE / 2.0f);
@@ -342,6 +318,9 @@ public class CPU : MonoBehaviour {
 		// レンダラーコンポーネントの取得
 		rendererObj = GetComponent<MeshRenderer>();
 
+        //子供の取得
+        Childs = GameObject.FindGameObjectsWithTag("Child");
+
 	}
 	
 	// Update is called once per frame
@@ -351,6 +330,7 @@ public class CPU : MonoBehaviour {
 		{
 			// 通所状態
 			case E_STATUS.ACTIVE:
+                ActiveUpdate();
 				thought();
 				break;
 
@@ -407,34 +387,22 @@ public class CPU : MonoBehaviour {
 		}
 */
 
-		if (Input.GetButtonDown(attackStr))
-			attackWaterObj.Play();
-
-		if (Input.GetButtonUp(attackStr))
-			attackWaterObj.Stop();
-
-		if (Input.GetKeyDown(KeyCode.A))
+        if (shot_flag == 1)
 		{
 			Water_SE.Play();
 			attackWaterObj.Play();
 		}
 
-		if (Input.GetKeyUp(KeyCode.A))
+        if (shot_flag == 0)
 		{
 			Water_SE.Stop();
 			attackWaterObj.Stop();
+            shot_flag = 2;
 		}
+
+
 	}
 
-	/// <summary>
-	/// 攻撃を当てた時の処理
-	/// テスト用、今は使っていない
-	/// </summary>
-	public void AttackSuccess()
-	{
-//		AddScore(1);
-	
-	}
 
 	/// <summary>
 	/// 攻撃を当てられた時の処理
@@ -448,16 +416,6 @@ public class CPU : MonoBehaviour {
 	
 	}
 
-	/// <summary>
-	/// 攻撃オブジェの削除
-	/// テスト時のものなので今は使っていません
-	/// </summary>
-	public void DestroyAttackObj()
-	{
-		Destroy(GetComponentInChildren<AttackObj>().gameObject);
-//		enableAttack_f = true;
-	
-	}
 
 	/// <summary>
 	/// スコアを加算する
@@ -467,12 +425,14 @@ public class CPU : MonoBehaviour {
 	/// <returns>true：成功　false：失敗</returns>
 	private bool AddScore(int addScore, Vector3 pos)
 	{
-		if (addScore <= 0) return false;
-		if (score + addScore > SCORE_MAX) return false;
+       
+        
+        if (addScore <= 0) return false;
 
-		childNumGaugeObj.GainChild(addScore, pos);
+		//childNumGaugeObj.GainChild(addScore, pos);
 		score += addScore;
 
+        moku_flag = false;
 		return true;
 
 	}
@@ -555,11 +515,6 @@ public class CPU : MonoBehaviour {
 
 	private void ActiveUpdate()
 	{
-		// ボタン入力を取る
-		// 戻り値は　-1から+1　の値
-		axisX = Input.GetAxis(horizontalStr);	// 左右入力
-		axisY = Input.GetAxis(verticalStr);	// 前後入力
-		axisUpDown = Input.GetAxis(upStr);
 
 		// 攻撃処理
 		AttackAction();
@@ -691,7 +646,7 @@ public class CPU : MonoBehaviour {
 		//回転速度計算 ============== 
 
 		//____減衰計算
-		rotationSpeed.y = rotationSpeed.y - rotationSpeed.y * rotationResistivity * Time.deltaTime;
+        rotationSpeed.y = rotationSpeed.y - rotationSpeed.y * rotationResistivity  * Time.deltaTime;
 		//____加速計算
 		rotationSpeed.y += (axisX * key_flag) * Time.deltaTime * rotationAcceleration;
 		//____速度制限
@@ -766,7 +721,7 @@ public class CPU : MonoBehaviour {
 
 	[SerializeField, Header("弾力,反射時の速度の反射率(壁との判定用) ")]
 	private float Elasticity;
-	[SerializeField, Header("弾力,反射時の速度の反射率(プレイヤとの判定用) ")]
+	[SerializeField, Header("弾力,反射時の速度の反射率(キャラクタとの判定用) ")]
 	private float PlayerElasticity;
 	[SerializeField, Header("反射速度の減衰値）")]
 	private float HitBackResistivity;
@@ -777,7 +732,7 @@ public class CPU : MonoBehaviour {
 	[SerializeField, Header("反射時のkey入力の禁止時間")]
 	private float KeyStopTime;
 
-	[SerializeField, Header("プレイヤーと当たった時のノックバック速度")]
+    [SerializeField, Header("キャラクタと当たった時のノックバック速度")]
 	private float PlayerHitBackSpeed;
 
 	Vector3 HitBackPlayer(PlayerControl PC, ContactPoint contact)
@@ -791,10 +746,21 @@ public class CPU : MonoBehaviour {
 		return speed;
 
 	}
+    Vector3 HitBackCPU(CPU CP, ContactPoint contact)
+    {
+        Vector3 speed = (new Vector3(0, moveSpeed.y, 0) + transform.forward * moveSpeed.z) + HitBackSpeed;
 
+        Vector3 vec = CP.transform.position - transform.position;
+
+        speed = Vector3.Reflect(speed, contact.normal) * PlayerElasticity + CP.rigidbody.velocity + Vector3.Reflect(vec.normalized * PlayerHitBackSpeed, contact.normal);
+
+        return speed;
+
+    }
 	void OnCollisionEnter(Collision aite)
 	{
 		ContactPoint contact = aite.contacts[0];
+        Vector3 speed;
 		switch (aite.transform.tag)
 		{
 
@@ -802,7 +768,7 @@ public class CPU : MonoBehaviour {
 			case "Player":
 				PlayerControl PC = aite.transform.GetComponent<PlayerControl>();
 
-				Vector3 speed = HitBackPlayer(PC, contact);
+				speed = HitBackPlayer(PC, contact);
 
 				KeyStop = KeyStopTime;
 				HitBackSpeed = speed;
@@ -810,6 +776,17 @@ public class CPU : MonoBehaviour {
 				//   rigidbody.velocity = HitBackSpeed;
 
 				break;
+            case "CPU":
+                CPU CP = aite.transform.GetComponent<CPU>();
+
+                speed = HitBackCPU(CP, contact);
+
+                KeyStop = KeyStopTime;
+                HitBackSpeed = speed;
+                moveSpeed = new Vector3(0, 0, 0);
+                //   rigidbody.velocity = HitBackSpeed;
+
+                break;
 
 			default:
 				HitBackSpeed = (new Vector3(0, moveSpeed.y, 0) + transform.forward * moveSpeed.z) + HitBackSpeed;
@@ -849,7 +826,6 @@ public class CPU : MonoBehaviour {
 //			ScoreGet_SE.Play();
 			playerData.AddPlayerScoreArray(int.Parse(transform.name) - 1 , score);
 			sceneObj.PlayerRankUpdate();
-			childNumGaugeObj.ChildrenAdjust();
 			score = 0;
 
         }
@@ -857,7 +833,7 @@ public class CPU : MonoBehaviour {
         if (other.tag == "Player")
         {
 
-            Colision_SE.Play();
+            //Colision_SE.Play();
             // 自分が通常状態じゃなければ除外
             if (eStatus != E_STATUS.ACTIVE) return;
 
@@ -893,27 +869,31 @@ public class CPU : MonoBehaviour {
 
 
 
- /*
-    private float axisX;
+ 
 
-    private float axisY;
+    //目標を確保したらfalseにする
+    private bool moku_flag=false;
 
-    private float axisUpDown;    
-  */
-/*
-    必要な情報
-        プレイヤ位置
-        子供の位置
-        壁の認識
-        
-*/
+    //今の目標の添え字
+    private int target=-1;
 
-    public GameObject ko1;
-    public GameObject ko2;
-    bool moku_flag=true;
-    float hosei = 1f;
-    public float move;
-   public float angle;
+    [SerializeField, Header("降下する際の目標との補正距離")]
+   public float hosei = 10f;
+
+
+    //水鉄砲のフラグ1で発射0で打ち止め2は待機状態
+   private int shot_flag=2;
+
+   //子供用配列
+   private GameObject[] Childs;
+
+    [SerializeField, Header("飛ぶ高さ")]
+   public float flight_pos;
+
+    //飛ぶ高さの調整用
+    private float upTime;
+    private float upnowTime;
+
 
     void thought(){
         axisUpDown = 0;
@@ -921,31 +901,73 @@ public class CPU : MonoBehaviour {
         axisY = 0;
 
         Vector3 pos;
-        if(moku_flag)
-            pos = ko1.transform.position;
-        else
-            pos = ko2.transform.position;
+        upnowTime += Time.deltaTime;
 
-         move = Vector3.Distance(transform.position,pos);
+        if (upnowTime > upTime)
+            upnowTime = upTime + 1;
 
-         angle = Vector3.Angle(transform.position,pos);
-         float rot = (float)(System.Math.Atan2(pos.y, pos.x) * 180 / System.Math.PI);
-         angle = (transform.eulerAngles.y + angle)%360;
-
-        if (hosei > System.Math.Abs(move) + System.Math.Abs(rigidbody.velocity.z) + System.Math.Abs(rigidbody.velocity.x))
+        if (target == -1 || !moku_flag || Childs[target].activeSelf == false)
         {
-            axisUpDown = -1; 
+        //子供のオブジェクトをアクティブ切り替えにするので必要ない
+         /*   Childs = GameObject.FindGameObjectsWithTag("Child");
+            if (length == 0)
+                return;
+         */
+           
+            int length = Childs.GetLength(0);
+            target = Random.Range(0, length);  
+
+            if (Childs[target].activeSelf == false)
+            {
+                for (int i = target + 1; Childs[target].activeSelf == false; i++)
+                {
+                    i %= length;
+                    if (target == i)
+                        return;        //activeな子供がいない
+                }    
+
+            }
+            moku_flag = true;
+            
+        }
+        pos = Childs[target].transform.position;
+
+        Vector3 angle = pos - transform.position;
+        angle.y = 0;
+        double rot = System.Math.Atan2(angle.x, angle.z) * 180 /System.Math.PI;   //目標地点の方向
+   
+
+        pos = (pos - transform.position + rigidbody.velocity);
+        float move = System.Math.Abs(pos.x) + System.Math.Abs(pos.z);
+
+        if (hosei > move)
+        {
+            axisUpDown = -1;
+            upnowTime = 0;
         }
         else
         {
+            if (upTime < upnowTime && transform.position.y + rigidbody.velocity.y < flight_pos)
+            {
+                axisUpDown = 1;
+            }
+        }
             
 
-            if (System.Math.Abs(angle) > 31 )
-                axisX = 1 - 2*(angle/180);
-            if (System.Math.Abs(angle) < 30)
-                axisY = 1;
+        double sa = rot - transform.eulerAngles.y;
+        sa -= System.Math.Floor(sa/360)*360;
+        if (sa > 180.0) 
+            sa -= 360.0;
 
+        if (System.Math.Abs(sa) > 15)
+        {
+            axisX = System.Math.Sign(sa);
         }
+        if (System.Math.Abs(sa) < 30)
+        {
+            axisY = 1;
+        }
+
 
 
 
