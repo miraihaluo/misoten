@@ -33,10 +33,10 @@ MonoBehaviour:
   target: {fileID: 0}
   MAX_SIZE: {x: 50, y: 50}
   MIN_SIZE: {x: 20, y: 20}
-  MAX_LENGTH: 200
+  MAX_LENGTH: 600
   MIN_LENGTH: 50
   MAX_SIZE_LENGTH: 90
-  MIN_SIZE_LENGTH: 180
+  MIN_SIZE_LENGTH: 500
 --- !u!114 &11489492
 MonoBehaviour:
   m_ObjectHideFlags: 1

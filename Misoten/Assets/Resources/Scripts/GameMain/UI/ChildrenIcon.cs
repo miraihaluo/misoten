@@ -7,6 +7,7 @@ public class ChildrenIcon : MonoBehaviour {
 	/// <summary>
 	/// プレイヤー毎のミニマップオブジェを取得
 	/// </summary>>
+	[SerializeField, Header("チルドアイコンオブジェ")]
 	private GameObject[] childPlayerMiniMapArray;
 
 	/// <summary>
@@ -15,7 +16,6 @@ public class ChildrenIcon : MonoBehaviour {
 	private GameObject prefabChildrenIcon;
 	private GameObject instansChildrenIcon;
 
-
 	// Use this for initialization
 	void Start () {
 	
@@ -23,15 +23,10 @@ public class ChildrenIcon : MonoBehaviour {
 
 	void Awake()
 	{
-		childPlayerMiniMapArray = new GameObject[transform.childCount];
+		prefabChildrenIcon = (GameObject)Resources.Load("Prefabs/GameMain/UIs/MiniMap_Child");
 
-		for (int i = 0; i < transform.childCount; i++)
-			childPlayerMiniMapArray[i] = transform.GetChild(i).gameObject;
-
-			prefabChildrenIcon = (GameObject)Resources.Load("Prefabs/GameMain/UIs/MiniMap_Child");
-	
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 	
@@ -51,8 +46,7 @@ public class ChildrenIcon : MonoBehaviour {
 			instansChildrenIcon.name = childID.ToString();
 		
 		}
-	
-	
+
 	}
 
 	public void DestroyChildIcon(uint childID)

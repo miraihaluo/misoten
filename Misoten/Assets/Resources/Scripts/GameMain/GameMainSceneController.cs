@@ -113,10 +113,40 @@ public class GameMainSceneController : MonoBehaviour
 	/// </summary>
 	private RawImage[] UIRawImageObjArray;
 
+	/// <summary>
+	/// UIのWorldIconのゲームオブジェ
+	/// </summary>
+	[SerializeField, Header("UIのWorldIconのゲームオブジェ")]
+	private GameObject woldIconObj;
+
+	/// <summary>
+	/// フレームのオブジェ
+	/// </summary>
+	[SerializeField, Header("フレームオブジェ")]
+	private RawImage frameObj;
+
+	/// <summary>
+	/// ミッションコントローラーオブジェ
+	/// </summary>
+	[SerializeField, Header("ミッションコントローラーオブジェ")]
+	private MissionController missionControllerObj;
+	private int missionFlag = 0;
+
+	//音楽データ
+	[SerializeField]
+	private AudioSource sound01;
+
 	// Use this for initialization
 	void Start()
 	{
 		MiwatasiInitialize();
+
+		foreach (RawImage UIObj in UIRawImageObjArray)
+		{
+			start_color = UIObj.color;
+			start_color.a = 0.0f;
+			UIObj.color = start_color;
+		}
 
 	}
 
@@ -142,7 +172,7 @@ public class GameMainSceneController : MonoBehaviour
 		sort = new int[scoreArray.Length];
 
 		// 全UIのRawImageを取得
-		UIRawImageObjArray = UIParentObj.gameObject.GetComponentsInChildren<RawImage>();
+		UIRawImageObjArray = UIParentObj.gameObject.GetComponentsInChildren<RawImage>(false);
 
 	}
 
@@ -176,8 +206,10 @@ public class GameMainSceneController : MonoBehaviour
 		// 特定のボタンを押すか、残り時間が0になったら遷移
 		if (Input.GetButtonDown(sceneChangeVirtualKeyName))
 		{
-			//	TimeUP_SE.Play();
-			SceneManager.LoadScene(nextSceneName);
+			sound01.Play();
+			FadeManager.Instance.LoadLevel(nextSceneName, 1.0f);
+
+			//SceneManager.LoadScene(nextSceneName);
 
 		}
 
@@ -300,6 +332,11 @@ public class GameMainSceneController : MonoBehaviour
 
 		}
 
+		foreach (PlayerControl playObj in players)
+			playObj.ChangePlayerStatus(PlayerControl.E_STATUS.SYUTUGEN);
+
+		frameObj.gameObject.SetActive(true);
+
 		syutugenNowTime = 0;
 	
 	}
@@ -340,11 +377,13 @@ public class GameMainSceneController : MonoBehaviour
 
 	private void StartInitialize()
 	{
-		UIParentObj.gameObject.SetActive(true);
+		foreach (PlayerControl playObj in players)
+			playObj.ChangePlayerStatus(PlayerControl.E_STATUS.START);
 
+		/*
 		foreach (RawImage UIObj in UIRawImageObjArray)
 			UIObj.color = start_color;
-
+		*/
 		UIsyutugenNowTime = 0;
 
 	}
@@ -354,7 +393,11 @@ public class GameMainSceneController : MonoBehaviour
 		UIsyutugenNowTime += Time.deltaTime / UI_SYUTUGEN_TIME;
 
 		foreach (RawImage UIObj in UIRawImageObjArray)
-			UIObj.color = Color.Lerp(start_color, Color.white, UIsyutugenNowTime);
+		{
+			start_color = UIObj.color;
+			start_color.a = Mathf.Lerp(0.0f, 1.0f, UIsyutugenNowTime);
+			UIObj.color = start_color;
+		}
 
 		if(UIsyutugenNowTime >= 1.0f)
 			ChangeStatus(E_STATUS.GAME);
@@ -373,6 +416,10 @@ public class GameMainSceneController : MonoBehaviour
 
 	private void GameInitialize()
 	{
+		foreach (PlayerControl playObj in players)
+			playObj.ChangePlayerStatus(PlayerControl.E_STATUS.ACTIVE);
+
+		woldIconObj.SetActive(true);
 
 	}
 
@@ -380,6 +427,25 @@ public class GameMainSceneController : MonoBehaviour
 	{
 		// 残り時間を減らす
 		limitTime -= Time.deltaTime * 1;
+
+		if (limitTime < 150 && missionFlag <= 0)
+		{
+			missionControllerObj.CallMissionText(MissionController.E_MISSION_TYPE.SPECIAL_CHILDREN);
+			missionFlag++;
+		}
+
+
+		if (limitTime < 90 && missionFlag <= 1)
+		{
+			missionControllerObj.CallMissionText(MissionController.E_MISSION_TYPE.ENEMY_DRONE);
+			missionFlag++;
+		}
+
+		if (limitTime < 30 && missionFlag <= 2)
+		{
+			missionControllerObj.CallMissionText(MissionController.E_MISSION_TYPE.FEVER);
+			missionFlag++;
+		}
 
 		if (limitTime <= 0)
 			ChangeStatus(E_STATUS.END);
@@ -394,7 +460,8 @@ public class GameMainSceneController : MonoBehaviour
 
 	private void EndUpdate()
 	{
-		SceneManager.LoadScene(nextSceneName);
+		FadeManager.Instance.LoadLevel(nextSceneName, 1.0f);
+		//SceneManager.LoadScene(nextSceneName);
 
 	}
 

@@ -7,6 +7,24 @@ using UnityEngine.UI;
 public class MissionController : MonoBehaviour
 {
 
+	/// <summary>
+	/// ミッションタイプ
+	/// </summary>
+	public enum E_MISSION_TYPE
+	{
+		SPECIAL_CHILDREN,
+		ENEMY_DRONE,
+		FEVER,
+	
+		MAX
+	};
+
+	private string[] missionText = {
+								"五つ子が現れた！ひとつで五人分だ！",
+								"余所のドローンが現れた！子供達を取り戻そう！",
+								"さあ、最後の追い上げだ！"
+								};
+
     // 残り時間を持っているGameMainSceneControllerオブジェの入れ子
     private GameMainSceneController sceneObj;
 
@@ -25,14 +43,7 @@ public class MissionController : MonoBehaviour
         STOP
     };
     private eTEXT_STATE onMission = eTEXT_STATE.DELETE ;           //テキストの状態
-    private Vector3 startPosition;                                 //テキストの待機位置
     private float LimitTime = 0;                                   //テキストの寿命 
-
-    private string mission1 = "UFOを撃墜せよ！";
-    private string mission2 = "野良猫の妨害を回避せよ！";
-    private string mission3 = "エイリアンから子供たちを守れ！";
-    private string mission4 = "太陽を破壊せよ！";
-    private string mission5 = "一定時間スピード2倍！";
 
     private Vector2 textSize;       //テキストの大きさ
 
@@ -50,38 +61,6 @@ public class MissionController : MonoBehaviour
     
     void Update()
     {
-        
-        //一定時間ごとにテキストを流す
-        if(Mathf.CeilToInt(sceneObj.NowTime) % 20 == 0 & onMission == eTEXT_STATE.DELETE)
-        {
-            //ランダムでミッション分岐
-            onMission = eTEXT_STATE.MOVE;
-            switch (Random.Range(0, 5))
-            {
-                case 0:
-                    textObj.text = mission1;
-                    break;
-                case 1:
-                    textObj.text = mission2;
-                    break;
-                case 2:
-                    textObj.text = mission3;
-                    break;
-                case 3:
-                    textObj.text = mission4;
-                    break;
-                case 4:
-                    textObj.text = mission5;
-                    break;
-            }
-            //テキストサイズを計算
-            textSize.x = textObj.preferredWidth;
-
-
-            startPosition = new Vector3(textSize.x + Screen.width, 0, 0);
-            textObj.transform.localPosition = startPosition;
-        }
-
         //テキストを流す処理
         if (onMission == eTEXT_STATE.MOVE | onMission == eTEXT_STATE.REMOVE)
         {
@@ -112,4 +91,16 @@ public class MissionController : MonoBehaviour
             }
         }
     }
+
+	public void CallMissionText(E_MISSION_TYPE callMissionType)
+	{
+		onMission = eTEXT_STATE.MOVE;
+		textObj.text = missionText[(int)callMissionType];
+		//テキストサイズを計算
+		textSize.x = textObj.preferredWidth;
+
+		textObj.transform.localPosition = Vector3.right * (textSize.x + Screen.width);
+	
+	}
+
 }

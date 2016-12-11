@@ -5,8 +5,10 @@ public class ChildObj : MonoBehaviour {
 
 	private Vector3 forward;
 
-	[SerializeField]
-	private ParticleSystem effect;
+	/// <summary>
+	/// 対応したミニマップの子供アイコンのゲームオブジェ
+	/// </summary>
+	public GameObject[] miniMapIcon = new GameObject[4];
 
 	// Use this for initialization
 	void Start () {
@@ -18,9 +20,20 @@ public class ChildObj : MonoBehaviour {
 	
 	}
 
+	public void ActiveOn()
+	{
+		this.gameObject.SetActive(true);
+
+		foreach (GameObject obj in miniMapIcon)
+			obj.SetActive(true);
+
+	}
+
 	public void ActiveOff()
 	{
-		effect.Play();
+		foreach (GameObject obj in miniMapIcon)
+			obj.SetActive(false);
+
 		this.gameObject.SetActive(false);
 	
 	}

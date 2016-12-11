@@ -10,6 +10,10 @@ public class TutorialSceneControllar : MonoBehaviour {
 	[SerializeField]    // 変数をインスペクターから変更できるようにする
 	private string nextSceneName;
 
+	//音楽データ
+	[SerializeField]
+	private AudioSource sound01;
+
 	// Use this for initialization
 	void Start()
 	{
@@ -22,7 +26,9 @@ public class TutorialSceneControllar : MonoBehaviour {
 
 		if (Input.GetButtonDown(sceneChangeVirtualKeyName))
 		{
-			SceneManager.LoadScene(nextSceneName);
+			sound01.Play();
+			FadeManager.Instance.LoadLevel(nextSceneName, 1.0f);
+			//SceneManager.LoadScene(nextSceneName);
 
 		}
 

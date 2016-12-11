@@ -1,146 +1,101 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class ChildObjCreatePoint : MonoBehaviour {
 
+	/// <summary>
+	/// ミニマップの子供アイコンプレハブ
+	/// </summary>
 	private GameObject prefabChildObj;
 	private GameObject instansChildObj;
 
 	/// <summary>
-	/// ミニマップ用のアイコンを生成するオブジェを取得
+	/// 次に子供オブジェをアクティブにするまでの時間
 	/// </summary>
-	private ChildrenIcon chidrenIconObj;
-
-	private Vector3 pos;
-	public Vector3 Pos { get { return pos; } }
-
-	private float createChildCoolTime;
-
-	private uint childrenID = 0;
+	private float activeCoolTime;
 
 	/// <summary>
 	/// 存在する最大子供の人数
 	/// </summary>
-	private const int MAX_CHILDREN = 15;
+	private const int MAX_CHILDREN = 20;
 
 	/// <summary>
-	/// 固定の子供オブジェの参照を格納している配列
+	/// ミニマップの子供アイコンを生成するオブジェ
 	/// </summary>
-	private GameObject[] childrenObjArray;
+	[SerializeField, Header("ミニマップアイコン生成用オブジェ")]
+	private Transform[] miniMapChildIconObj;
+
+	/// <summary>
+	/// 普通の子供管理オブジェ
+	/// </summary>
+	[SerializeField, Header("普通の子供の管理オブジェ")]
+	private Transform normalChildrenObj;
+
+	/// <summary>
+	/// 特別な子供管理オブジェ
+	/// </summary>
+	[SerializeField, Header("特別な子供の管理オブジェ")]
+	private Transform specialChildrenObj;
+
+	private Vector3 childPos = Vector3.zero;
 
 	// Use this for initialization
-	void Start () {
+	void Start()
+	{
+		// 普通の子供のミニマップアイコンをインスタンス
+		foreach (Transform childObj in normalChildrenObj)
+		{
+			// 1p～4pの四つ分生成する
+			for (int i = 0; i < 4; i++)
+			{
+				instansChildObj = Instantiate(prefabChildObj);
+				instansChildObj.transform.parent = miniMapChildIconObj[i];
+				childObj.GetComponent<ChildObj>().miniMapIcon[i] = instansChildObj;
+
+				// (ミニマップの大きさ / 2) * 子供オブジェの座標 / (ステージの広さ / 2)
+				childPos.x = (200 / 2) * childObj.position.x / (500 / 2);
+				childPos.y = (200 / 2) * childObj.position.z / (500 / 2);
+
+				instansChildObj.transform.localPosition = childPos;
+
+			}
+
+		}
+
+		// 特別の子供のミニマップアイコンをインスタンス
+		foreach (Transform childObj in specialChildrenObj)
+		{
+			// 1p～4pの四つ分生成する
+			for (int i = 0; i < 4; i++)
+			{
+				instansChildObj = Instantiate(prefabChildObj);
+				instansChildObj.transform.parent = miniMapChildIconObj[i];
+				childObj.GetComponent<ChildObj>().miniMapIcon[i] = instansChildObj;
+
+				// (ミニマップの大きさ / 2) * 子供オブジェの座標 / (ステージの広さ / 2)
+				childPos.x = (200 / 2) * childObj.position.x / (500 / 2);
+				childPos.y = (200 / 2) * childObj.position.z / (500 / 2);
+
+				instansChildObj.transform.localPosition = childPos;
+				instansChildObj.GetComponent<RawImage>().color = Color.green;
+
+			}
+
+		}
 	
 	}
 
 	void Awake()
 	{
-		chidrenIconObj = FindObjectOfType<ChildrenIcon>();
-		pos.y = 0;
-		createChildCoolTime = Random.Range(15, 30);
-
-		prefabChildObj = (GameObject)Resources.Load("Prefabs/GameMain/ChildObj");
-
-		// 固定の子供オブジェクトの参照を受け取り、ミニマップアイコンを生成する
-		Transform special = this.transform.GetChild(0);
-		childrenObjArray = new GameObject[special.childCount];
-		for (int i = 0; i < childrenObjArray.Length; i++)
-		{
-			childrenObjArray[i] = special.GetChild(i).gameObject;
-			CreateChild(childrenObjArray[i].transform.position, (uint)i);
-
-		}
-
-		childrenID = (uint)childrenObjArray.Length;
-
-		// 最初にいくつか生成
-		for (int i = 0; i < 9; i++)
-		{
-			pos.x = Random.Range(-150, 150);
-			pos.z = Random.Range(-150, 150);
-
-			CreateChild(pos);
-
-		}
+		prefabChildObj = (GameObject)Resources.Load("Prefabs/GameMain/UIs/MiniMap_Child");
 
 	}
 
 	// Update is called once per frame
 	void Update () {
 
-		// テキトーに再生成
-		if (transform.childCount < 15)
-		{
-			createChildCoolTime -= Time.deltaTime * 60;
 
-			if (createChildCoolTime <= 0)
-			{
-				pos.x = Random.Range(-150, 150);
-				pos.z = Random.Range(-150, 150);
-
-				CreateChild(pos);
-
-				for (int i = 0; i < 2; i++)
-				{
-					int rand = Random.Range(0, childrenObjArray.Length - 1);
-					childrenObjArray[rand].SetActive(true);
-					CreateChild(childrenObjArray[rand].transform.position, (uint)rand);
-				
-				}
-
-
-					createChildCoolTime = Random.Range(15, 30);
-			
-			}
-		
-		}
-
-	}
-
-	private void CreateChild(Vector3 createPos)
-	{
-		instansChildObj = Instantiate(prefabChildObj);
-		instansChildObj.transform.position = createPos;
-		instansChildObj.name = childrenID.ToString();
-		instansChildObj.transform.parent = this.transform;
-
-		// ミニマップアイコン生成
-		chidrenIconObj.CreateChildIcon(createPos, childrenID);
-
-		childrenID++;
-
-	}
-
-	private void CreateChild(Vector3 createPos, uint childID)
-	{
-		// ミニマップアイコン生成
-		chidrenIconObj.CreateChildIcon(createPos, childID);
-
-	}
-
-	public void DestroyChild(uint childID)
-	{
-		chidrenIconObj.DestroyChildIcon(childID);
-
-		if (childID < childrenObjArray.Length)
-		{
-			//childrenObjArray[childID].SetActive(false);
-			childrenObjArray[childID].SendMessage("ActiveOff");
-			return;
-
-		}
-
-		foreach (Transform child in transform)
-		{
-			if (child.name == "Special") continue;
-			if (uint.Parse(child.name) == childID)
-			{
-				Destroy(child.gameObject);
-				break;
-			}
-		
-		}
-	
 	}
 
 }
