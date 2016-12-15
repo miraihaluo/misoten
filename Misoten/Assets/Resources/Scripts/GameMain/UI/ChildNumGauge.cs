@@ -13,6 +13,7 @@ public class ChildNumGauge : MonoBehaviour {
 		OPEN,
 		MOGUMOGU,
 		ADJUST,
+		ROB,
 
 		MAX
 	};
@@ -91,6 +92,8 @@ public class ChildNumGauge : MonoBehaviour {
 
 	private float childrenAdjustNowTime;
 
+	private PlayerData playerData;
+
 	/// <summary>
 	/// 解法していく子要素の番号
 	/// </summary>
@@ -107,6 +110,9 @@ public class ChildNumGauge : MonoBehaviour {
 	void Awake()
 	{
 		prefab_ChildrenIconObj = (GameObject)Resources.Load("Prefabs/GameMain/UIs/ChildGauge_ChildIcon");
+		
+		// アセットの参照受け取り
+		playerData = Resources.Load<PlayerData>("Assets/PlayerData");
 
 		foreach (Transform child in this.transform)
 		{
@@ -118,8 +124,20 @@ public class ChildNumGauge : MonoBehaviour {
 		
 		}
 
+		// 子供アイコンをあらかじめ生成しておく
+		for (int i = 0; i < playerData.MAX_SCORE_CHILDREN; i++)
+		{
+			instanseObj = Instantiate(prefab_ChildrenIconObj);
+			instanseObj.transform.parent = childrenObj.transform;
+			instanseObj.transform.localPosition = Vector3.zero;
+			instanseObj.transform.localScale = Vector3.one;
+			instanseObj.SendMessage("SetGaugeObj", this);
+			instanseObj.gameObject.SetActive(false);
+
+		}
+
 		UVRect = headObj_RawImage.uvRect;
-	
+
 	}
 	
 	// Update is called once per frame
@@ -143,6 +161,10 @@ public class ChildNumGauge : MonoBehaviour {
 				AdjustUpdate();
 				break;
 		
+			case E_HEAD_STATUS.ROB:
+				RobUpdate();
+				break;
+
 		}
 
 	}
@@ -153,13 +175,31 @@ public class ChildNumGauge : MonoBehaviour {
 	/// <param name="num">獲得した子供の人数</param>
 	public void GainChild(int num, Vector3 pos)
 	{
-		for (int i = 0; i < num; i++)
+/*		for (int i = 0; i < num; i++)
 		{
 			instanseObj = Instantiate(prefab_ChildrenIconObj);
 			instanseObj.transform.parent = childrenObj.transform;
-		//	instanseObj.transform.localPosition = Vector3.zero;
-			instanseObj.transform.localPosition = RectTransformUtility.WorldToScreenPoint(camera, pos);
+			instanseObj.transform.localPosition = Vector3.up * 150;
+		//	instanseObj.transform.position = RectTransformUtility.WorldToScreenPoint(camera, pos);
+		//	instanseObj.transform.localPosition = instanseObj.transform.position;
 			instanseObj.SendMessage("SetGaugeObj", this);
+
+		}
+*/
+
+		for (int i = 0; i < num; i++)
+		{
+			foreach (Transform obj in childrenObj.transform)
+			{
+				if (!obj.gameObject.activeSelf)
+				{
+					obj.gameObject.SetActive(true);
+					obj.GetComponent<ChildGauge_ChildIcon>().ChangeModeCreate();
+					break;
+
+				}
+			
+			}
 
 		}
 
@@ -203,6 +243,10 @@ public class ChildNumGauge : MonoBehaviour {
 				AdjustFinalize();
 				break;
 
+			case E_HEAD_STATUS.ROB:
+				RobFinalize();
+				break;
+
 		}
 
 		eStatus = changeStatus;
@@ -222,6 +266,10 @@ public class ChildNumGauge : MonoBehaviour {
 
 			case E_HEAD_STATUS.ADJUST:
 				AdjustInitialize();
+				break;
+
+			case E_HEAD_STATUS.ROB:
+				RobInitialize();
 				break;
 
 		}
@@ -293,6 +341,7 @@ public class ChildNumGauge : MonoBehaviour {
 	private void MogumoguFinalize()
 	{ }
 
+	private int activeChildrenCount;
 	private void AdjustInitialize()
 	{
 		childrenAdjustNowTime = childrenAdjustInterval;
@@ -300,6 +349,13 @@ public class ChildNumGauge : MonoBehaviour {
 
 		UVRect.y = 1 * UVRect.height;
 		headObj_RawImage.uvRect = UVRect;
+
+		activeChildrenCount = 0;
+		foreach (Transform obj in childrenObj.transform)
+		{
+			if (obj.gameObject.activeSelf) activeChildrenCount++;
+		
+		}
 	
 	}
 
@@ -309,13 +365,22 @@ public class ChildNumGauge : MonoBehaviour {
 
 		if (childrenAdjustNowTime <= 0)
 		{
-			childrenObj.transform.GetChild(adjustChildrenCount).SendMessage("ChangeModeOUT"); ;
+		//	childrenObj.transform.GetChild(adjustChildrenCount).SendMessage("ChangeModeOUT");
+			foreach(Transform obj in childrenObj.transform)
+			{
+				if(!obj.gameObject.activeSelf) continue;
+				if (obj.GetComponent<ChildGauge_ChildIcon>().GetGaugeIconActiveFlag()) continue;
+
+				obj.SendMessage("ChangeModeOUT");
+				break;
+
+			}
 			childrenAdjustNowTime = childrenAdjustInterval;
 			adjustChildrenCount++;
 
 		}
 
-		if (adjustChildrenCount >= childrenObj.transform.childCount)
+		if (adjustChildrenCount >= activeChildrenCount)
 		{
 			ChangeStatus(E_HEAD_STATUS.CLOSE);
 
@@ -324,6 +389,53 @@ public class ChildNumGauge : MonoBehaviour {
 	}
 
 	private void AdjustFinalize()
+	{ }
+
+	public void ChangeRobStatus(int dec)
+	{
+		decChildren = dec;
+		ChangeStatus(E_HEAD_STATUS.ROB);
+	
+	}
+
+	private int decChildren;
+	private void RobInitialize()
+	{
+		childrenAdjustNowTime = 0.5f; ;
+		adjustChildrenCount = decChildren;
+
+		UVRect.y = 1 * UVRect.height;
+		headObj_RawImage.uvRect = UVRect;
+
+	}
+
+	private void RobUpdate()
+	{
+		childrenAdjustNowTime -= Time.deltaTime;
+
+		if (childrenAdjustNowTime <= 0)
+		{
+			foreach (Transform obj in childrenObj.transform)
+			{
+				if (!obj.gameObject.activeSelf) continue;
+				if (obj.GetComponent<ChildGauge_ChildIcon>().GetGaugeIconRobFlag()) continue;
+
+				obj.SendMessage("ChangeModeRob");
+				break;
+
+			}
+			childrenAdjustNowTime = 0.5f;
+			adjustChildrenCount--;
+
+		}
+
+		if (adjustChildrenCount <= 0)
+			ChangeStatus(E_HEAD_STATUS.CLOSE);
+
+
+	}
+
+	private void RobFinalize()
 	{ }
 
 }

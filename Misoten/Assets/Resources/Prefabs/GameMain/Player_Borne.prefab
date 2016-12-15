@@ -145,7 +145,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 435140}
   - 95: {fileID: 9579630}
-  - 114: {fileID: 11417672}
   - 65: {fileID: 6523514}
   - 65: {fileID: 6528712}
   - 54: {fileID: 5459830}
@@ -154,6 +153,7 @@ GameObject:
   - 82: {fileID: 8239838}
   - 82: {fileID: 8256166}
   - 82: {fileID: 8233254}
+  - 114: {fileID: 11407614}
   m_Layer: 0
   m_Name: Player_Borne
   m_TagString: Player
@@ -2084,7 +2084,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &11417672
+--- !u!114 &11407614
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -2101,29 +2101,29 @@ MonoBehaviour:
   moveResistivity: 0.8
   rotationAcceleration: 2
   rotationMaxspeed: 5
-  rotationResistivity: 1
-  floatingAcceleration: 0.02
+  rotationResistivity: 2
+  floatingAcceleration: 0.1
   floatingResistivity: 0.8
   floatingMaxspeed: 200
   floatingMoveAcceleration: 60
   damageTimePerSec: 3
   crashTimePerSec: 0
-  crashRotationFrequency: 0
+  crashRotationFrequency: 5
   flashingOnCrashTimePreSec: 0.1
   childNumGaugeObj: {fileID: 0}
   rigidbody: {fileID: 0}
   score: 0
   rank: 1
-  rootObj: {fileID: 488834}
+  rootObj: {fileID: 0}
   propellerObj:
-  - {fileID: 490972}
-  - {fileID: 448984}
-  - {fileID: 422700}
-  - {fileID: 434486}
-  Water_SE: {fileID: 8242990}
-  Hit_SE: {fileID: 8242990}
-  ChildGet_SE: {fileID: 8242990}
-  ScoreGet_SE: {fileID: 8242990}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  Water_SE: {fileID: 8233254}
+  Hit_SE: {fileID: 8256166}
+  ChildGet_SE: {fileID: 8239838}
+  ScoreGet_SE: {fileID: 8253282}
   Colision_SE: {fileID: 8242990}
   Elasticity: 0.8
   PlayerElasticity: 0.9

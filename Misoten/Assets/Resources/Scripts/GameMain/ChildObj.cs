@@ -22,8 +22,6 @@ public class ChildObj : MonoBehaviour {
 
 	public void ActiveOn()
 	{
-		this.gameObject.SetActive(true);
-
 		foreach (GameObject obj in miniMapIcon)
 			obj.SetActive(true);
 

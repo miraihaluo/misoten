@@ -132,6 +132,18 @@ public class GameMainSceneController : MonoBehaviour
 	private MissionController missionControllerObj;
 	private int missionFlag = 0;
 
+	/// <summary>
+	/// 子供オブジェ管理オブジェ
+	/// </summary>
+	[SerializeField, Header("子供オブジェ管理オブジェ")]
+	private ChildObjCreatePoint childCreateObj;
+
+	/// <summary>
+	/// CPUオブジェ
+	/// </summary>
+	[SerializeField, Header("CPUオブジェ")]
+	private CPU cpuObj;
+
 	//音楽データ
 	[SerializeField]
 	private AudioSource sound01;
@@ -207,9 +219,9 @@ public class GameMainSceneController : MonoBehaviour
 		if (Input.GetButtonDown(sceneChangeVirtualKeyName))
 		{
 			sound01.Play();
-			FadeManager.Instance.LoadLevel(nextSceneName, 1.0f);
+			//FadeManager.Instance.LoadLevel(nextSceneName, 1.0f);
 
-			//SceneManager.LoadScene(nextSceneName);
+			SceneManager.LoadScene(nextSceneName);
 
 		}
 
@@ -431,6 +443,7 @@ public class GameMainSceneController : MonoBehaviour
 		if (limitTime < 150 && missionFlag <= 0)
 		{
 			missionControllerObj.CallMissionText(MissionController.E_MISSION_TYPE.SPECIAL_CHILDREN);
+			childCreateObj.ActiveSpecialChild();
 			missionFlag++;
 		}
 
@@ -438,12 +451,21 @@ public class GameMainSceneController : MonoBehaviour
 		if (limitTime < 90 && missionFlag <= 1)
 		{
 			missionControllerObj.CallMissionText(MissionController.E_MISSION_TYPE.ENEMY_DRONE);
+			cpuObj.gameObject.SetActive(true);
 			missionFlag++;
 		}
 
-		if (limitTime < 30 && missionFlag <= 2)
+		if (limitTime < 40 && missionFlag <= 2)
+		{
+			cpuObj.gameObject.SetActive(false);
+			missionFlag++;
+		
+		}
+
+		if (limitTime < 30 && missionFlag <= 3)
 		{
 			missionControllerObj.CallMissionText(MissionController.E_MISSION_TYPE.FEVER);
+			childCreateObj.ChangeFever();
 			missionFlag++;
 		}
 
@@ -460,8 +482,8 @@ public class GameMainSceneController : MonoBehaviour
 
 	private void EndUpdate()
 	{
-		FadeManager.Instance.LoadLevel(nextSceneName, 1.0f);
-		//SceneManager.LoadScene(nextSceneName);
+		//FadeManager.Instance.LoadLevel(nextSceneName, 1.0f);
+		SceneManager.LoadScene(nextSceneName);
 
 	}
 
@@ -474,6 +496,7 @@ public class GameMainSceneController : MonoBehaviour
 
 	}
 
+	private int[] work = new int[4];
 	public void PlayerRankUpdate()
 	{
 		// スコア配列をソート用配列にコピー
@@ -530,7 +553,8 @@ public class GameMainSceneController : MonoBehaviour
 			rankingScoreObjArray[i].UpdateNextScore(scoreArray[i % 4]);
 
 		/*** ランキングブロックの処理 ***/
-		int[] work = new int[] { -1, -1, -1, -1 };
+		for (int i = 0; i < work.Length; i++ )
+			work[i] = -1;
 
 		// 要素番号を順位に、中身をプレイヤー番号で、work配列に並べていく
 		for (int playerID = 0; playerID < rankingBlockRankArray.Length; playerID++)
