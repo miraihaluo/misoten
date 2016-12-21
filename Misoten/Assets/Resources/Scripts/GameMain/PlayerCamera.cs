@@ -17,6 +17,7 @@ public class PlayerCamera : MonoBehaviour {
 		MAX
 	};
 */
+	[SerializeField]
 	private GameMainSceneController.E_STATUS eStatus = GameMainSceneController.E_STATUS.MIWATASI;
 
 	/// <summary>

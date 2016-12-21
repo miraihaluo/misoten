@@ -83,6 +83,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15d7159e28acaad448d848e53f254144, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneObj: {fileID: 0}
   targetPlayer: {fileID: 0}
   posOffset: {x: 0, y: 7, z: -30}
   lookAtOffset: {x: 0, y: 0, z: 0}

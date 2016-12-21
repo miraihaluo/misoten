@@ -11,14 +11,46 @@ public class ChildObjCreatePoint : MonoBehaviour {
 	private GameObject instansChildObj;
 
 	/// <summary>
+	/// このUpdateを走らすかどうかのフラグ
+	/// </summary>
+	private bool activeFlag = false;
+
+	/// <summary>
 	/// 次に子供オブジェをアクティブにするまでの時間
 	/// </summary>
 	private float activeCoolTime;
 
 	/// <summary>
+	/// 次に特別な子供オブジェをアクティブにするまでの時間
+	/// </summary>
+	private float specialActiveCoolTime = 5;
+
+	/// <summary>
+	/// リスポンのランダム範囲
+	/// </summary>
+	private Vector2 activeCoolTimeRange = new Vector2(2, 4);
+
+	/// <summary>
+	/// リスポンさせる子供のID
+	/// </summary>
+	private int activeChildID;
+
+	/// <summary>
 	/// 存在する最大子供の人数
 	/// </summary>
-	private const int MAX_CHILDREN = 20;
+	[SerializeField, Header("普通の子供の出現する最大個数")]
+	private int MAX_CHILDREN = 5;
+
+	/// <summary>
+	/// 
+	/// </summary>
+	[SerializeField, Header("特別の子供の出現する最大個数")]
+	private int MAX_SPECIAL_CHILDREN = 5;
+
+	/// <summary>
+	/// アクティブ状態の子供の個数
+	/// </summary>
+	private int activeChildCount;
 
 	/// <summary>
 	/// ミニマップの子供アイコンを生成するオブジェ
@@ -39,6 +71,8 @@ public class ChildObjCreatePoint : MonoBehaviour {
 	private Transform specialChildrenObj;
 
 	private Vector3 childPos = Vector3.zero;
+
+	private bool feverFlag = false;
 
 	// Use this for initialization
 	void Start()
@@ -61,6 +95,8 @@ public class ChildObjCreatePoint : MonoBehaviour {
 
 			}
 
+			childObj.SendMessage("ActiveOff");
+
 		}
 
 		// 特別の子供のミニマップアイコンをインスタンス
@@ -82,8 +118,17 @@ public class ChildObjCreatePoint : MonoBehaviour {
 
 			}
 
+			childObj.SendMessage("ActiveOff");
+
 		}
-	
+
+		activeCoolTime = Random.Range(activeCoolTimeRange.x, activeCoolTimeRange.y);
+
+		for (int i = 0; i < MAX_CHILDREN; i++)
+			ActiveChild(normalChildrenObj);
+
+		activeFlag = true;
+
 	}
 
 	void Awake()
@@ -94,8 +139,93 @@ public class ChildObjCreatePoint : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		if (!activeFlag) return;
+
+		NormalChildUpdate();
+		SpecialChildUpdate();
+
+	}
+
+	private void NormalChildUpdate()
+	{
+		// アクティブの子供の個数を数える
+		activeChildCount = 0;
+		foreach (Transform child in normalChildrenObj.transform)
+		{
+			if (child.gameObject.activeSelf) activeChildCount++;
+
+		}
+
+		if (!feverFlag)
+		{
+			if (activeChildCount > MAX_CHILDREN) return;
+		}
+		else
+		{
+			if (activeChildCount >= normalChildrenObj.childCount) return;
+		
+		}
 
 
+			activeCoolTime -= Time.deltaTime;
+
+		if (activeCoolTime <= 0)
+		{
+			activeCoolTime = Random.Range(activeCoolTimeRange.x, activeCoolTimeRange.y);
+			ActiveChild(normalChildrenObj);
+
+		}
+
+	}
+
+	private void SpecialChildUpdate()
+	{
+		if (!feverFlag) return;
+		activeChildCount = 0;
+		foreach (Transform child in specialChildrenObj)
+			if (child.gameObject.activeSelf) activeChildCount++;
+
+		if (activeChildCount > MAX_SPECIAL_CHILDREN) return;
+
+		specialActiveCoolTime -= Time.deltaTime;
+
+		if (specialActiveCoolTime <= 0)
+		{
+			specialActiveCoolTime = 5;
+			ActiveChild(specialChildrenObj);
+		
+		}
+
+	}
+
+	private void ActiveChild(Transform childArray)
+	{
+		activeChildID = Random.Range(0, childArray.childCount - 1);
+
+		while (childArray.GetChild(activeChildID).gameObject.activeSelf)
+			activeChildID = (activeChildID + 1) % childArray.childCount;
+
+		childArray.GetChild(activeChildID).gameObject.SetActive(true);
+		childArray.GetChild(activeChildID).SendMessage("ActiveOn");
+	
+	}
+
+	public void ChangeFever()
+	{
+		ActiveSpecialChild();
+		feverFlag = true;
+
+	}
+
+	public void ActiveSpecialChild()
+	{
+		foreach (Transform child in specialChildrenObj)
+		{
+			child.gameObject.SetActive(true);
+			child.SendMessage("ActiveOn");
+		
+		}
+	
 	}
 
 }

@@ -212,6 +212,15 @@ public class CPU : MonoBehaviour {
 	/// </summary>
 	private ParticleSystem attackWaterObj;
 
+	/// <summary>
+	/// 頭上に表示するプレイヤーアイコンのオブジェ
+	/// </summary>
+	private Transform numIconObj;
+
+	/// <summary>
+	/// プレイヤーアイコンのローカル位置
+	/// </summary>
+	private Vector3 numIconPos;
 
 	/// <summary>
 	/// 自身のリジッドボディ
@@ -267,13 +276,17 @@ public class CPU : MonoBehaviour {
 	private AudioSource Colision_SE;
 
 
+    [SerializeField, Header("child_allスクリプト")]
+    public child_all child_all;
+
 	// Use this for initialization
 	void Start () {
-	
 	}
 
 	void Awake()
 	{
+
+
 		// アセットの参照受け取り
 		playerData = Resources.Load<PlayerData>("Assets/PlayerData");
 		defineData = Resources.Load<DefineData>("Assets/DefineData");
@@ -306,8 +319,7 @@ public class CPU : MonoBehaviour {
 		// レンダラーコンポーネントの取得
 		rendererObj = GetComponent<MeshRenderer>();
 
-        //子供の取得
-        Childs = GameObject.FindGameObjectsWithTag("Child");
+
 
 	}
 	
@@ -729,7 +741,7 @@ public class CPU : MonoBehaviour {
 
 		Vector3 vec = PC.transform.position - transform.position;
 
-		speed = Vector3.Reflect(speed, contact.normal) * PlayerElasticity + PC.GetComponent<Rigidbody>().velocity + Vector3.Reflect(vec.normalized * PlayerHitBackSpeed, contact.normal);
+		speed = Vector3.Reflect(speed, contact.normal) * PlayerElasticity + PC.rigidbody.velocity + Vector3.Reflect(vec.normalized * PlayerHitBackSpeed, contact.normal);
 
 		return speed;
 
@@ -801,8 +813,10 @@ public class CPU : MonoBehaviour {
             if (AddScore(1, other.transform.position))
             {
 //                ChildGet_SE.Play();
-//                childObjCreatePointObj.DestroyChild(uint.Parse(other.transform.name));
+                //childObjCreatePointObj.DestroyChild(uint.Parse(other.transform.name));
 				other.SendMessage("ActiveOff");
+			//	getChildObj.transform.position = other.transform.position;
+			//	getChildObj.Play();
 
             }
 
@@ -819,7 +833,7 @@ public class CPU : MonoBehaviour {
 
         }
 
-        if (other.tag == "Player")
+/*        if (other.tag == "Player")
         {
 
             //Colision_SE.Play();
@@ -842,7 +856,7 @@ public class CPU : MonoBehaviour {
 			}
 
         }
-
+		*/
     }
 
     void OnParticleCollision(GameObject obj)
@@ -873,9 +887,6 @@ public class CPU : MonoBehaviour {
     //水鉄砲のフラグ1で発射0で打ち止め2は待機状態
    private int shot_flag=2;
 
-   //子供用配列
-   private GameObject[] Childs;
-
     [SerializeField, Header("飛ぶ高さ")]
    public float flight_pos;
 
@@ -894,21 +905,22 @@ public class CPU : MonoBehaviour {
 
         if (upnowTime > upTime)
             upnowTime = upTime + 1;
+        
 
-        if (target == -1 || !moku_flag || Childs[target].activeSelf == false)
+        if (target == -1 || !moku_flag || child_all.Childs[target].activeSelf == false)
         {
         //子供のオブジェクトをアクティブ切り替えにするので必要ない
          /*   Childs = GameObject.FindGameObjectsWithTag("Child");
             if (length == 0)
                 return;
          */
-           
-            int length = Childs.GetLength(0);
-            target = Random.Range(0, length);  
 
-            if (Childs[target].activeSelf == false)
+            int length = child_all.Childs.GetLength(0);
+            target = Random.Range(0, length);
+
+            if (child_all.Childs[target].activeSelf == false)
             {
-                for (int i = target + 1; Childs[target].activeSelf == false; i++)
+                for (int i = target + 1; child_all.Childs[target].activeSelf == false; i++)
                 {
                     i %= length;
                     if (target == i)
@@ -919,7 +931,7 @@ public class CPU : MonoBehaviour {
             moku_flag = true;
             
         }
-        pos = Childs[target].transform.position;
+        pos = child_all.Childs[target].transform.position;
 
         Vector3 angle = pos - transform.position;
         angle.y = 0;
@@ -956,10 +968,6 @@ public class CPU : MonoBehaviour {
         {
             axisY = 1;
         }
-
-
-
-
     }
 
 }
