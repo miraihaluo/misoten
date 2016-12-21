@@ -261,7 +261,7 @@ public class PlayerControl : MonoBehaviour {
 	/// <summary>
 	/// 一度に持てる子供の最大数
 	/// </summary>
-	//private const int SCORE_MAX = 50;
+	private const int SCORE_MAX = 20;
 
 	/// <summary>
 	/// 現在持っている子供の人数
@@ -487,15 +487,10 @@ public class PlayerControl : MonoBehaviour {
 	private bool AddScore(int addScore, Vector3 pos)
 	{
 		if (addScore <= 0) return false;
-	//	if (score + addScore > SCORE_MAX) return false;
+		if (score + addScore > SCORE_MAX) return false;
 
-		for (int i = 1; i <= addScore && score + i <= playerData.MAX_SCORE_CHILDREN; i++)
-		{
-			childNumGaugeObj.GainChild(1, pos);
-			score++;
-		}
-
-	//	score += addScore;
+		childNumGaugeObj.GainChild(addScore, pos);
+		score += addScore;
 
 		return true;
 
@@ -506,26 +501,14 @@ public class PlayerControl : MonoBehaviour {
 	/// </summary>
 	/// <param name="decScore">減算する値　値は正</param>
 	/// <returns>正誤判定</returns>
-	public int DecreaseScore(int decScore)
+	public bool DecreaseScore(int decScore)
 	{
-		if (decScore <= 0) return 0;
-//		if (score - decScore < 0) return 0;
+		if (decScore <= 0) return false;
+		if (score - decScore < 0) return false;
 
-		if (decScore > score)
-		{
-			decScore = score;
-			score = 0;
+		score -= decScore;
 
-		}
-		else
-		{
-			score -= decScore;
-		
-		}
-
-		childNumGaugeObj.ChangeRobStatus(decScore);
-
-		return decScore;
+		return true;
 
 	}
 
@@ -929,68 +912,57 @@ public class PlayerControl : MonoBehaviour {
 		}
 	}
 
-	private PlayerControl playerObj;
 	void OnTriggerEnter(Collider other)
     {
-		switch (other.tag)
-		{
-			case "Child":
-				if (AddScore(1, other.transform.position))
-				{
-					ChildGet_SE.Play();
-					//                childObjCreatePointObj.DestroyChild(uint.Parse(other.transform.name));
-					other.SendMessage("ActiveOff");
-					getChildObj.transform.position = other.transform.position;
-					getChildObj.Play();
 
-				}
+        if (other.tag == "Child")
+        {
+            if (AddScore(1, other.transform.position))
+            {
+                ChildGet_SE.Play();
+//                childObjCreatePointObj.DestroyChild(uint.Parse(other.transform.name));
+				other.SendMessage("ActiveOff");
+				getChildObj.transform.position = other.transform.position;
+				getChildObj.Play();
 
-				break;
+            }
 
-			case "SpecialChild":
-				if (AddScore(5, other.transform.position))
-				{
-					ChildGet_SE.Play();
-					//                childObjCreatePointObj.DestroyChild(uint.Parse(other.transform.name));
-					other.SendMessage("ActiveOff");
-					getChildObj.transform.position = other.transform.position;
-					getChildObj.Play();
+        }
 
-				}
+        if (other.tag == "Goal")
+        {
+            if (score == 0) return;
+			ScoreGet_SE.Play();
+			playerData.AddPlayerScoreArray(int.Parse(transform.name) - 1 , score);
+			sceneObj.PlayerRankUpdate();
+			childNumGaugeObj.ChildrenAdjust();
+			score = 0;
 
-				break;
+        }
 
-			case "Goal":
-				if (score == 0) return;
-				ScoreGet_SE.Play();
-				playerData.AddPlayerScoreArray(int.Parse(transform.name) - 1, score);
-				sceneObj.PlayerRankUpdate();
-				childNumGaugeObj.ChildrenAdjust();
-				score = 0;
+        if (other.tag == "Player")
+        {
 
-				break;
+            Colision_SE.Play();
+            // 自分が通常状態じゃなければ除外
+            if (eStatus != E_STATUS.ACTIVE) return;
 
-			case "Player":
-				Colision_SE.Play();
-				// 自分が通常状態じゃなければ除外
-				if (eStatus != E_STATUS.ACTIVE) return;
+            // 所持子供数がマックスなら除外
+            if (score == SCORE_MAX) return;
 
-				// 所持子供数がマックスなら除外
-				if (score == playerData.MAX_SCORE_CHILDREN) return;
+            PlayerControl playerObj = other.GetComponent<PlayerControl>();
 
-				playerObj = other.GetComponent<PlayerControl>();
+            // 相手がダメージ状態じゃなければ除外
+            if ((E_STATUS)playerObj.GetStatus() != E_STATUS.DAMAGE) return;
+			
+			// 相手の所持子供人数を1減らして、自分の所持子供人数を1増やす
+			if (playerObj.DecreaseScore(1))
+			{
+				playerObj.RobbedChildren();
+				score++;
+			}
 
-				// 相手がダメージ状態じゃなければ除外
-				if ((E_STATUS)playerObj.GetStatus() != E_STATUS.DAMAGE) return;
-
-				// 相手の所持子供人数を1減らして、自分の所持子供人数を1増やす
-				if (AddScore(playerObj.DecreaseScore(3), other.transform.position))
-				{
-					playerObj.RobbedChildren();
-				}
-
-				break;
-		}
+        }
 
     }
 

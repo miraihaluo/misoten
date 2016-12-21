@@ -130,7 +130,8 @@ public class ChildrenVal : MonoBehaviour {
 				break;
 		
 		}
-
+	
+	
 	}
 
 }

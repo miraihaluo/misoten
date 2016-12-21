@@ -6,17 +6,15 @@ public class ChildGauge_ChildIcon : MonoBehaviour {
 	/// <summary>
 	/// 子供アイコンの状態
 	/// </summary>
-	public enum E_CHILD_ICON_STATUS
+	private enum E_STATUS
 	{
-		NONE,
 		CREATE,
 		MOVE,
         OUT,
-		ROB,
 		MAX
 	}
 
-	private E_CHILD_ICON_STATUS eStatus = E_CHILD_ICON_STATUS.NONE;
+	private E_STATUS eStatus = E_STATUS.CREATE;
 
 	/// <summary>
 	/// 自分のRectTransformオブジェ
@@ -88,7 +86,7 @@ public class ChildGauge_ChildIcon : MonoBehaviour {
 	private const int randomPer = 5;
 
     //ベジェ曲線
-    private Bezier inBezier, outBezier, robBezier;
+    private Bezier inBezier, outBezier;
     private float t = 0.0f;
 
     void Awake()
@@ -103,11 +101,7 @@ public class ChildGauge_ChildIcon : MonoBehaviour {
 		mainPosOffset.x = -this.transform.parent.transform.localPosition.x;
 		mainPosOffset.y = -this.transform.parent.transform.localPosition.y;
 		limitPosOffset += mainPosOffset;
-		inBezier = new Bezier(this.transform.localPosition, Vector3.zero + mainPosOffset, new Vector3(400f, 0.0f, 0f) + mainPosOffset, new Vector3(limitPosOffset.x, mainPosOffset.y, 0f));
-		outBezier = new Bezier(Vector3.up * -20.0f + mainPosOffset, new Vector3(300f, 0f, 0f), Vector3.zero + mainPosOffset, new Vector3(Random.Range(-100, 100) + mainPosOffset.x, 400f + mainPosOffset.y, 0f));
-		robBezier = new Bezier(new Vector3(limitPosOffset.x, mainPosOffset.y, 0f), new Vector3(400f, 0.0f, 0f) + mainPosOffset, Vector3.zero + mainPosOffset, Vector3.up * 150.0f );
-
-		//CreateInitialize();
+		CreateInitialize();
         //inBezier = new Bezier(new Vector3(0f, 200.0f, 0f), new Vector3(0f, 0f, 0f), new Vector3(400f, 0.0f, 0f), new Vector3(limitPosOffset.x, -20.0f, 0f));
         //outBezier = new Bezier(new Vector3(0f, 0f, 0f), new Vector3(300f, 0f, 0f), new Vector3(0f, 0f, 0f), new Vector3(Random.Range(-50, 50), 400f, 0f));
     }
@@ -117,21 +111,17 @@ public class ChildGauge_ChildIcon : MonoBehaviour {
 
 		switch (eStatus)
 		{
-			case E_CHILD_ICON_STATUS.CREATE:
+			case E_STATUS.CREATE:
 				CreateUpdate();
 				break;
 
-			case E_CHILD_ICON_STATUS.MOVE:
+			case E_STATUS.MOVE:
 				MoveUpdate();
 				break;
 
-            case E_CHILD_ICON_STATUS.OUT:
+            case E_STATUS.OUT:
                 OutUpdate();
                 break;
-
-			case E_CHILD_ICON_STATUS.ROB:
-				Robupdate();
-				break;
 
         }
 
@@ -153,46 +143,26 @@ public class ChildGauge_ChildIcon : MonoBehaviour {
 
 	}
 
-	public void ChangeModeCreate()
-	{
-		ChangeChildIconStatus(E_CHILD_ICON_STATUS.CREATE);
-	
-	}
-
 	/// <summary>
 	/// 状態をOUTにする
 	/// </summary>
 	public void ChangeModeOUT()
 	{
-		ChangeChildIconStatus(E_CHILD_ICON_STATUS.OUT);
+		ChangeStatus(E_STATUS.OUT);
 	
 	}
 
-	public void ChangeModeRob()
-	{
-		ChangeChildIconStatus(E_CHILD_ICON_STATUS.ROB);
-	
-	}
-
-	private void ChangeChildIconStatus(E_CHILD_ICON_STATUS changeStatus)
+	private void ChangeStatus(E_STATUS changeStatus)
 	{
 		// 各状態の終了処理
 		switch (eStatus)
 		{
-			case E_CHILD_ICON_STATUS.CREATE:
+			case E_STATUS.CREATE:
 				CreateFinalize();
 				break;
 
-			case E_CHILD_ICON_STATUS.MOVE:
+			case E_STATUS.MOVE:
 				MoveFinalize();
-				break;
-
-			case E_CHILD_ICON_STATUS.OUT:
-				OutFinalize();
-				break;
-
-			case E_CHILD_ICON_STATUS.ROB:
-				RobFinalize();
 				break;
 		
 		}
@@ -201,20 +171,16 @@ public class ChildGauge_ChildIcon : MonoBehaviour {
 		eStatus = changeStatus;
 		switch (eStatus)
 		{
-			case E_CHILD_ICON_STATUS.CREATE:
+			case E_STATUS.CREATE:
 				CreateInitialize();
 				break;
 
-			case E_CHILD_ICON_STATUS.MOVE:
+			case E_STATUS.MOVE:
 				MoveInitialize();
 				break;
 
-			case E_CHILD_ICON_STATUS.OUT:
+			case E_STATUS.OUT:
 				OutInitialize();
-				break;
-
-			case E_CHILD_ICON_STATUS.ROB:
-				RobInitialize();
 				break;
 
 		}
@@ -223,18 +189,19 @@ public class ChildGauge_ChildIcon : MonoBehaviour {
 
 	private void CreateInitialize()
 	{
-		this.transform.localPosition = Vector3.up * 200.0f;
-		
+		//this.transform.localPosition = Vector3.up * 200.0f;
+		inBezier = new Bezier(this.transform.localPosition, Vector3.zero + mainPosOffset, new Vector3(400f, 0.0f, 0f) + mainPosOffset, new Vector3(limitPosOffset.x, mainPosOffset.y, 0f));
+
 	}
 
 	private void CreateUpdate()
 	{
         this.transform.localPosition = inBezier.GetPointAtTime(t);
-        t += Time.deltaTime * 0.5f;
+        t += 0.02f;
         if (t > 1f)
         {
             t = 0f;
-            ChangeChildIconStatus(E_CHILD_ICON_STATUS.MOVE);
+            ChangeStatus(E_STATUS.MOVE);
         }
         /*/   
         this.transform.localPosition -= Vector3.up * (25.0f * Time.deltaTime);
@@ -293,73 +260,27 @@ public class ChildGauge_ChildIcon : MonoBehaviour {
 
 	}
 
-	private void MoveFinalize()
-	{
-//		this.gameObject.SetActive(false);
-
-	}
-
 	private void OutInitialize()
 	{
 		//outBezier = new Bezier(this.transform.localPosition, new Vector3(300f, 0f, 0f), new Vector3(0f, 0f, 0f), new Vector3(Random.Range(-50, 50), 400f, 0f));
-		
+		outBezier = new Bezier(Vector3.up * -20.0f + mainPosOffset, new Vector3(300f, 0f, 0f), Vector3.zero + mainPosOffset, new Vector3(Random.Range(-100, 100) + mainPosOffset.x, 400f + mainPosOffset.y, 0f));
+	
 	}
 
     private void OutUpdate()
     {
 		this.transform.localPosition = outBezier.GetPointAtTime(t);
-        t += Time.deltaTime * 0.5f;
+        t += 0.02f;
         if (t > 1f)
         {
             t = 0f;
-			ChangeChildIconStatus(E_CHILD_ICON_STATUS.NONE);
+            // バグりそう
+			Destroy(this.gameObject);
         }
 
     }
 
-	private void OutFinalize()
-	{
-		this.gameObject.SetActive(false);
-	
-	}
-
-	private void RobInitialize()
+	private void MoveFinalize()
 	{ }
-
-	private void Robupdate()
-	{
-		this.transform.localPosition = robBezier.GetPointAtTime(t);
-		t += Time.deltaTime * 0.5f;
-		if (t > 1f)
-		{
-			t = 0f;
-			ChangeChildIconStatus(E_CHILD_ICON_STATUS.NONE);
-		}
-
-	}
-
-	private void RobFinalize()
-	{
-		this.gameObject.SetActive(false);
-	
-	}
-
-	public bool GetGaugeIconActiveFlag()
-	{
-		if (eStatus == E_CHILD_ICON_STATUS.OUT)
-			return true;
-		else
-			return false;
-
-	}
-
-	public bool GetGaugeIconRobFlag()
-	{
-		if (eStatus == E_CHILD_ICON_STATUS.ROB)
-			return true;
-		else
-			return false;
-
-	}
 
 }

@@ -29,8 +29,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a2167c933d116548b6edb1df85ff50d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  limitPos: {x: 80, y: 20, z: 0}
-  limitPosOffset: {x: -50, y: -20, z: 0}
+  limitPos: {x: 80, y: 20}
+  limitPosOffset: {x: -50, y: -20}
   moveVal: 50
   rotateValArea: 180
   moveTimeArea:
@@ -83,7 +83,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 50, y: 50}
+  m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &100100000
 Prefab:

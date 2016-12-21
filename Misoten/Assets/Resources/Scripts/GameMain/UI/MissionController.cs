@@ -33,12 +33,6 @@ public class MissionController : MonoBehaviour
     [SerializeField]
     private RawImage BGObj;
 
-	/// <summary>
-	/// 画面を区切るフレームのオブジェ
-	/// </summary>
-	[SerializeField, Header("画面を区切るフレームのオブジェ")]
-	private Frame frameObj;
-
     [SerializeField]
     private float textSpeed;  //テキストの流れるスピード
 
@@ -55,9 +49,7 @@ public class MissionController : MonoBehaviour
 
     // Use this for initialization
     void Start()
-	{
-		textSize.x = textObj.preferredWidth;
-		textObj.transform.localPosition = Vector3.right * (textSize.x + Screen.width);
+    {
 
     }
 
@@ -104,9 +96,6 @@ public class MissionController : MonoBehaviour
 	{
 		onMission = eTEXT_STATE.MOVE;
 		textObj.text = missionText[(int)callMissionType];
-
-		frameObj.SetFrameStatus(callMissionType);
-
 		//テキストサイズを計算
 		textSize.x = textObj.preferredWidth;
 

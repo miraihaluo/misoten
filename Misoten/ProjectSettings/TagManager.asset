@@ -9,8 +9,6 @@ TagManager:
   - Child
   - Goal
   - AttackObj
-  - CPU
-  - SpecialChild
   layers:
   - Default
   - TransparentFX

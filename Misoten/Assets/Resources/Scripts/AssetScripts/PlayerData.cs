@@ -19,8 +19,6 @@ public class PlayerData : ScriptableObject
 
 	private const int MAX_PLAYER_NUM = 4;
 
-	public readonly int MAX_SCORE_CHILDREN = 50;
-
 	/////////////////////////
 	/* 参加プレイヤー関係 */
 	////////////////////////
@@ -110,15 +108,5 @@ public class PlayerData : ScriptableObject
 	/// </summary>
 	/// <returns>スコア配列</returns>
 	public int[] GetPlayerScoreArray() { return playerScoreArray; }
-
-	/// <summary>
-	/// スコア配列を0にする
-	/// </summary>
-	public void ResetPlayerScoreArray()
-	{
-		for (int i = 0; i < playerScoreArray.Length; i++)
-			playerScoreArray[i] = 0;
-	
-	}
 
 }

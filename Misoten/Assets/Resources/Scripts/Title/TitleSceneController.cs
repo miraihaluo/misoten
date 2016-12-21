@@ -25,9 +25,9 @@ public class TitleSceneController : MonoBehaviour
 		if (Input.anyKeyDown)
 		{
 			sound01.Play();
-			//FadeManager.Instance.LoadLevel(nextSceneName, 1.0f);
+			FadeManager.Instance.LoadLevel(nextSceneName, 1.0f);
 
-			SceneManager.LoadScene(nextSceneName);
+			//SceneManager.LoadScene(nextSceneName);
 		}
 
 	}
