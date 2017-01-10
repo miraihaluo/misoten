@@ -98,6 +98,10 @@ MonoBehaviour:
   textObj: {fileID: 11486250}
   rankObj: {fileID: 11481424}
   MAX_CHILD: 50
+  childIconMarge: 20
+  childIconYoko: 50
+  fallSpedd: 10000
+  emptyObjYoko: 10
 --- !u!114 &11472710
 MonoBehaviour:
   m_ObjectHideFlags: 1

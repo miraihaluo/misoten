@@ -20,9 +20,9 @@ public class MissionController : MonoBehaviour
 	};
 
 	private string[] missionText = {
-								"五つ子が現れた！ひとつで五人分だ！",
-								"余所のドローンが現れた！子供達を取り戻そう！",
-								"さあ、最後の追い上げだ！"
+								"五つ子が現れた！",
+								"余所のドローンが現れた！",
+								"残り30秒！"
 								};
 
     // 残り時間を持っているGameMainSceneControllerオブジェの入れ子
@@ -42,6 +42,12 @@ public class MissionController : MonoBehaviour
     [SerializeField]
     private float textSpeed;  //テキストの流れるスピード
 
+	/// <summary>
+	/// テキスト背景の流れる速さ
+	/// </summary>
+	[SerializeField, Header("テキスト背景の流れる早さ")]
+	private float BGSpeed = 100;
+
     enum eTEXT_STATE{
         DELETE,
         MOVE,
@@ -53,11 +59,21 @@ public class MissionController : MonoBehaviour
 
     private Vector2 textSize;       //テキストの大きさ
 
+	private Vector3 defTextPos;
+	private Vector3 defBGPos;
+	private Vector3 BGPos;
+
     // Use this for initialization
     void Start()
 	{
 		textSize.x = textObj.preferredWidth;
-		textObj.transform.localPosition = Vector3.right * (textSize.x + Screen.width);
+		defTextPos = textObj.transform.localPosition;
+		defTextPos.x = textSize.x + Screen.width;
+		textObj.transform.localPosition = defTextPos;
+
+		defBGPos = BGObj.transform.localPosition;
+		defBGPos.x = BGObj.rectTransform.rect.width;
+		BGObj.transform.localPosition = -defBGPos;
 
     }
 
@@ -98,6 +114,27 @@ public class MissionController : MonoBehaviour
                 onMission = eTEXT_STATE.REMOVE;
             }
         }
+
+		// テキスト背景の処理
+		switch (onMission)
+		{
+			case eTEXT_STATE.MOVE:
+				if (BGPos.x <= 0) break;
+				BGPos.x -= BGSpeed * Time.deltaTime;
+				if (BGPos.x <= 0) BGPos.x = 0;
+				BGObj.transform.localPosition = BGPos;
+
+				break;
+
+			case eTEXT_STATE.DELETE:
+				if (BGPos.x <= -defBGPos.x) break;
+				BGPos.x -= BGSpeed * Time.deltaTime;
+				BGObj.transform.localPosition = BGPos;
+
+				break;
+
+		}
+
     }
 
 	public void CallMissionText(E_MISSION_TYPE callMissionType)
@@ -109,8 +146,10 @@ public class MissionController : MonoBehaviour
 
 		//テキストサイズを計算
 		textSize.x = textObj.preferredWidth;
+		defTextPos.x = textSize.x + Screen.width;
 
-		textObj.transform.localPosition = Vector3.right * (textSize.x + Screen.width);
+		textObj.transform.localPosition = defTextPos;
+		BGObj.transform.localPosition = BGPos = defBGPos;
 	
 	}
 

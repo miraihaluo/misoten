@@ -22,7 +22,7 @@ public class BGMove : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		UVRect.x += Time.deltaTime;
+		UVRect.x -= Time.deltaTime;
 		UVRect.y -= Time.deltaTime;
 
 		BGObj.uvRect = UVRect;

@@ -98,7 +98,7 @@ public class ChildObjCreatePoint : MonoBehaviour {
 			childObj.SendMessage("ActiveOff");
 
 		}
-
+		
 		// 特別の子供のミニマップアイコンをインスタンス
 		foreach (Transform childObj in specialChildrenObj)
 		{

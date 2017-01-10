@@ -45,11 +45,25 @@ public class PlayerControl : MonoBehaviour {
 	/// </summary>
 	private bool muteki_f = false;
 
-	/// <summary>
-	/// 秒間の移動の加速量。。
-	/// インスペクターで設定する
-	/// </summary>
-	[SerializeField, Header("秒間の移動の加速量")]
+    /// <summary>
+    /// 秒間の移動の加速量。。
+    /// インスペクターで設定する
+    /// </summary>
+    [SerializeField, Header("加速時の傾き")]
+    private float katamuki;
+
+    private float BackStop = 0;
+    /// <summary>
+    /// 反転再使用待ち時間（または前進の入力で解除）
+    /// </summary>
+    [SerializeField, Header("反転再使用待ち時間")]
+    float BackStopTime;
+
+
+    /// <summary>
+    /// 秒間の移動の加速量。。
+    /// </summary>
+    [SerializeField, Header("秒間の移動の加速量")]
 	private float moveAcceleration;
 
 	/// <summary>
@@ -70,18 +84,45 @@ public class PlayerControl : MonoBehaviour {
 	[SerializeField, Header("移動の減速割合")]
 	private float moveResistivity;
 
-	/// <summary>
-	/// 秒間の回転の加速量。
-	/// インスペクターで設定する
-	/// </summary>
-	[SerializeField, Header("秒間の回転の加速量")]
-	private float rotationAcceleration;
 
-	/// <summary>
-	/// 現在の回転量
-	/// </summary>
-	//[SerializeField, Header("現在の回転量")]
-	private Vector3 rotationSpeed;
+
+    /// <summary>
+    /// 秒間の横移動の加速量。。
+    /// </summary>
+    [SerializeField, Header("秒間の横移動の加速量")]
+    private float sideAcceleration;
+
+    /// <summary>
+    /// 現在の横移動量
+    /// </summary>
+    //[SerializeField, Header("現在の横移動速度")]
+    private Vector3 sideSpeed;
+
+    /// <summary>
+    /// 横移動の最高速度
+    /// </summary>
+    [SerializeField, Header("横移動の最高速度")]
+    private float sideMaxspeed;
+
+    /// <summary>
+    /// 横移動の減速の割合
+    /// </summary>
+    [SerializeField, Header("横移動の減速割合")]
+    private float sideResistivity;
+
+
+
+    /// <summary>
+    /// 秒間の回転の加速量。
+    /// </summary>
+    [SerializeField, Header("秒間の回転の加速量")]
+    private float rotationAcceleration;
+
+    /// <summary>
+    /// 現在の回転量
+    /// </summary>
+    //[SerializeField, Header("現在の回転量")]
+    private Vector3 rotationSpeed;
 
 	/// <summary>
 	/// 回転の最高速度
@@ -94,6 +135,8 @@ public class PlayerControl : MonoBehaviour {
 	/// </summary>
 	[SerializeField, Header("回転の減速割合")]
 	private float rotationResistivity;
+
+    
 
 	/// <summary>
 	/// 浮遊の現在の速度
@@ -632,7 +675,9 @@ public class PlayerControl : MonoBehaviour {
 	private void ActiveInitialize()
 	{ }
 
-	private void ActiveUpdate()
+    
+
+    private void ActiveUpdate()
 	{
 		// ボタン入力を取る
 		// 戻り値は　-1から+1　の値
@@ -643,18 +688,31 @@ public class PlayerControl : MonoBehaviour {
 		// 攻撃処理
 		AttackAction();
 
-		// 移動と回転の計算
-		//				transform.Rotate(0.0f, axisX * Time.deltaTime * rotationSpeed, 0.0f, Space.Self);	// ローカル回転
-		//				transform.Translate(0.0f, axisUpDown * moveSpeed * Time.deltaTime, axisY * Time.deltaTime * moveSpeed);
-		//				transform.Rotate(rotationSpeed.x, rotationSpeed.y, rotationSpeed.z, Space.Self);	// ローカル回転
-		//				transform.Translate(0.0f,moveSpeed.y, moveSpeed.z);
+        // 移動と回転の計算
+        //				transform.Rotate(0.0f, axisX * Time.deltaTime * rotationSpeed, 0.0f, Space.Self);	// ローカル回転
+        //				transform.Translate(0.0f, axisUpDown * moveSpeed * Time.deltaTime, axisY * Time.deltaTime * moveSpeed);
+        //				transform.Rotate(rotationSpeed.x, rotationSpeed.y, rotationSpeed.z, Space.Self);	// ローカル回転
+        //				transform.Translate(0.0f,moveSpeed.y, moveSpeed.z);
 
-		//速度の代入
-		rigidbody.velocity = (new Vector3(0, moveSpeed.y, 0) + transform.forward * moveSpeed.z) + HitBackSpeed;
-		transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0); //回転のＸ、Ｚ軸を0に固定、freezeだとずれる
-		rigidbody.angularVelocity = (new Vector3(rotationSpeed.x, rotationSpeed.y, rotationSpeed.z));
+        //速度の代入
 
-	}
+        Vector3 speed = new Vector3(0, moveSpeed.y, 0);//上下降
+        Vector3 forward = transform.forward;
+        Vector3 right = transform.right;
+        forward = new Vector3(forward.x , 0, forward.z);
+        right = new Vector3(right.x, 0, right.z);
+        speed += forward * moveSpeed.z; //前進後進
+        speed += right * moveSpeed.x;   //左右移動
+        speed += HitBackSpeed;          //反射移動
+        rigidbody.velocity = speed;
+
+        //かたむけ処理
+        speed.y = 0;
+        transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0) + (transform.right * axisY + transform.forward * -axisX) * katamuki;
+        rigidbody.angularVelocity = (new Vector3(rotationSpeed.x, rotationSpeed.y, rotationSpeed.z));
+
+
+    }
 
 	private void ActiveFinalize()
 	{ }
@@ -669,6 +727,10 @@ public class PlayerControl : MonoBehaviour {
 
 	private void DamageUpdate()
 	{
+		axisX = 0;
+		axisY = 0;
+		axisUpDown = 0;
+
 		remainingDamageTime -= Time.deltaTime;
 		if (remainingDamageTime < 0)
 		{
@@ -715,6 +777,10 @@ public class PlayerControl : MonoBehaviour {
 
 	private void CrashUpdate()
 	{
+		axisX = 0;
+		axisY = 0;
+		axisUpDown = 0;
+
 		remainingDamageTime -= Time.deltaTime;
 
 		if (remainingDamageTime < 0)
@@ -759,43 +825,70 @@ public class PlayerControl : MonoBehaviour {
 	
 	}
 
-	//移動、回転、上下降速度計算
-	void speedCalculation()
-	{
-		float absNum;
-		int key_flag = 1;
-		if (KeyStop != 0)
-			key_flag = 0;
 
-		//回転速度計算 ============== 
 
-		//____減衰計算
-		rotationSpeed.y = rotationSpeed.y - rotationSpeed.y * rotationResistivity * Time.deltaTime;
-		//____加速計算
-		rotationSpeed.y += (axisX * key_flag) * Time.deltaTime * rotationAcceleration;
-		//____速度制限
-		absNum = System.Math.Abs(rotationSpeed.y);
-		if (rotationMaxspeed < absNum)
-			rotationSpeed.y = rotationMaxspeed * (rotationSpeed.y / absNum);
+    //移動、回転、上下降速度計算
+    void speedCalculation()
+    {
+        float absNum;
+        int key_flag = 1;
+        
 
-		//移動速度計算 ============== 
+        if (KeyStop != 0)
+            key_flag = 0;
 
-		//____減衰計算
-		moveSpeed.z = moveSpeed.z - moveSpeed.z * moveResistivity * Time.deltaTime;
-		//____加速計算
-		moveSpeed.z += (axisY * key_flag) * Time.deltaTime * moveAcceleration;
-		//____速度制限
-		absNum = System.Math.Abs(moveSpeed.z);
+        //回転速度計算 ============== 
+
+        //____減衰計算
+        rotationSpeed.y = rotationSpeed.y - rotationSpeed.y * rotationResistivity * Time.deltaTime;
+        //____加速計算
+        rotationSpeed.y += (axisX * key_flag) * Time.deltaTime * rotationAcceleration;
+        //____速度制限
+        absNum = System.Math.Abs(rotationSpeed.y);
+        if (rotationMaxspeed < absNum)
+            rotationSpeed.y = rotationMaxspeed * (rotationSpeed.y / absNum);
+
+        //移動速度計算 ============== 
+
+
+        //____減衰計算
+        moveSpeed.z = moveSpeed.z - moveSpeed.z * moveResistivity * Time.deltaTime;
+        if (axisY > 0) {
+            //____加速計算
+            moveSpeed.z += (axisY * key_flag) * Time.deltaTime * moveAcceleration;
+            BackStop = 0;
+        }
+        else if (BackStop == 0 && axisY < -0.7f) 
+        {
+            //反転処理
+            transform.eulerAngles = new Vector3(0, transform.eulerAngles.y + 180, 0);
+            BackStop = BackStopTime;
+        }
+        if (axisY >= 0.1f)
+            BackStop = 0;
+
+
+        //____速度制限
+        absNum = System.Math.Abs(moveSpeed.z);
+
 		if (moveMaxspeed < absNum)
 			moveSpeed.z = moveMaxspeed * (moveSpeed.z / absNum);
 
 
+        //____減衰計算
+        moveSpeed.x = moveSpeed.x - moveSpeed.x * sideResistivity * Time.deltaTime;
+        //____加速計算
+        moveSpeed.x += (axisX * key_flag) * Time.deltaTime * sideAcceleration;
+        //____速度制限
+        absNum = System.Math.Abs(moveSpeed.x);
+        if (sideMaxspeed < absNum)
+            moveSpeed.x = moveMaxspeed * (moveSpeed.x / absNum);
 
 
-		//浮遊計算 ==============       
+        //浮遊計算 ==============       
 
-		//____減衰計算
-		moveSpeed.y = moveSpeed.y - moveSpeed.y * floatingResistivity * Time.deltaTime;
+        //____減衰計算
+        moveSpeed.y = moveSpeed.y - moveSpeed.y * floatingResistivity * Time.deltaTime;
 
 		//キー入力があれば浮遊を停止する
 		if (key_flag != 0 && axisUpDown != 0)
@@ -819,9 +912,10 @@ public class PlayerControl : MonoBehaviour {
 			moveSpeed.y = floatingMaxspeed * (moveSpeed.y / absNum);
 
 
-		//反射速度計算
 
-		HitBackSpeed = HitBackSpeed - (HitBackSpeed * HitBackResistivity * Time.deltaTime);
+        //反射速度計算
+
+        HitBackSpeed = HitBackSpeed - (HitBackSpeed * HitBackResistivity * Time.deltaTime);
 
 		if (KeyStop != 0)
 		{
@@ -830,7 +924,15 @@ public class PlayerControl : MonoBehaviour {
 				KeyStop = 0;
 
 		}
-		return;
+        if (BackStop != 0)
+        {
+            BackStop -= Time.deltaTime;
+            if (0.016 > BackStop)
+                BackStop = 0;
+
+        }
+
+        return;
 	}
 	
     float test_atack_resist = 6f;

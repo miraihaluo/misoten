@@ -24,13 +24,13 @@ public class TutorialMissionController : MonoBehaviour
 	};
 
 	private string[] missionText = {
-								"あそびかた",
-								"左スティック上で前進、下で後退",
-								"左スティック左右で旋回",
-								"R1で上昇　L1で下降",
+								"あ　そ　び　か　た",
+								"左スティックで移動",
+								"下入力でクイックターン",
+								"L1で下降　R1で上昇",
 								"子供をどんどん集めよう",
-								"ステージ中央上空のクジラに届けると得点獲得",
-								"○ボタンの水鉄砲を当てて子供を奪えるぞ"
+								"クジラに届けると得点獲得だ",
+								"水鉄砲を当てて子供を奪えるぞ"
 								};
 
 	// 残り時間を持っているGameMainSceneControllerオブジェの入れ子
@@ -50,6 +50,12 @@ public class TutorialMissionController : MonoBehaviour
 	[SerializeField]
 	private float textSpeed;  //テキストの流れるスピード
 
+	/// <summary>
+	/// テキスト背景の流れる速さ
+	/// </summary>
+	[SerializeField, Header("テキスト背景の流れる早さ")]
+	private float BGSpeed = 100;
+
 	enum eTEXT_STATE
 	{
 		DELETE,
@@ -62,11 +68,21 @@ public class TutorialMissionController : MonoBehaviour
 
 	private Vector2 textSize;       //テキストの大きさ
 
+	private Vector3 defTextPos;
+	private Vector3 defBGPos;
+	private Vector3 BGPos;
+
 	// Use this for initialization
 	void Start()
 	{
 		textSize.x = textObj.preferredWidth;
-		textObj.transform.localPosition = Vector3.right * (textSize.x + Screen.width);
+		defTextPos = textObj.transform.localPosition;
+		defTextPos.x = textSize.x + Screen.width;
+		textObj.transform.localPosition = defTextPos;
+
+		defBGPos = BGObj.transform.localPosition;
+		defBGPos.x = BGObj.rectTransform.rect.width;
+		BGObj.transform.localPosition = -defBGPos;
 
 	}
 
@@ -107,6 +123,27 @@ public class TutorialMissionController : MonoBehaviour
 				onMission = eTEXT_STATE.REMOVE;
 			}
 		}
+
+		// テキスト背景の処理
+		switch (onMission)
+		{
+			case eTEXT_STATE.MOVE:
+				if (BGPos.x <= 0) break;
+				BGPos.x -= BGSpeed * Time.deltaTime;
+				if (BGPos.x <= 0) BGPos.x = 0;
+				BGObj.transform.localPosition = BGPos;
+
+				break;
+
+			case eTEXT_STATE.DELETE:
+				if (BGPos.x <= -defBGPos.x) break;
+				BGPos.x -= BGSpeed * Time.deltaTime;
+				BGObj.transform.localPosition = BGPos;
+
+				break;
+
+		}
+
 	}
 
 	public void CallMissionText(E_MISSION_TYPE callMissionType)
@@ -118,8 +155,10 @@ public class TutorialMissionController : MonoBehaviour
 
 		//テキストサイズを計算
 		textSize.x = textObj.preferredWidth;
+		defTextPos.x = textSize.x + Screen.width;
 
-		textObj.transform.localPosition = Vector3.right * (textSize.x + Screen.width);
+		textObj.transform.localPosition = defTextPos;
+		BGObj.transform.localPosition = BGPos = defBGPos;
 
 	}
 

@@ -2096,11 +2096,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eStatus: 0
+  katamuki: 0
+  BackStopTime: 3
   moveAcceleration: 40
   moveMaxspeed: 150
   moveResistivity: 0.8
+  sideAcceleration: 40
+  sideMaxspeed: 150
+  sideResistivity: 0.8
   rotationAcceleration: 2
-  rotationMaxspeed: 5
+  rotationMaxspeed: 9
   rotationResistivity: 2
   floatingAcceleration: 0.1
   floatingResistivity: 0.8

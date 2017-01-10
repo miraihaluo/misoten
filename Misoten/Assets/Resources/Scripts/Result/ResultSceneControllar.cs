@@ -26,7 +26,7 @@ public class ResultSceneControllar : MonoBehaviour {
 	{
 
 		//if (Input.GetButtonDown(sceneChangeVirtualKeyName))
-		if (Input.anyKeyDown)
+		if (Input.GetButtonDown(sceneChangeVirtualKeyName))
 		{
 			sound01.Play();
 			//FadeManager.Instance.LoadLevel(nextSceneName, 1.0f);

@@ -24,25 +24,16 @@ public class ChildObj : MonoBehaviour {
 	{
 		foreach (GameObject obj in miniMapIcon)
 			obj.SetActive(true);
-
+		
 	}
 
 	public void ActiveOff()
-	{
+	{/*
 		foreach (GameObject obj in miniMapIcon)
-			obj.SetActive(false);
+			obj.SetActive(false);*/
 
 		this.gameObject.SetActive(false);
 	
-	}
-
-	void OnWillRenderObject()
-	{
-//		forward = -Camera.current.transform.forward;
-		forward = Vector3.Normalize(Camera.current.transform.position - this.transform.position);
-		forward.y = 0.0f;
-		this.transform.forward = forward;
-
 	}
 
 }

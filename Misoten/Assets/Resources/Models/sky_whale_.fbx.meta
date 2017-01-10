@@ -1,0 +1,248 @@
+fileFormatVersion: 2
+guid: 038bbfa26887a7940b1552ea5115ecaa
+timeCreated: 1483848622
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: body
+    100002: duct
+    100004: duct2
+    100006: duct_bar1
+    100008: duct_bar1 1
+    100010: duct_bar2
+    100012: duct_bar2 1
+    100014: duct_bar3
+    100016: duct_bar3 1
+    100018: duct_center1
+    100020: duct_center1 1
+    100022: eye_left
+    100024: eye_right
+    100026: fan1
+    100028: fan1 1
+    100030: fan2
+    100032: fan2 1
+    100034: fan3
+    100036: fan3 1
+    100038: fan4
+    100040: fan4 1
+    100042: fan5
+    100044: fan5 1
+    100046: fan6
+    100048: fan6 1
+    100050: fan7
+    100052: fan7 1
+    100054: fan8
+    100056: fan8 1
+    100058: fan9
+    100060: fan9 1
+    100062: fan_center1
+    100064: fan_center1 1
+    100066: mouth_shutter
+    100068: root_joint
+    100070: shutter_joint
+    100072: //RootNode
+    400000: body
+    400002: duct
+    400004: duct2
+    400006: duct_bar1
+    400008: duct_bar1 1
+    400010: duct_bar2
+    400012: duct_bar2 1
+    400014: duct_bar3
+    400016: duct_bar3 1
+    400018: duct_center1
+    400020: duct_center1 1
+    400022: eye_left
+    400024: eye_right
+    400026: fan1
+    400028: fan1 1
+    400030: fan2
+    400032: fan2 1
+    400034: fan3
+    400036: fan3 1
+    400038: fan4
+    400040: fan4 1
+    400042: fan5
+    400044: fan5 1
+    400046: fan6
+    400048: fan6 1
+    400050: fan7
+    400052: fan7 1
+    400054: fan8
+    400056: fan8 1
+    400058: fan9
+    400060: fan9 1
+    400062: fan_center1
+    400064: fan_center1 1
+    400066: mouth_shutter
+    400068: root_joint
+    400070: shutter_joint
+    400072: //RootNode
+    2300000: body
+    2300002: duct
+    2300004: duct2
+    2300006: duct_bar1
+    2300008: duct_bar1 1
+    2300010: duct_bar2
+    2300012: duct_bar2 1
+    2300014: duct_bar3
+    2300016: duct_bar3 1
+    2300018: duct_center1
+    2300020: duct_center1 1
+    2300022: eye_left
+    2300024: eye_right
+    2300026: fan1
+    2300028: fan1 1
+    2300030: fan2
+    2300032: fan2 1
+    2300034: fan3
+    2300036: fan3 1
+    2300038: fan4
+    2300040: fan4 1
+    2300042: fan5
+    2300044: fan5 1
+    2300046: fan6
+    2300048: fan6 1
+    2300050: fan7
+    2300052: fan7 1
+    2300054: fan8
+    2300056: fan8 1
+    2300058: fan9
+    2300060: fan9 1
+    2300062: fan_center1
+    2300064: fan_center1 1
+    2300066: mouth_shutter
+    3300000: body
+    3300002: duct
+    3300004: duct2
+    3300006: duct_bar1
+    3300008: duct_bar1 1
+    3300010: duct_bar2
+    3300012: duct_bar2 1
+    3300014: duct_bar3
+    3300016: duct_bar3 1
+    3300018: duct_center1
+    3300020: duct_center1 1
+    3300022: eye_left
+    3300024: eye_right
+    3300026: fan1
+    3300028: fan1 1
+    3300030: fan2
+    3300032: fan2 1
+    3300034: fan3
+    3300036: fan3 1
+    3300038: fan4
+    3300040: fan4 1
+    3300042: fan5
+    3300044: fan5 1
+    3300046: fan6
+    3300048: fan6 1
+    3300050: fan7
+    3300052: fan7 1
+    3300054: fan8
+    3300056: fan8 1
+    3300058: fan9
+    3300060: fan9 1
+    3300062: fan_center1
+    3300064: fan_center1 1
+    3300066: mouth_shutter
+    4300000: mouth_shutter
+    4300002: body
+    4300004: eye_left
+    4300006: eye_right
+    4300008: duct
+    4300010: fan_center1
+    4300012: fan1
+    4300014: fan2
+    4300016: fan3
+    4300018: fan4
+    4300020: fan5
+    4300022: fan6
+    4300024: fan7
+    4300026: fan8
+    4300028: fan9
+    4300030: duct_center1
+    4300032: duct_bar1
+    4300034: duct_bar2
+    4300036: duct_bar3
+    4300038: duct2
+    4300040: fan_center1
+    4300042: fan1
+    4300044: fan2
+    4300046: fan3
+    4300048: fan4
+    4300050: fan5
+    4300052: fan6
+    4300054: fan7
+    4300056: fan8
+    4300058: fan9
+    4300060: duct_center1
+    4300062: duct_bar1
+    4300064: duct_bar2
+    4300066: duct_bar3
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

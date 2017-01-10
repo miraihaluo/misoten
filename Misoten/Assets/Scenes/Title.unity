@@ -25,7 +25,7 @@ RenderSettings:
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
   m_AmbientMode: 0
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 9367b47795526c54685f4d428c86e266, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -824,21 +824,6 @@ CanvasRenderer:
 Transform:
   m_PrefabParentObject: {fileID: 443912, guid: 168c5f846e8eab34babe568db4a65aee, type: 2}
   m_PrefabInternal: {fileID: 294120727}
---- !u!1 &1150062944 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 128616, guid: b55c292bd295e5b4a86658953c76b9a2, type: 2}
-  m_PrefabInternal: {fileID: 1030003877}
---- !u!114 &1150062945
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1150062944}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43d94f1ec90f7a0449851f0e980b58d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1319604291
 Prefab:
   m_ObjectHideFlags: 0
@@ -1000,18 +985,6 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 413364, guid: 0d83e0cf24788c24288582019f08e194, type: 2}
       propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 174848, guid: 0d83e0cf24788c24288582019f08e194, type: 2}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 158522, guid: 0d83e0cf24788c24288582019f08e194, type: 2}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 184090, guid: 0d83e0cf24788c24288582019f08e194, type: 2}
-      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
